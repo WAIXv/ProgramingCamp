@@ -28,6 +28,8 @@ public class camera_ctrl : MonoBehaviour
         float dt = Time.deltaTime;
 
         //ax
+
+
         float tmp = pos.x * a_x;
 
         tmp = (math.abs(tmp) <= 0.1f ? 0.1f : tmp) * dt;
