@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Animations;
 
 public class player_ctrl : MonoBehaviour
 {
@@ -47,26 +48,17 @@ public class player_ctrl : MonoBehaviour
         }
 
 
-        if (Input.GetKey(KeyCode.A))
+        int axis_x = -(int)Input.GetAxisRaw("Horizontal");
+        if (axis_x != 0)
         {
-            move_v = move_v < 0 ? 0 : move_v;
-            move_v += stop_a * Time.deltaTime;
-            if(move_v > 7f)
+            move_v = (axis_x * move_v) < 0 ? 0 : move_v;
+            move_v += axis_x * stop_a * Time.deltaTime;
+
+            if(math.abs(move_v) > 7f)
             {
-                move_v = 7f;
+                move_v = axis_x * 7f;
             }
-            d_r = false;
-            a.SetBool("walk", true);
-        }
-        else if (Input.GetKey(KeyCode.D))
-        {
-            move_v = move_v > 0 ? 0 : move_v;
-            move_v -= stop_a * Time.deltaTime;
-            if (move_v < -7f)
-            {
-                move_v = -7f;
-            }
-            d_r = true;
+            d_r = axis_x < 0;
             a.SetBool("walk", true);
         }
         else
