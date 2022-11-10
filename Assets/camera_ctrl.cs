@@ -1,8 +1,8 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
+using Assets;
 using Unity.Mathematics;
 using UnityEngine;
+
+using static Assets.EntityStates;
 
 public class camera_ctrl : MonoBehaviour
 {
@@ -26,6 +26,15 @@ public class camera_ctrl : MonoBehaviour
         bg = GameObject.Find("bg");
         danger_layer = GameObject.Find("danger");
         lost_layer = GameObject.Find("lost");
+
+        //test state-lambda mapping
+        MyUtils.HashMap<Player, MyUtils.Executer> hashMap = new MyUtils.HashMap<Player, MyUtils.Executer>();
+        hashMap.Add(Player.IDLE, () => { print("test"); });
+        hashMap.Add(Player.WALK, () => { print("walk"); });
+
+        hashMap.Get(Player.IDLE)();
+        hashMap.Get(Player.WALK)();
+
     }
 
     // Update is called once per frame
@@ -38,11 +47,9 @@ public class camera_ctrl : MonoBehaviour
         float dt = Time.deltaTime;
 
         //ax
-
-
         float tmp = pos.x * a_x;
 
-        tmp = (math.abs(tmp) <= 0.1f ? 0.1f : tmp) * dt;
+        tmp = (math.abs(tmp) <= 0.3f ? 0.0f : tmp) * dt;
 
         if (math.abs(cam_pos.x - tmp) >= 0.0001f)
             cam_pos.x += tmp;
@@ -52,7 +59,7 @@ public class camera_ctrl : MonoBehaviour
 
         //ay
         tmp = pos.y * a_y;
-        tmp = (math.abs(tmp) <= 0.1f ? 0.1f : tmp) * dt;
+        tmp = (math.abs(tmp) <= 0.1f ? 0f : tmp) * dt;
 
         if (math.abs(cam_pos.y - tmp) >= 0.0001f)
             cam_pos.y += tmp;

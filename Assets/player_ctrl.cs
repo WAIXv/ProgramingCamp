@@ -97,7 +97,7 @@ public class player_ctrl : MonoBehaviour
         if (ground_tick <= 0) ground_tick = -0.1f;
     }
 
-    void OnTriggerEnter2D(Collider2D collision)
+    void OnTriggerStay2D(Collider2D collision)
     {
         if (collision != _Collider) 
         { 
