@@ -24,7 +24,7 @@ public class player_ctrl : MonoBehaviour
     static float scale_x;
     bool d_r = true;
 
-    public static EntityState IDLE, WALK; //JUMP, OnAir;
+    public static EntityState ROOT, WALK; //JUMP, OnAir;
     public static EntityStateMgr StateMgr = new EntityStateMgr();
 
     void Start()
@@ -37,7 +37,7 @@ public class player_ctrl : MonoBehaviour
         a = visual.GetComponent<Animator>();
 
         //init state 
-        IDLE = StateMgr.Add(new EntityState(true,
+        ROOT = StateMgr.Add(new EntityState(true,
         (gObj) => { },
         (gObj) => {
             if ((onGround || ground_tick > 0) && (Input.GetKeyDown(KeyCode.Space) || (int)Input.GetAxisRaw("Vertical") > 0))
