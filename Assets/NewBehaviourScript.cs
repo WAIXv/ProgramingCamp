@@ -8,6 +8,7 @@ public class NewBehaviourScript : MonoBehaviour
     public Rigidbody2D rb;
     public int speedx;
     public int speedy;
+    public float jumpforce;
     // Start is called before the first frame update
     void Start()
     {
