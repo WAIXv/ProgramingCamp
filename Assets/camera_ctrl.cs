@@ -1,5 +1,6 @@
 using Assets;
 using Unity.Mathematics;
+using UnityEditorInternal;
 using UnityEngine;
 
 using static Assets.EntityStates;
@@ -26,14 +27,6 @@ public class camera_ctrl : MonoBehaviour
         bg = GameObject.Find("bg");
         danger_layer = GameObject.Find("danger");
         lost_layer = GameObject.Find("lost");
-
-        //test state-lambda mapping
-        MyUtils.HashMap<Player, MyUtils.Executer> hashMap = new MyUtils.HashMap<Player, MyUtils.Executer>();
-        hashMap.Add(Player.IDLE, () => { print("test"); });
-        hashMap.Add(Player.WALK, () => { print("walk"); });
-
-        hashMap.Get(Player.IDLE)();
-        hashMap.Get(Player.WALK)();
 
     }
 
