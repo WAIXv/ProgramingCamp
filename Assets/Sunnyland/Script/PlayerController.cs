@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -11,7 +12,9 @@ public class PlayerController : MonoBehaviour
 
     public float speed;         //速度变量
     public float JumpForce;     //跳跃速度
+    private int cherry = 0;          //吃掉的樱桃数量
     public LayerMask Ground;    //地面图层
+    public Text score;
 
     private bool CanJump = true;        //用于判断能否跳跃
     
@@ -78,6 +81,16 @@ public class PlayerController : MonoBehaviour
             {
                 CanJump = true;
             }
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)             
+    {
+        if (collision.gameObject.tag == "Collection")               //当角色触碰到物品
+        {
+            Destroy(collision.gameObject);                          //吃掉物品
+            cherry++;
+            score.text = cherry.ToString();
         }
     }
 }
