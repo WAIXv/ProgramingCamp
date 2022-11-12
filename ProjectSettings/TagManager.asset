@@ -12,7 +12,7 @@ TagManager:
   - Ground
   - Water
   - UI
-  - 
+  - Empty
   - 
   - 
   - 
@@ -50,4 +50,7 @@ TagManager:
     locked: 0
   - name: FrontGround
     uniqueID: 2538355903
+    locked: 0
+  - name: Enemy
+    uniqueID: 3569728173
     locked: 0
