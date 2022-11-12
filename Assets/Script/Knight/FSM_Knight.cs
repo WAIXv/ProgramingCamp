@@ -15,11 +15,17 @@ public class FSM_Knight : MonoBehaviour
     public Collider2D coll;
     public SpriteRenderer render;
 
-    public LayerMask ground;
+    public GameObject leftFoot;
+    public GameObject rightFoot;
+    public GameObject grabHand;
+    public LayerMask groundLayer;
     public float speed;
     public int jumpForce;
 
     public bool spacePress;
+    public bool isGround;
+    public bool isOnWall;
+
     private void Awake()
     {
         allSaveState = new Dictionary<StateType, State>();
@@ -43,6 +49,7 @@ public class FSM_Knight : MonoBehaviour
     }
     void FixedUpdate()
     {
+        PhysicsCheck();
         currentState?.OnUpdate();
         Debug.Log(currentState);
     }
@@ -70,13 +77,28 @@ public class FSM_Knight : MonoBehaviour
             spacePress=true;
     }
 
+    //物理检测
+    public void PhysicsCheck()
+    {
+        RaycastHit2D leftFootHit;
+        RaycastHit2D rightFootHit;
+        RaycastHit2D grabHandHit;
+        leftFootHit = Physics2D.Raycast(leftFoot.transform.position, Vector3.down, 0.1f, groundLayer);
+        rightFootHit = Physics2D.Raycast(rightFoot.transform.position, Vector3.down, 0.1f, groundLayer);
+        grabHandHit = Physics2D.Raycast(grabHand.transform.position, transform.right * transform.localScale.x, 0.1f, groundLayer);
+        isGround = leftFootHit || rightFootHit;
+        isOnWall = grabHandHit;
+        Debug.DrawRay(leftFoot.transform.position, Vector3.down * 0.1f, Color.red);
+        Debug.DrawRay(rightFoot.transform.position, Vector3.down * 0.1f, Color.red);
+        Debug.DrawRay(grabHand.transform.position, transform.right * transform.localScale.x * 0.1f, Color.red);
+    }
+
     //角色移动
     public float Move()
     {
-        float move = Input.GetAxisRaw("Horizontal");
-        if (move == -1) render.flipX = true;
-        else if (move == 1) render.flipX = false;
-        rb.velocity = new Vector2(speed * move, rb.velocity.y);
-        return move;
+        float moveDir = Input.GetAxisRaw("Horizontal");
+        if (moveDir != 0) transform.localScale = new Vector3(moveDir, 1, 1);
+        rb.velocity = new Vector2(speed * moveDir, rb.velocity.y);
+        return moveDir;
     }
 }

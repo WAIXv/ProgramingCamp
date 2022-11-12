@@ -25,7 +25,7 @@ public class Fall_Knight : State
         fsm.Move();
 
         //如果触碰到地面，就切换为Idle状态
-        if (fsm.coll.IsTouchingLayers(fsm.ground))
+        if (fsm.isGround)
         {
             fsm.ChangeState(StateType.Idle);
         }
