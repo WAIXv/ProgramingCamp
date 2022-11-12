@@ -287,7 +287,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 3
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 0
@@ -413,6 +413,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   runSpeed: 7
+  jumpSpeed: 12
 --- !u!95 &1248880564
 Animator:
   serializedVersion: 3
@@ -444,7 +445,7 @@ GameObject:
   - component: {fileID: 1517414066}
   - component: {fileID: 1517414065}
   - component: {fileID: 1517414067}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Tilemap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
