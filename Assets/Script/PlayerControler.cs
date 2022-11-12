@@ -29,7 +29,7 @@ public class PlayerControler : MonoBehaviour
         if(horizontalmove != 0)
         {
             rb.velocity = new Vector2(horizontalmove * speed * Time.deltaTime,rb.velocity.y);
-            anim.SetFloat("running",Mathf.Abs(facedirection));
+            anim.SetFloat("running",Mathf.Abs(horizontalmove));
         }
 
         if(facedirection != 0)//¿ØÖÆ½ÇÉ«³¯Ïò
