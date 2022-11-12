@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 10
   jumpForce: 15
+  extraTime: 0.1
   groundCheckRadius: 0.3
   groundCheckLayer:
     serializedVersion: 2

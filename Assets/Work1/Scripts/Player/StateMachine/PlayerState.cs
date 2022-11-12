@@ -2,14 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerState
+public class PlayerState : PlayerStateMachine
 {
     protected PlayerControl player;//玩家控制
     protected PlayerStateMachine stateMachine;//玩家状态机
     protected PlayerData playerData;//玩家数据
 
-    private float stateStartTime;//动画开始时间
+    public float stateStartTime;//动画开始时间
     private string animationBoolName;//播放动画名
+    public float stateDuration => Time.time - stateStartTime;//动画持续时间
 
     public PlayerState(PlayerControl player, PlayerStateMachine stateMachine, PlayerData playerData, string animationBoolName)
     {

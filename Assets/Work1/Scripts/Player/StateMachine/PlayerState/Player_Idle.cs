@@ -17,7 +17,8 @@ public class Player_Idle : PlayerState
     public override void Enter()
     {
         base.Enter();
-        player.SetVelocityX(0);
+        player.SetVelocityX(0);//将角色速度归零
+        player.jumpCount = playerData.maxJumpCount;//重置剩余跳跃次数为最大跳跃次数
     }
 
     public override void Exit()
@@ -26,9 +27,15 @@ public class Player_Idle : PlayerState
         player.transform.localScale = new Vector2(((player.inputAction.MoveInput.x > 0) ? 1 : -1), 1);//设置翻转方向
     }
 
-    public override void LogicUpdate()//可切入状态:移动 跳跃
+    public override void LogicUpdate()//可切入状态:移动 跳跃 下落
     {
         base.LogicUpdate();
+
+        if(player.isOnGround()==false)//不在地面时 进入下落状态
+        {
+            stateMachine.ChangeState(player.FallState);
+        }
+
         if (player.inputAction.MoveInput.x != 0)//移动输入存在时 进入移动状态
         {
             stateMachine.ChangeState(player.MoveState);

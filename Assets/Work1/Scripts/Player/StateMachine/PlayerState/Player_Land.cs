@@ -17,7 +17,7 @@ public class Player_Land : PlayerState
     public override void Enter()
     {
         base.Enter();
-
+        player.jumpCount = playerData.maxJumpCount;//重置剩余跳跃次数为最大跳跃次数
     }
 
     public override void Exit()

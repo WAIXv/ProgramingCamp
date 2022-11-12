@@ -10,10 +10,15 @@ public class PlayerData : ScriptableObject
     public float moveSpeed = 10f;
 
     [Header("跳跃状态")]
+    [Tooltip("最大跳跃次数")]
+    public int maxJumpCount = 2;
     [Tooltip("跳跃力度")]
     public float jumpForce = 15f;
+    [Tooltip("延迟跳跃时间")]
+    public float extraTime = 0.1f;
 
-    [Header("Check")]
+
+    [Header("检测")]
     [Tooltip("地面检测距离")]
     public float groundCheckRadius = 0.3f;
     [Tooltip("地面检测图层")]

@@ -13,6 +13,7 @@ public class PlayerInputAction : MonoBehaviour
         MoveInput = context.ReadValue<Vector2>();
     }
 
+    int presstime = 0;
     public void OnJumpInput(InputAction.CallbackContext context)
     {
         JumpInput = context.performed;

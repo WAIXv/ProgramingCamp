@@ -634,6 +634,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerData: {fileID: 11400000, guid: 44f4930f3edb35e48818ac28442e1529, type: 2}
+  onGround: 1
+  touchWall: 0
+  canMove: 1
+  jumpCount: 0
   groundCheckPos: {fileID: 680859474}
   wallCheckPos: {fileID: 583826471}
 --- !u!114 &1570277735

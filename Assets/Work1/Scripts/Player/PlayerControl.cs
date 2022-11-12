@@ -12,9 +12,15 @@ public class PlayerControl : MonoBehaviour
 
     public Player_Idle IdleState { get; private set; }//空闲状态
     public Player_Run MoveState { get; private set; }//移动状态
+    public Player_ExtraRun ExtraMoveState { get; private set; }//额外移动状态
     public Player_Jump JumpState { get; private set; }//跳跃状态
     public Player_Fall FallState { get; private set; }//下落状态
     public Player_Land LandState { get; private set; }//落地状态
+
+    public bool onGround = true;//是否位于地面上
+    public bool touchWall = false;//是否接触到墙面
+    public bool canMove = true;//是否能够移动 
+    public int jumpCount = 0;//当前跳跃次数
 
     private void Awake()
     {
@@ -24,6 +30,7 @@ public class PlayerControl : MonoBehaviour
         JumpState = new Player_Jump(this, StateMachine, playerData, "jump");
         FallState = new Player_Fall(this, StateMachine, playerData, "fall");
         LandState = new Player_Land(this, StateMachine, playerData, "land");
+        ExtraMoveState = new Player_ExtraRun(this, StateMachine, playerData, "extraJump");
     }
 
     private void Start()
@@ -36,7 +43,13 @@ public class PlayerControl : MonoBehaviour
     public void Update()
     {
         StateMachine.CurrentState.LogicUpdate();
-        ani.SetBool("ground", isOnGround());
+        ani.SetBool("ground", isOnGround());//同步地面状态到动画控制台
+
+        onGround = isOnGround();//地面状态
+        touchWall = isTouchWall();//墙面接触状态
+
+        canMove = !touchWall;//接触到墙面时无法移动
+
     }
     public void FixedUpdate()
     {
@@ -56,13 +69,12 @@ public class PlayerControl : MonoBehaviour
     }
 
     public Transform groundCheckPos;//地面检测位置
-    public bool isOnGround()//进行地面检测
+    public bool isOnGround()//地面检测
     {
         return Physics2D.OverlapCircle(groundCheckPos.position, playerData.groundCheckRadius, playerData.groundCheckLayer);
     }
-
     public Transform wallCheckPos;//地面检测位置
-    public bool isTouchWall()//进行墙面检测
+    public bool isTouchWall()//墙面检测
     {
         return Physics2D.OverlapBox(wallCheckPos.position, playerData.wallCheckRange,0 ,playerData.wallCheckLayer);
     }

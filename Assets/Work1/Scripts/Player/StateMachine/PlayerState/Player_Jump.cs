@@ -18,6 +18,7 @@ public class Player_Jump : PlayerState
     {
         base.Enter();
         player.SetVelocityY(playerData.jumpForce);//读取跳跃力度数据 进行跳跃
+        player.jumpCount--;//跳跃次数-1
     }
 
     public override void Exit()
