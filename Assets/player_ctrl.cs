@@ -80,9 +80,13 @@ public class player_ctrl : MonoBehaviour
                 }
             }
             setMovement(move_v);
-            if (move_v == 0f)
+            if (math.abs(move_v) <= 0.02)
             {
-                WALK.SetActive(false);
+                a.SetBool("walk", false);
+                if (move_v == 0f)
+                {
+                    WALK.SetActive(false);
+                }
             }
         },
         (gObj) => { a.SetBool("walk", false); }));
@@ -145,7 +149,7 @@ public class player_ctrl : MonoBehaviour
         if (collision != _Collider)
         {
             onGround = false;
-            ground_tick = 0.12f;
+            ground_tick = 0.2f;
         }
     }
 
