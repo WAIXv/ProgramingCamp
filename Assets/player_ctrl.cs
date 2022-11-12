@@ -20,43 +20,37 @@ public class player_ctrl : MonoBehaviour
     float jump_cool = 0f;
     float ground_tick = 0.12f;
     float move_v = 0f;
-    static float stop_a = 32.0f;
+    static float stop_a = 24.0f;
     static float scale_x;
     bool d_r = true;
 
     public static EntityState ROOT, WALK; //JUMP, OnAir;
     public static EntityStateMgr StateMgr = new EntityStateMgr();
 
-    void Start()
+    private void Awake()
     {
-        //init
-        _Rigidbody2D = this.gameObject.GetComponent<Rigidbody2D>();
-        _Collider = this.gameObject.GetComponent<BoxCollider2D>();
-        visual = GameObject.Find("visual");
-        scale_x = visual.transform.localScale.x;
-        a = visual.GetComponent<Animator>();
-
-        //init state 
         ROOT = StateMgr.Add(new EntityState(true,
-        (gObj) => { },
-        (gObj) => {
-            if ((onGround || ground_tick > 0) && (Input.GetKeyDown(KeyCode.Space) || (int)Input.GetAxisRaw("Vertical") > 0))
-            {
-                print("jump");
-                onGround = false;
-                //WALK.SetActive(true);
-                doJump(15.0f);
-                jump_cool = 0.2f;
-            }
-            if (jump_cool > 0f)
-            {
-                jump_cool -= Time.deltaTime;
-            }
+                (gObj) => { },
+                (gObj) =>
+                {
+                    if ((onGround || ground_tick > 0) && (Input.GetKeyDown(KeyCode.Space) || (int)Input.GetAxisRaw("Vertical") > 0))
+                    {
+                        print("jump");
+                        onGround = false;
+                        //WALK.SetActive(true);
+                        doJump(15.0f);
+                        jump_cool = 0.2f;
+                    }
+                    if (jump_cool > 0f)
+                    {
+                        jump_cool -= Time.deltaTime;
+                    }
 
-            int axis_x = -(int)GetHorIn();
-            if ((int)GetHorIn() != 0)  WALK.SetActive(true);
-        },
-        (gObj) => { }));
+                    int axis_x = -(int)GetHorIn();
+                    if ((int)GetHorIn() != 0) WALK.SetActive(true);
+   
+                },
+                (gObj) => { }));
 
 
         WALK = StateMgr.Add(new EntityState(
@@ -72,7 +66,7 @@ public class player_ctrl : MonoBehaviour
                     move_v = axis_x * 7f;
                 }
                 d_r = axis_x < 0;
-                a.SetBool("walk", false);
+                a.SetBool("walk", true);
             }
             else
             {
@@ -96,6 +90,16 @@ public class player_ctrl : MonoBehaviour
         //todo future
         //JUMP = StateMgr.Add(new EntityState());
         //OnAir = StateMgr.Add(new EntityState());
+    }
+
+    void Start()
+    {
+        //init
+        _Rigidbody2D = this.gameObject.GetComponent<Rigidbody2D>();
+        _Collider = this.gameObject.GetComponent<BoxCollider2D>();
+        visual = GameObject.Find("visual");
+        scale_x = visual.transform.localScale.x;
+        a = visual.GetComponent<Animator>();
     }
 
     // Update is called once per frame
