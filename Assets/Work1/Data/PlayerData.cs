@@ -10,6 +10,8 @@ public class PlayerData : ScriptableObject
     public float moveSpeed = 10f;
 
     [Header("跳跃状态")]
+    [Tooltip("角色重力参数")]
+    public float gravityMount = 5;
     [Tooltip("最大跳跃次数")]
     public int maxJumpCount = 2;
     [Tooltip("跳跃力度")]

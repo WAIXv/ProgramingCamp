@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 public class PlayerInputAction : MonoBehaviour
 {
     public Vector2 MoveInput { get; private set; }//移动输入
-    public bool JumpInput { get; private set; }//跳跃输入
+    public bool JumpInput;//跳跃输入
 
     public void OnMoveInput(InputAction.CallbackContext context)
     {

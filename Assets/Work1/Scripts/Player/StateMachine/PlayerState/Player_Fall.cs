@@ -17,7 +17,7 @@ public class Player_Fall : PlayerState
     public override void Enter()
     {
         base.Enter();
-
+        player.inputAction.JumpInput = false;
     }
 
     public override void Exit()

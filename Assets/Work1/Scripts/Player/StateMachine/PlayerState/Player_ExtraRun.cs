@@ -17,7 +17,7 @@ public class Player_ExtraRun : PlayerState
     public override void Enter()
     {
         base.Enter();
-        Debug.Log(1231);
+        player.rb.gravityScale = 0;//将重力设置为0
     }
 
     public override void Exit()
@@ -31,12 +31,14 @@ public class Player_ExtraRun : PlayerState
         {
             stateMachine.ChangeState(player.JumpState);//进入跳跃状态
             player.jumpCount--;//跳跃次数-1
+            player.rb.gravityScale = playerData.gravityMount;//重置重力参数
         }
 
         if(player.inputAction.MoveInput.x == 0||stateDuration>playerData.extraTime)
             //玩家停止移动输入 或者时间超过额外时间时
         {
             stateMachine.ChangeState(player.FallState);
+            player.rb.gravityScale = playerData.gravityMount;//重置重力参数
         }
     }
 

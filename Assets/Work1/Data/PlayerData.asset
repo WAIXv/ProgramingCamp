@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: PlayerData
   m_EditorClassIdentifier: 
   moveSpeed: 10
+  gravityMount: 5
+  maxJumpCount: 2
   jumpForce: 15
   extraTime: 0.1
   groundCheckRadius: 0.3
