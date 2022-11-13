@@ -1,26 +1,87 @@
-﻿  Renderer.cpp
-F:\Desktop\图形学\Homework\Homework7\Assignment7\global.hpp(19,46): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-F:\Desktop\图形学\Homework\Homework7\Assignment7\global.hpp(21,17): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-F:\Desktop\图形学\Homework\Homework7\Assignment7\global.hpp(45,13): warning C4244: “初始化”: 从“float”转换到“int”，可能丢失数据
-F:\Desktop\图形学\Homework\Homework7\Assignment7\Ray.hpp(16,68): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-F:\Desktop\图形学\Homework\Homework7\Assignment7\Ray.hpp(16,52): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-F:\Desktop\图形学\Homework\Homework7\Assignment7\Ray.hpp(16,36): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-F:\Desktop\图形学\Homework\Homework7\Assignment7\Ray.hpp(22,65): warning C4244: “参数”: 从“double”转换到“const float”，可能丢失数据
-F:\Desktop\图形学\Homework\Homework7\Assignment7\Bounds3.hpp(20,41): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-F:\Desktop\图形学\Homework\Homework7\Assignment7\Bounds3.hpp(20,33): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-F:\Desktop\图形学\Homework\Homework7\Assignment7\Bounds3.hpp(20,25): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-F:\Desktop\图形学\Homework\Homework7\Assignment7\Bounds3.hpp(21,41): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-F:\Desktop\图形学\Homework\Homework7\Assignment7\Bounds3.hpp(21,33): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-F:\Desktop\图形学\Homework\Homework7\Assignment7\Bounds3.hpp(21,25): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-F:\Desktop\图形学\Homework\Homework7\Assignment7\Bounds3.hpp(106,19): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-F:\Desktop\图形学\Homework\Homework7\Assignment7\Bounds3.hpp(107,19): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-F:\Desktop\图形学\Homework\Homework7\Assignment7\Scene.hpp(23,30): warning C4305: “参数”: 从“double”到“float”截断
-F:\Desktop\图形学\Homework\Homework7\Assignment7\Scene.hpp(25,27): warning C4305: “初始化”: 从“double”到“float”截断
-F:\Desktop\图形学\Homework\Homework7\Assignment7\Renderer.cpp(13,60): warning C4244: “return”: 从“double”转换到“float”，可能丢失数据
-F:\Desktop\图形学\Homework\Homework7\Assignment7\Renderer.cpp(24,41): warning C4244: “参数”: 从“double”转换到“const float”，可能丢失数据
-F:\Desktop\图形学\Homework\Homework7\Assignment7\Renderer.cpp(41,13): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-F:\Desktop\图形学\Homework\Homework7\Assignment7\Renderer.cpp(43,13): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-F:\Desktop\图形学\Homework\Homework7\Assignment7\Renderer.cpp(47,62): warning C4244: “参数”: 从“int”转换到“const float”，可能丢失数据
-F:\Desktop\图形学\Homework\Homework7\Assignment7\Renderer.cpp(55,47): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-F:\Desktop\图形学\Homework\Homework7\Assignment7\Renderer.cpp(98,16): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+﻿  BVH.cpp
+F:\Code\Homework07\global.hpp(19,46): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+F:\Code\Homework07\global.hpp(21,17): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+F:\Code\Homework07\global.hpp(45,13): warning C4244: “初始化”: 从“float”转换到“int”，可能丢失数据
+F:\Code\Homework07\Ray.hpp(16,68): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+F:\Code\Homework07\Ray.hpp(16,52): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+F:\Code\Homework07\Ray.hpp(16,36): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+F:\Code\Homework07\Ray.hpp(22,65): warning C4244: “参数”: 从“double”转换到“const float”，可能丢失数据
+F:\Code\Homework07\Bounds3.hpp(20,41): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+F:\Code\Homework07\Bounds3.hpp(20,33): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+F:\Code\Homework07\Bounds3.hpp(20,25): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+F:\Code\Homework07\Bounds3.hpp(21,41): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+F:\Code\Homework07\Bounds3.hpp(21,33): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+F:\Code\Homework07\Bounds3.hpp(21,25): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+F:\Code\Homework07\Bounds3.hpp(106,19): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+F:\Code\Homework07\Bounds3.hpp(107,19): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+  main.cpp
+F:\Code\Homework07\global.hpp(19,46): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+F:\Code\Homework07\global.hpp(21,17): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+F:\Code\Homework07\global.hpp(45,13): warning C4244: “初始化”: 从“float”转换到“int”，可能丢失数据
+F:\Code\Homework07\Ray.hpp(16,68): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+F:\Code\Homework07\Ray.hpp(16,52): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+F:\Code\Homework07\Ray.hpp(16,36): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+F:\Code\Homework07\Ray.hpp(22,65): warning C4244: “参数”: 从“double”转换到“const float”，可能丢失数据
+F:\Code\Homework07\Bounds3.hpp(20,41): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+F:\Code\Homework07\Bounds3.hpp(20,33): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+F:\Code\Homework07\Bounds3.hpp(20,25): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+F:\Code\Homework07\Bounds3.hpp(21,41): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+F:\Code\Homework07\Bounds3.hpp(21,33): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+F:\Code\Homework07\Bounds3.hpp(21,25): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+F:\Code\Homework07\Bounds3.hpp(106,19): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+F:\Code\Homework07\Bounds3.hpp(107,19): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+F:\Code\Homework07\Scene.hpp(23,30): warning C4305: “参数”: 从“double”到“float”截断
+F:\Code\Homework07\Scene.hpp(25,27): warning C4305: “初始化”: 从“double”到“float”截断
+F:\Code\Homework07\OBJ_Loader.hpp(944,33): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+F:\Code\Homework07\Triangle.hpp(181,23): warning C4244: “初始化”: 从“int”转换到“float”，可能丢失数据
+F:\Code\Homework07\Triangle.hpp(184,1): warning C4305: “参数”: 从“double”到“float”截断
+F:\Code\Homework07\Sphere.hpp(81,21): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+  Renderer.cpp
+F:\Code\Homework07\global.hpp(19,46): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+F:\Code\Homework07\global.hpp(21,17): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+F:\Code\Homework07\global.hpp(45,13): warning C4244: “初始化”: 从“float”转换到“int”，可能丢失数据
+F:\Code\Homework07\Ray.hpp(16,68): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+F:\Code\Homework07\Ray.hpp(16,52): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+F:\Code\Homework07\Ray.hpp(16,36): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+F:\Code\Homework07\Ray.hpp(22,65): warning C4244: “参数”: 从“double”转换到“const float”，可能丢失数据
+F:\Code\Homework07\Bounds3.hpp(20,41): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+F:\Code\Homework07\Bounds3.hpp(20,33): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+F:\Code\Homework07\Bounds3.hpp(20,25): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+F:\Code\Homework07\Bounds3.hpp(21,41): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+F:\Code\Homework07\Bounds3.hpp(21,33): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+F:\Code\Homework07\Bounds3.hpp(21,25): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+F:\Code\Homework07\Bounds3.hpp(106,19): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+F:\Code\Homework07\Bounds3.hpp(107,19): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+F:\Code\Homework07\Scene.hpp(23,30): warning C4305: “参数”: 从“double”到“float”截断
+F:\Code\Homework07\Scene.hpp(25,27): warning C4305: “初始化”: 从“double”到“float”截断
+F:\Code\Homework07\Renderer.cpp(13,60): warning C4244: “return”: 从“double”转换到“float”，可能丢失数据
+F:\Code\Homework07\Renderer.cpp(24,41): warning C4244: “参数”: 从“double”转换到“const float”，可能丢失数据
+F:\Code\Homework07\Renderer.cpp(41,13): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+F:\Code\Homework07\Renderer.cpp(43,13): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+F:\Code\Homework07\Renderer.cpp(47,62): warning C4244: “参数”: 从“int”转换到“const float”，可能丢失数据
+F:\Code\Homework07\Renderer.cpp(55,47): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+F:\Code\Homework07\Renderer.cpp(98,16): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  Scene.cpp
+F:\Code\Homework07\global.hpp(19,46): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+F:\Code\Homework07\global.hpp(21,17): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+F:\Code\Homework07\global.hpp(45,13): warning C4244: “初始化”: 从“float”转换到“int”，可能丢失数据
+F:\Code\Homework07\Ray.hpp(16,68): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+F:\Code\Homework07\Ray.hpp(16,52): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+F:\Code\Homework07\Ray.hpp(16,36): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+F:\Code\Homework07\Ray.hpp(22,65): warning C4244: “参数”: 从“double”转换到“const float”，可能丢失数据
+F:\Code\Homework07\Bounds3.hpp(20,41): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+F:\Code\Homework07\Bounds3.hpp(20,33): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+F:\Code\Homework07\Bounds3.hpp(20,25): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+F:\Code\Homework07\Bounds3.hpp(21,41): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+F:\Code\Homework07\Bounds3.hpp(21,33): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+F:\Code\Homework07\Bounds3.hpp(21,25): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+F:\Code\Homework07\Bounds3.hpp(106,19): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+F:\Code\Homework07\Bounds3.hpp(107,19): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+F:\Code\Homework07\Scene.hpp(23,30): warning C4305: “参数”: 从“double”到“float”截断
+F:\Code\Homework07\Scene.hpp(25,27): warning C4305: “初始化”: 从“double”到“float”截断
+  Vector.cpp
+  正在生成代码...
+F:\Code\Homework07\Material.hpp(177): warning C4715: “Material::eval”: 不是所有的控件路径都返回值
+F:\Code\Homework07\Material.hpp(160): warning C4715: “Material::pdf”: 不是所有的控件路径都返回值
+F:\Code\Homework07\Material.hpp(146): warning C4715: “Material::sample”: 不是所有的控件路径都返回值
   Homework07.vcxproj -> F:\Code\Homework07\x64\Debug\Homework07.exe

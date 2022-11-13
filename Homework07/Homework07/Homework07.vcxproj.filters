@@ -15,66 +15,66 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\Desktop\图形学\Homework\Homework7\Assignment7\Vector.hpp">
+    <ClInclude Include="..\AreaLight.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Desktop\图形学\Homework\Homework7\Assignment7\AreaLight.hpp">
+    <ClInclude Include="..\Bounds3.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Desktop\图形学\Homework\Homework7\Assignment7\Bounds3.hpp">
+    <ClInclude Include="..\BVH.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Desktop\图形学\Homework\Homework7\Assignment7\BVH.hpp">
+    <ClInclude Include="..\global.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Desktop\图形学\Homework\Homework7\Assignment7\global.hpp">
+    <ClInclude Include="..\Intersection.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Desktop\图形学\Homework\Homework7\Assignment7\Intersection.hpp">
+    <ClInclude Include="..\Light.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Desktop\图形学\Homework\Homework7\Assignment7\Light.hpp">
+    <ClInclude Include="..\Material.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Desktop\图形学\Homework\Homework7\Assignment7\Material.hpp">
+    <ClInclude Include="..\OBJ_Loader.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Desktop\图形学\Homework\Homework7\Assignment7\OBJ_Loader.hpp">
+    <ClInclude Include="..\Object.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Desktop\图形学\Homework\Homework7\Assignment7\Object.hpp">
+    <ClInclude Include="..\Ray.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Desktop\图形学\Homework\Homework7\Assignment7\Ray.hpp">
+    <ClInclude Include="..\Renderer.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Desktop\图形学\Homework\Homework7\Assignment7\Renderer.hpp">
+    <ClInclude Include="..\Scene.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Desktop\图形学\Homework\Homework7\Assignment7\Scene.hpp">
+    <ClInclude Include="..\Sphere.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Desktop\图形学\Homework\Homework7\Assignment7\Sphere.hpp">
+    <ClInclude Include="..\Triangle.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Desktop\图形学\Homework\Homework7\Assignment7\Triangle.hpp">
+    <ClInclude Include="..\Vector.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\Desktop\图形学\Homework\Homework7\Assignment7\Vector.cpp">
+    <ClCompile Include="..\BVH.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Desktop\图形学\Homework\Homework7\Assignment7\BVH.cpp">
+    <ClCompile Include="..\main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Desktop\图形学\Homework\Homework7\Assignment7\main.cpp">
+    <ClCompile Include="..\Renderer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Desktop\图形学\Homework\Homework7\Assignment7\Renderer.cpp">
+    <ClCompile Include="..\Scene.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Desktop\图形学\Homework\Homework7\Assignment7\Scene.cpp">
+    <ClCompile Include="..\Vector.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
