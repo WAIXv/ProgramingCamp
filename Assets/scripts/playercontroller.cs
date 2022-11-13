@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class playercontroller : MonoBehaviour
 {
-    [SerializeField] private  Rigidbody2D player;
-    [SerializeField] private Animator anim;
+    private  Rigidbody2D player;
+    private Animator anim;
     [SerializeField] private Collider2D feet;
     [SerializeField] private float speedx;
     [SerializeField] private float jumpforce;
@@ -14,7 +14,8 @@ public class playercontroller : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        player = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
