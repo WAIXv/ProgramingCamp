@@ -15,6 +15,14 @@ namespace Assets
         static EntityStates()
         {
         }
+        public interface IState
+        {
+            public void OnUpdate();
+            public void OnEnter();
+            public void OnLeave();
+        }
+
+
 
         public class EntityStateMgr
         {

@@ -35,7 +35,6 @@ public class player_ctrl : MonoBehaviour
                 {
                     if ((onGround || ground_tick > 0) && (Input.GetKeyDown(KeyCode.Space) || (int)Input.GetAxisRaw("Vertical") > 0))
                     {
-                        print("jump");
                         onGround = false;
                         //WALK.SetActive(true);
                         doJump(15.0f);
