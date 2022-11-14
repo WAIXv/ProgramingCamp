@@ -10,15 +10,18 @@ public class playercontroller : MonoBehaviour
     [SerializeField] private float speedx;
     [SerializeField] private float jumpforce;
     [SerializeField] private LayerMask ground;
+    [SerializeField] private int cherry = 0;
+    [SerializeField] private int gem = 0;
+    private int jumpchance;
 
-    // Start is called before the first frame update
+    
     void Start()
     {
         player = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
     }
 
-    // Update is called once per frame
+    
     void FixedUpdate()
     {
         movement();
@@ -37,16 +40,22 @@ public class playercontroller : MonoBehaviour
             player.velocity = new Vector2 (horizontalmove*speedx*Time.fixedDeltaTime, player.velocity.y);
             anim.SetFloat("running", Mathf.Abs(facedirection));
         }
+        
+        //×ªÍ·
         if (facedirection != 0)
         {
             transform.localScale = new Vector3(facedirection, 1, 1);
         }
 
+        if (anim.GetBool("onground"))
+            jumpchance = 2;
         //½ÇÉ«ÌøÔ¾
-        if (Input.GetButton("Jump"))
+        if (Input.GetButton("Jump")&& jumpchance > 0)
         {
             player.velocity = new Vector2 (player.velocity.x, jumpforce*Time.fixedDeltaTime);
             anim.SetBool("jumping", true);
+            jumpchance -= 1;
+            anim.SetBool("onground",false);
         }
     }
 
@@ -67,10 +76,18 @@ public class playercontroller : MonoBehaviour
         {
             anim.SetBool("falling", false);
             anim.SetBool("idle",true);
+            anim.SetBool("onground", true);
         }
     }
 
-
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "collection")
+        {
+            Destroy(collision.gameObject);
+            cherry += 1;
+        }
+    }
 
 
 }
