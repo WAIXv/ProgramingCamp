@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.Animations;
 using static Assets.EntityStates;
 
-public class player_ctrl : MonoBehaviour
+public class cxk_ctrl : MonoBehaviour
 {
     // Start is called before the first frame update
 
@@ -100,7 +100,7 @@ public class player_ctrl : MonoBehaviour
         //init
         _Rigidbody2D = this.gameObject.GetComponent<Rigidbody2D>();
         _Collider = this.gameObject.GetComponent<BoxCollider2D>();
-        visual = GameObject.Find("visual");
+        visual = gameObject.transform.Find("visual").gameObject;
         scale_x = visual.transform.localScale.x;
         a = visual.GetComponent<Animator>();
     }

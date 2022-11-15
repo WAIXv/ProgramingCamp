@@ -19,11 +19,14 @@ public class camera_ctrl : MonoBehaviour
     static float a_x = 2.2f; 
     static float a_y = 1.9f;
 
+    [SerializeField]
+    private float min_y = -20f;
+
     // Start is called before the first frame update
     void Start()
     {
         cam = gameObject.GetComponent<Camera>();
-        player = GameObject.Find("player");
+        player = GameObject.Find("irene");
         bg = GameObject.Find("bg");
         danger_layer = GameObject.Find("danger");
         lost_layer = GameObject.Find("lost");
@@ -59,7 +62,7 @@ public class camera_ctrl : MonoBehaviour
         else
             cam_pos.y = p_pos.x;
 
-        if (cam_pos.y <= 0.8f) cam_pos.y = 0.8f;
+        if (cam_pos.y <= min_y) cam_pos.y = min_y;
 
         cam.transform.position = cam_pos;
     }
@@ -67,7 +70,7 @@ public class camera_ctrl : MonoBehaviour
     void Update()
     {
         Color col = danger_layer.GetComponent<SpriteRenderer>().color;
-        if (player.transform.position.y < -5f)
+        if (player.transform.position.y < -20f)
         {
             col.a += Time.deltaTime * 1.5f;
             col.a = math.min(1.0f,col.a);
