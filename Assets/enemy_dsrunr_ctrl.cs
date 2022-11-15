@@ -21,9 +21,9 @@ public static class S
         {
             Vector3 vec = Obj.gameObject.transform.localScale;
             Obj.animator.SetBool("move", true);
-            if (Obj.rigidbody.velocity.x >= 0.001f)
+            if (Obj.rb.velocity.x >= 0.001f)
                 vec.x = math.abs(vec.x);
-            else if (Obj.rigidbody.velocity.x <= -0.001f)
+            else if (Obj.rb.velocity.x <= -0.001f)
                 vec.x = -math.abs(vec.x);
             else
                 Obj.animator.SetBool("move", false);
@@ -72,9 +72,9 @@ public static class S
             if (math.abs(vec.x) >= 1.3f)
             {
                 int d = (int)(vec.x / math.abs(vec).x);
-                Vector3 v = Obj.rigidbody.velocity;
+                Vector3 v = Obj.rb.velocity;
                 v.x = 2.7f * d;
-                Obj.rigidbody.velocity = v;
+                Obj.rb.velocity = v;
 
                 vec = Obj.gameObject.transform.localScale;
                 vec.x = d*math.abs(vec.x);
@@ -98,7 +98,7 @@ public static class S
 public class enemy_dsrunr_ctrl : MonoBehaviour
 {
     public EntityStates.IState EState;
-    public Rigidbody2D rigidbody;
+    public Rigidbody2D rb;
     public Animator animator;
 
     private Vector3 last_pos;
@@ -107,7 +107,7 @@ public class enemy_dsrunr_ctrl : MonoBehaviour
 
     void Awake()
     {
-        rigidbody = GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
     }
 
@@ -131,7 +131,7 @@ public class enemy_dsrunr_ctrl : MonoBehaviour
     {
         if(collision.gameObject.name == "player")
         {
-            EState = new S.LOCKED(this, collision.gameObject);
+            //EState = new S.LOCKED(this, collision.gameObject);
         }
     }
 
@@ -139,7 +139,7 @@ public class enemy_dsrunr_ctrl : MonoBehaviour
     {
         if (collision.gameObject.name == "player")
         {
-            EState = new S.IDLE(this);
+            //EState = new S.IDLE(this);
         }
     }
 
