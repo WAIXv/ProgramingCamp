@@ -138,7 +138,7 @@ public class irene_ctrl : MonoBehaviour
                 move_v -= stop_a * Time.deltaTime * (move_v > 0 ? 1 : -1);
             }
         }
-        animator.SetFloat("walk_speed", math.abs(move_v) / move_v_max);
+        animator.SetFloat("walk_speed", math.abs(rb.velocity.x) / move_v_max);
         setMovement(move_v);
 
         if (rb.velocity.y < -0.05f && !onGround) animator.SetBool("fall", true);
