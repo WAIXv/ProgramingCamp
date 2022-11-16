@@ -236,7 +236,7 @@ public class irene_ctrl : MonoBehaviour
         {
             onGround = true;
             if (rootLayerAnim == walk_Anim)
-                setAnim(0, rootLayerAnim, true, math.abs(rb.velocity.x) * 0.45f);
+                setAnim(0, rootLayerAnim, true, math.abs(rb.velocity.x) * 0.482f);
             else
                 setAnim(0, rootLayerAnim, true);
             ground_tick = 0.2f;
