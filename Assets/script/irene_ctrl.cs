@@ -50,9 +50,7 @@ public class irene_ctrl : MonoBehaviour
 
         }
         */
-
     }
-
     //public EntityStates.IState EState;
 
 
@@ -69,8 +67,11 @@ public class irene_ctrl : MonoBehaviour
     [SerializeField] private string jump_up_Anim;
     [SerializeField] private string jump_up_2_Anim;
     [SerializeField] private string jump_fall_Anim;
+
+    private string rootLayerAnim;
     #endregion
 
+    #region Editable var
     [Header("Ctrl")]
     public Rigidbody2D rb;
     public Animator animator;
@@ -79,37 +80,36 @@ public class irene_ctrl : MonoBehaviour
     public bool face_r = true;
     private bool onGround = false;
 
-    public float move_v = 0f;
-
-    [SerializeField]
+    private float move_v = 0f;
     public float move_v_max = 0.7f;
     [SerializeField]
-    private static float stop_a = 32.0f;
+    private float stop_a = 32.0f;
     [SerializeField]
-    public float jump_v = 10.0f;
+    private float jump_buffer_time = 0.4f;
+    [SerializeField]
+    private float grav_mul = 1.0f;
+    #endregion
 
+    #region Jump buffer
+    private float jump_buffer = 0;
+    private int jump_state = 4;
+    private float jump_press_time = 0;
+
+    private float[] grav = { 8.8f, 18.9f, 1.2f, 21.1f, 5.8f };
+    
     float ground_tick = 0.2f;
 
+    [SerializeField]
+    private float jump_v = 10f;
 
-    private string rootLayerAnim;
+    #endregion
 
-
-    void Awake()
-    {
-
-    }
-
-    // Start is called before the first frame update
     void Start()
     {
-        //EState = new IRENE.IDLE(this);
-
         rb = GetComponent<Rigidbody2D>();
-
         visual = gameObject.transform.Find("visual").gameObject;
         animator = visual.GetComponent<Animator>();
         visual_scale = visual.transform.localScale;
-
 
         #region Initializating SpineAnimation
         bone = skeletonAnimation.Skeleton.FindBone(boneName);
@@ -122,25 +122,73 @@ public class irene_ctrl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Vector2 speed = rb.velocity;
         float dt = Time.deltaTime;
 
-        //face on
+        #region Face on
         Vector3 vec = visual.transform.localScale;
         int _0x00 = (face_r ? 1 : -1);
-
-        //vec.x = visual_scale.x * _0x00;
         vec.x += dt * _0x00 * visual_scale.x * 18;
         if (math.abs(vec.x) > visual_scale.x) vec.x = visual_scale.x * _0x00;
         visual.transform.localScale = vec;
+        #endregion
 
-        //input handle
-        if ((onGround || ground_tick > 0) && (Input.GetKeyDown(KeyCode.Space) || (int)Input.GetAxisRaw("Vertical") > 0))
+        #region Vertical movment handle
+
+        if ((int)Input.GetAxisRaw("Vertical") > 0 || Input.GetKey(KeyCode.Space))
         {
-            doJump(jump_v);
-            onGround = false;
-            ground_tick = -0.1f;
+            jump_buffer = jump_buffer_time;
+            jump_press_time += dt;
+        }
+        else
+        {
+            jump_press_time = 0f;
         }
 
+
+        if ((onGround || ground_tick > 0) && jump_buffer > 0)
+        {
+            speed.y = jump_v;
+            if(jump_state >= 4)
+            {
+                jump_state = 1;
+                setAnim(0, jump_up_Anim, false);
+                addAnim(0, jump_up_2_Anim, true, 0f);
+            }
+        }
+
+        switch (jump_state)
+        {
+            case 1: //减速上升
+                speed.y -= grav[0] * grav_mul * dt;
+                if (jump_press_time >= 0.4f || jump_press_time == 0f) jump_state++;
+                break;
+            case 2: //减速 1 挡
+                speed.y -= grav[1] * grav_mul * dt;
+                if (speed.y <= 0.1f) jump_state++;
+                break;
+            case 3: //减速 2 挡（近似滞留）
+                speed.y -= grav[2] * grav_mul * dt;
+                if (speed.y <= -0.08f) jump_state++;
+                break;
+            case 4: //加速下坠
+                speed.y -= grav[3] * grav_mul * dt;
+                if (speed.y <= -30f) jump_state++;
+                break;
+            case 5: //缓慢加速下坠
+                speed.y -= grav[4] * grav_mul * dt;
+                if (speed.y <= -40f) jump_state++;
+                break;
+            case 6: //匀速下坠
+                speed.y = -40f;
+                break;
+            default: 
+                
+                break;
+        }
+        #endregion
+
+        #region Horizontal movment handle
         int axis_x = -(int)GetHorIn();
         if (axis_x != 0)
         {
@@ -151,7 +199,6 @@ public class irene_ctrl : MonoBehaviour
                 move_v = axis_x * move_v_max;
             }
             face_r = axis_x < 0;
-            //animator.SetBool("walk", true);
             rootLayerAnim = walk_Anim;
         }
         else
@@ -166,17 +213,21 @@ public class irene_ctrl : MonoBehaviour
                 move_v -= stop_a * (onGround ? 1 : 0.7f) * Time.deltaTime * (move_v > 0 ? 1 : -1);
             }
         }
-        //animator.SetFloat("walk_speed", math.abs(rb.velocity.x) / move_v_max);
-        setMovement(move_v);
+        speed.x = -move_v;
+        #endregion
 
+        #region EndUpdate
+        //handle animation
         if (rb.velocity.y < -0.01f && !onGround)
         {
             setAnim(0, jump_fall_Anim, true);
         }
 
-        //else setAnim(0, rootLayerAnim, true);
-
         if (ground_tick >= 0f) ground_tick -= dt;
+        if (jump_buffer > 0f) jump_buffer -= dt;
+
+        rb.velocity = speed;
+        #endregion
     }
 
     void OnTriggerStay2D(Collider2D collision)
@@ -189,6 +240,7 @@ public class irene_ctrl : MonoBehaviour
             else
                 setAnim(0, rootLayerAnim, true);
             ground_tick = 0.2f;
+            jump_state = 4;
         }
     }
 
@@ -200,28 +252,7 @@ public class irene_ctrl : MonoBehaviour
         }
     }
 
-
-    private void doJump(float v)
-    {
-        Vector2 vec = rb.velocity;
-        vec.y = v;
-        rb.velocity = vec;
-        setAnim(0, jump_up_Anim, false);
-        addAnim(0, jump_up_2_Anim, true, 0f);
-    }
-
-    private void setMovement(float v)
-    {
-        Vector2 vec = rb.velocity;
-        vec.x = -v;
-        rb.velocity = vec;
-    }
-    private void updateFall(float v)
-    {
-        Vector2 vec = rb.velocity;
-        vec.y = -v;
-        rb.velocity = vec;
-    }
+    #region Utils
     public static float GetHorIn()
     {
         return Input.GetAxisRaw("Horizontal");
@@ -260,5 +291,5 @@ public class irene_ctrl : MonoBehaviour
         }
         return animationState.GetCurrent(layer);
     }
-
+    #endregion
 }

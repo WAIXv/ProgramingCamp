@@ -53,7 +53,7 @@ public class temp_visual_ctrl : MonoBehaviour
             yield return new WaitForSeconds(5f);
             animationState.SetAnimation(0, "Die", false);
             yield return new WaitForSeconds(1f);
-            gameObject.SetActive(false);
+            gameObject.transform.parent.gameObject.SetActive(false);
         }
     }
 }

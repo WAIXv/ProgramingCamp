@@ -1598,9 +1598,11 @@ MonoBehaviour:
   animator: {fileID: 0}
   visual: {fileID: 542705857}
   face_r: 1
-  move_v: 0
   move_v_max: 6.5
-  jump_v: 35
+  stop_a: 32
+  jump_buffer_time: 0.05
+  grav_mul: 4.8
+  jump_v: 20
 --- !u!4 &656620394
 Transform:
   m_ObjectHideFlags: 0
@@ -1674,7 +1676,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 7.5
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -2893,7 +2895,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1437114143
 Transform:
   m_ObjectHideFlags: 0
@@ -2949,7 +2951,7 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 4
-  m_Time: 3.2
+  m_Time: 0.5
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
