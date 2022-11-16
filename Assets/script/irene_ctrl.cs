@@ -163,7 +163,7 @@ public class irene_ctrl : MonoBehaviour
             }
             else
             {
-                move_v -= stop_a * Time.deltaTime * (move_v > 0 ? 1 : -1);
+                move_v -= stop_a * (onGround ? 1 : 0.7f) * Time.deltaTime * (move_v > 0 ? 1 : -1);
             }
         }
         //animator.SetFloat("walk_speed", math.abs(rb.velocity.x) / move_v_max);
