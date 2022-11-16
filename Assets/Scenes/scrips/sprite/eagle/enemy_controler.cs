@@ -6,7 +6,6 @@ public class enemy_controler : MonoBehaviour
 {
     [SerializeField] private int damage;
     [SerializeField] private float speed;
-    [SerializeField] private Rigidbody2D rb;
     [SerializeField] Transform leftpoint;
     [SerializeField] Transform rightpoint;
     [SerializeField] private player_controler player;
@@ -28,11 +27,11 @@ public class enemy_controler : MonoBehaviour
     {
         if(face_direction)
         {
-            rb.velocity = new Vector2(-speed,rb.velocity.y);
+            transform.position += new Vector3(-1f,0f,0f)*speed*Time.deltaTime;
         }
         else if(!face_direction)
         {
-            rb.velocity = new Vector2(speed,rb.velocity.y);
+            transform.position += new Vector3(1f,0f,0f)*speed*Time.deltaTime;
         }
         if((transform.position.x<=leftpoint.position.x&&face_direction)||(transform.position.x>=rightpoint.position.x)&&!face_direction)
         {
@@ -46,7 +45,14 @@ public class enemy_controler : MonoBehaviour
         {
             if(player_controler.player_blood>0)
             {
-                player.gethurt(damage); 
+                if(other.transform.position.x>transform.position.x)
+                {
+                player.gethurt(damage,true);
+                }
+                else
+                {
+                player.gethurt(damage,false); 
+                }
             }      
         }
         else if(other.gameObject.CompareTag("player")&&other.GetType().ToString()=="UnityEngine.BoxCollider2D")

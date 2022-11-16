@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class player_controler : MonoBehaviour
 {
+ 
     [SerializeField] public static int player_blood;
     [SerializeField] public static int ammo_amount;
     [SerializeField] public static int stair_amount;
     
+    [SerializeField] private float hurt_timecounter; 
     [SerializeField] private float hurt_foces;
     [SerializeField] private bool able_to_move;
     [SerializeField] private bool hurted;
@@ -18,6 +20,7 @@ public class player_controler : MonoBehaviour
     [SerializeField] private Collider2D player_feet;
     [SerializeField] private LayerMask ground;
     [SerializeField] private Animator player_animator;
+    
     
     [SerializeField] private bool N_facing;
     // Start is called before the first frame update
@@ -36,10 +39,14 @@ public class player_controler : MonoBehaviour
     {
         animation_change();
         check_if_movable();
-         if(able_to_move)
-         {
+        if(hurted)
+        {
+            hurt_timecounter+=Time.fixedDeltaTime;
+        } 
+        if(able_to_move)
+        {
             player_move();
-         }
+        }
     }
     private void player_move()
     {
@@ -118,12 +125,12 @@ public class player_controler : MonoBehaviour
     {
 
     }    
-    public void gethurt(int damage)
+    public void gethurt(int damage,bool direction)
     {
         able_to_move = false;
         hurted = true;
         print("opps");
-        if(N_facing)
+        if(!direction)
         {
             player_body.velocity = new Vector2(-hurt_foces *Time.deltaTime,hurt_foces *Time.deltaTime); 
         }
@@ -133,6 +140,7 @@ public class player_controler : MonoBehaviour
         }
         if((player_blood-=damage)>0)
         {
+            hurt_timecounter=0;
             player_animator.SetBool("hurt",true);
         }
         else
@@ -143,14 +151,14 @@ public class player_controler : MonoBehaviour
 
     public void check_if_movable()
     {
-        if(Mathf.Abs(player_body.velocity.x)<0.1)
+        if(hurt_timecounter>=0.5f)
         {
             able_to_move = true;
         }
     }
     public void jump()
     {
-            player_body.velocity = new Vector2(player_body.velocity.x,jumpfoces);
-            player_animator.SetBool("jumping",true);
+        player_body.velocity = new Vector2(player_body.velocity.x,jumpfoces);
+        player_animator.SetBool("jumping",true);
     }
 }
