@@ -141,7 +141,10 @@ public class irene_ctrl : MonoBehaviour
         animator.SetFloat("walk_speed", math.abs(rb.velocity.x) / move_v_max);
         setMovement(move_v);
 
-        if (rb.velocity.y < -0.05f && !onGround) animator.SetBool("fall", true);
+        if (rb.velocity.y < -0.01f && !onGround) 
+        {
+            animator.SetBool("fall", true);
+        }
         else animator.SetBool("fall", false);
 
         if (ground_tick >= 0f) ground_tick -= dt;
@@ -183,7 +186,12 @@ public class irene_ctrl : MonoBehaviour
         vec.x = -v;
         rb.velocity = vec;
     }
-
+    private void updateFall(float v)
+    {
+        Vector2 vec = rb.velocity;
+        vec.y = -v;
+        rb.velocity = vec;
+    }
     public static float GetHorIn()
     {
         return Input.GetAxisRaw("Horizontal");
