@@ -76,11 +76,8 @@ public class irene_ctrl : MonoBehaviour
     public Rigidbody2D rb;
     public Animator animator;
     public GameObject visual;
-    Vector3 visual_scale;
-    public bool face_r = true;
-    private bool onGround = false;
 
-    private float move_v = 0f;
+    
     public float move_v_max = 0.7f;
     [SerializeField]
     private float stop_a = 32.0f;
@@ -88,6 +85,16 @@ public class irene_ctrl : MonoBehaviour
     private float jump_buffer_time = 0.4f;
     [SerializeField]
     private float grav_mul = 1.0f;
+    #endregion
+
+    #region Walk buffer
+    public bool face_r = true;
+    private float move_v = 0f;
+    Vector3 visual_scale;
+
+    public int walk_state = 0;
+    public float last_pos_x = 0f;
+
     #endregion
 
     #region Jump buffer
@@ -98,11 +105,14 @@ public class irene_ctrl : MonoBehaviour
     private float[] grav = { 8.8f, 18.9f, 1.2f, 21.1f, 5.8f };
     
     float ground_tick = 0.2f;
-
+    private bool onGround = false;
     [SerializeField]
     private float jump_v = 10f;
 
     #endregion
+
+
+
 
     void Start()
     {
@@ -110,7 +120,7 @@ public class irene_ctrl : MonoBehaviour
         visual = gameObject.transform.Find("visual").gameObject;
         animator = visual.GetComponent<Animator>();
         visual_scale = visual.transform.localScale;
-
+        last_pos_x = gameObject.transform.position.x;
         #region Initializating SpineAnimation
         bone = skeletonAnimation.Skeleton.FindBone(boneName);
         animationState = skeletonAnimation.AnimationState;
@@ -173,14 +183,14 @@ public class irene_ctrl : MonoBehaviour
                 break;
             case 4: //加速下坠
                 speed.y -= grav[3] * grav_mul * dt;
-                if (speed.y <= -30f) jump_state++;
+                if (speed.y <= -19f) jump_state++;
                 break;
             case 5: //缓慢加速下坠
                 speed.y -= grav[4] * grav_mul * dt;
-                if (speed.y <= -40f) jump_state++;
+                if (speed.y <= -26f) jump_state++;
                 break;
             case 6: //匀速下坠
-                speed.y = -40f;
+                speed.y = -26f;
                 break;
             default: 
                 
@@ -192,28 +202,47 @@ public class irene_ctrl : MonoBehaviour
         int axis_x = -(int)GetHorIn();
         if (axis_x != 0)
         {
-            move_v = (axis_x * move_v) < 0 ? 0 : move_v;
-            move_v += axis_x * stop_a * Time.deltaTime;
-            if (math.abs(move_v) > move_v_max)
-            {
-                move_v = axis_x * move_v_max;
-            }
             face_r = axis_x < 0;
-            rootLayerAnim = walk_Anim;
+            walk_state = 1;
         }
         else
         {
-            if (math.abs(move_v) <= stop_a * Time.deltaTime)
-            {
-                move_v = 0f;
-                rootLayerAnim = idle_Anim;
-            }
-            else
-            {
-                move_v -= stop_a * (onGround ? 1 : 0.7f) * Time.deltaTime * (move_v > 0 ? 1 : -1);
-            }
+            if (walk_state == 1)
+                walk_state = 2;
+        }
+
+        switch (walk_state)
+        {
+            case 0:
+                move_v = 0;
+                Vector3 v = gameObject.transform.position;
+                v.x = last_pos_x;
+                gameObject.transform.position = v;
+                break;
+            case 1:
+                move_v = (axis_x * move_v) < 0 ? 0 : move_v;
+                move_v += axis_x * stop_a * Time.deltaTime;
+                if (math.abs(move_v) > move_v_max)
+                {
+                    move_v = axis_x * move_v_max;
+                }
+                rootLayerAnim = walk_Anim;
+                break;
+            case 2:
+                if (math.abs(move_v) <= stop_a * Time.deltaTime)
+                {
+                    walk_state = 0;
+                    move_v = 0f;
+                    rootLayerAnim = idle_Anim;
+                }
+                else
+                {
+                    move_v -= stop_a * (onGround ? 1 : 0.7f) * Time.deltaTime * (move_v > 0 ? 1 : -1);
+                }
+                break;
         }
         speed.x = -move_v;
+
         #endregion
 
         #region EndUpdate
@@ -227,7 +256,14 @@ public class irene_ctrl : MonoBehaviour
         if (jump_buffer > 0f) jump_buffer -= dt;
 
         rb.velocity = speed;
+
+        last_pos_x = gameObject.transform.position.x;
         #endregion
+    }
+
+    private void LateUpdate()
+    {
+
     }
 
     void OnTriggerStay2D(Collider2D collision)
