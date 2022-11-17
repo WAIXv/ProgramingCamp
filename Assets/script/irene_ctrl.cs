@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.VFX;
 using Spine;
 using static S;
+using UnityEngine.UIElements;
 
 public class irene_ctrl : MonoBehaviour
 {
@@ -53,7 +54,6 @@ public class irene_ctrl : MonoBehaviour
     }
     //public EntityStates.IState EState;
 
-
     #region SpineAnimation
     [Header("Animation")]
     public SkeletonAnimation skeletonAnimation;
@@ -74,10 +74,8 @@ public class irene_ctrl : MonoBehaviour
     #region Editable var
     [Header("Ctrl")]
     public Rigidbody2D rb;
-    public Animator animator;
     public GameObject visual;
 
-    
     public float move_v_max = 0.7f;
     [SerializeField]
     private float stop_a = 32.0f;
@@ -85,16 +83,25 @@ public class irene_ctrl : MonoBehaviour
     private float jump_buffer_time = 0.4f;
     [SerializeField]
     private float grav_mul = 1.0f;
+    [SerializeField]
+    private player_Instance pInstance;
+    [SerializeField]
+    private float max_stun_tick = 0.35f;
     #endregion
 
+    [Header("Attack range")]
+    public GameObject attack_range_mgr;
+    [SerializeField]
+    private GameObject basic_attack_range;
     #region Walk buffer
+    [Header("Buffer")]
     public bool face_r = true;
     private float move_v = 0f;
     Vector3 visual_scale;
 
     public int walk_state = 0;
     public float last_pos_x = 0f;
-
+    private float stun_tick = 0f;
     #endregion
 
     #region Jump buffer
@@ -111,22 +118,69 @@ public class irene_ctrl : MonoBehaviour
 
     #endregion
 
-
-
-
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         visual = gameObject.transform.Find("visual").gameObject;
-        animator = visual.GetComponent<Animator>();
         visual_scale = visual.transform.localScale;
         last_pos_x = gameObject.transform.position.x;
+
+        pInstance.onDamage = () => {
+            walk_state = 3;
+            stun_tick = max_stun_tick;
+        };
+
         #region Initializating SpineAnimation
         bone = skeletonAnimation.Skeleton.FindBone(boneName);
         animationState = skeletonAnimation.AnimationState;
         animationState.SetAnimation(0, idle_Anim, true);
         rootLayerAnim = idle_Anim;
+        animationState.Event += AnimEventHandler;
         #endregion
+    }
+
+    private void AnimEventHandler(TrackEntry trackEntry, Spine.Event e)
+    {
+        switch (e.Data.Name)
+        {
+            case "OnAttack_1":
+                Basic_Attack(0);
+                break;
+            case "OnAttack_2":
+                Basic_Attack(8.5f);
+                break;
+        }
+    }
+
+    private void Basic_Attack(float KnockBack)
+    {
+        GameObject[] tmp2 = Basic_Attack_Range();
+        foreach (GameObject mob in tmp2)
+        {
+            mob_Instance MI = mob.GetComponent<mob_Instance>();
+            if (MI != null)
+            {
+                float db = MI.Damage(500);
+                MI.rigidbody.velocity += Vector2.right * (face_r ? 1 : -1) * KnockBack;
+                Debug.Log("Damage: " + db + "\n MOB_HEALTH: " + (int)MI.health + "/" + (int)MI.getMaxHealth());
+            }
+        }
+    }
+
+    private GameObject[] Basic_Attack_Range()
+    {
+        Vector2 Button = basic_attack_range.transform.position;
+        Vector2 Scale = basic_attack_range.transform.localScale;
+        RaycastHit2D[] hits = Physics2D.BoxCastAll(Button, Scale/2, 0, Vector2.right * (face_r ? 1 : -1), 0f);
+        List<GameObject> result = new List<GameObject>();
+        foreach(RaycastHit2D hit in hits)
+        {
+            if(!hit.collider.isTrigger && hit.collider.gameObject.tag == "mob_obj" && result.IndexOf(hit.collider.gameObject) < 0)
+            {
+                result.Add(hit.collider.gameObject);
+            }
+        }
+        return result.ToArray();
     }
 
     // Update is called once per frame
@@ -136,11 +190,16 @@ public class irene_ctrl : MonoBehaviour
         float dt = Time.deltaTime;
 
         #region Face on
+        //visual handle
         Vector3 vec = visual.transform.localScale;
         int _0x00 = (face_r ? 1 : -1);
         vec.x += dt * _0x00 * visual_scale.x * 18;
         if (math.abs(vec.x) > visual_scale.x) vec.x = visual_scale.x * _0x00;
         visual.transform.localScale = vec;
+        //attack range handle
+        vec = attack_range_mgr.transform.localScale;
+        vec.x = math.abs(vec.x) * _0x00;
+        attack_range_mgr.transform.localScale = vec;
         #endregion
 
         #region Vertical movment handle
@@ -183,14 +242,14 @@ public class irene_ctrl : MonoBehaviour
                 break;
             case 4: //加速下坠
                 speed.y -= grav[3] * grav_mul * dt;
-                if (speed.y <= -19f) jump_state++;
+                if (speed.y <= -25f) jump_state++;
                 break;
             case 5: //缓慢加速下坠
                 speed.y -= grav[4] * grav_mul * dt;
-                if (speed.y <= -26f) jump_state++;
+                if (speed.y <= -29f) jump_state++;
                 break;
             case 6: //匀速下坠
-                speed.y = -26f;
+                speed.y = -29f;
                 break;
             default: 
                 
@@ -200,14 +259,14 @@ public class irene_ctrl : MonoBehaviour
 
         #region Horizontal movment handle
         int axis_x = -(int)GetHorIn();
-        if (axis_x != 0)
+        if (axis_x != 0 && stun_tick <= 0)
         {
             face_r = axis_x < 0;
             walk_state = 1;
         }
         else
         {
-            if (walk_state == 1)
+            if (walk_state == 1 && stun_tick <= 0)
                 walk_state = 2;
         }
 
@@ -222,14 +281,14 @@ public class irene_ctrl : MonoBehaviour
             case 1:
                 move_v = (axis_x * move_v) < 0 ? 0 : move_v;
                 move_v += axis_x * stop_a * Time.deltaTime;
-                if (math.abs(move_v) > move_v_max)
+                if (math.abs(move_v) > move_v_max * (onGround ? 1f : 1.5f))
                 {
-                    move_v = axis_x * move_v_max;
+                    move_v = axis_x * move_v_max * (onGround ? 1f : 1.5f);
                 }
                 rootLayerAnim = walk_Anim;
                 break;
             case 2:
-                if (math.abs(move_v) <= stop_a * Time.deltaTime)
+                if (math.abs(move_v) <= stop_a * dt)
                 {
                     walk_state = 0;
                     move_v = 0f;
@@ -237,12 +296,33 @@ public class irene_ctrl : MonoBehaviour
                 }
                 else
                 {
-                    move_v -= stop_a * (onGround ? 1 : 0.7f) * Time.deltaTime * (move_v > 0 ? 1 : -1);
+                    move_v -= stop_a * (onGround ? 1 : 0.7f) * dt * (move_v > 0 ? 1 : -1);
+                }
+                break;
+            case 3:
+                rootLayerAnim = idle_Anim;
+                move_v += (move_v>0 ? -1 : 1) * stop_a * dt;
+                if (math.abs(move_v) <= stop_a * dt || stun_tick <= 0)
+                {
+                    walk_state = 0;
+                    move_v = 0f;
                 }
                 break;
         }
         speed.x = -move_v;
 
+        #endregion
+
+        #region Attack handle
+        if (Input.GetMouseButtonDown(0))
+        {
+            TrackEntry track = animationState.GetCurrent(1);
+            if (track==null || (track!= null && track.Animation.Name == "<empty>"))
+            {
+                setAnim(1, "Attack", false, 1.7f);
+                animationState.AddEmptyAnimation(1, 0.2f, 0f);
+            }
+        }
         #endregion
 
         #region EndUpdate
@@ -254,16 +334,16 @@ public class irene_ctrl : MonoBehaviour
 
         if (ground_tick >= 0f) ground_tick -= dt;
         if (jump_buffer > 0f) jump_buffer -= dt;
+        if (stun_tick > 0f) stun_tick -= dt;
 
         rb.velocity = speed;
-
         last_pos_x = gameObject.transform.position.x;
         #endregion
     }
 
-    private void LateUpdate()
+    public void setMove_v(float a)
     {
-
+        move_v = a;
     }
 
     void OnTriggerStay2D(Collider2D collision)

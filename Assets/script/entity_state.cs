@@ -57,9 +57,9 @@ namespace Assets
         public class EntityState
         {
             protected bool Active = false;
-            public Executer OnEnter;
-            public Executer OnExit;
-            public Executer OnUpdate;
+            public Executer_Gobj_V OnEnter;
+            public Executer_Gobj_V OnExit;
+            public Executer_Gobj_V OnUpdate;
 
             public EntityState()
             {
@@ -68,15 +68,15 @@ namespace Assets
                 this.OnUpdate = (Gobj) => { };
             }
 
-            public EntityState(bool active, Executer onEnter, Executer onUpdate, Executer onExit)
-            {
+            public EntityState(bool active, Executer_Gobj_V onEnter, Executer_Gobj_V onUpdate, Executer_Gobj_V onExit)
+            {   
                 this.OnEnter = onEnter;
                 this.OnExit = onExit;
                 this.OnUpdate = onUpdate;
                 Active = active;
             }
 
-            public EntityState(Executer onEnter, Executer onUpdate, Executer onExit)
+            public EntityState(Executer_Gobj_V onEnter, Executer_Gobj_V onUpdate, Executer_Gobj_V onExit)
             {
                 this.OnEnter = onEnter;
                 this.OnExit = onExit;
