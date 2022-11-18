@@ -1,0 +1,46 @@
+using System.Collections;
+using System.Collections.Generic;
+using Unity.Mathematics;
+using UnityEngine;
+
+public class health_bar : MonoBehaviour
+{
+    [SerializeField]
+    private GameObject Internal;
+    [SerializeField]
+    private mob_Instance MI;
+
+    private SpriteRenderer sr1;
+    private SpriteRenderer sr2;
+    //public float rate = 1;
+    // Start is called before the first frame update
+    void Start()
+    {
+        sr1 = gameObject.GetComponent<SpriteRenderer>();
+        sr2 = Internal.GetComponent<SpriteRenderer>();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        float rate = math.min(math.max(MI.health / MI.getMaxHealth(), 0), 1.0f);
+        if(rate >= 1.0f)
+        {
+            sr1.enabled = false;
+            sr2.enabled = false;
+        }
+        else
+        {
+            sr1.enabled = true;
+            sr2.enabled = true;
+        }
+
+        Vector3 tmp = Internal.transform.localScale;
+        tmp.x = rate;
+        Internal.transform.localScale = tmp;
+
+        tmp = Internal.transform.localPosition;
+        tmp.x = (rate - 1f) / 2;
+        Internal.transform.localPosition = tmp;
+    }
+}
