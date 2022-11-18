@@ -11,49 +11,6 @@ using UnityEngine.UIElements;
 
 public class irene_ctrl : MonoBehaviour
 {
-    public static class IRENE
-    {
-        /*
-        public class IDLE : EntityStates.IState
-        {
-            private irene_ctrl Obj;
-            public IDLE(irene_ctrl obj)
-            {
-                Obj = obj;
-            }
-
-            public void OnEnter() { }
-
-            public void OnLeave() { }
-
-            public void OnUpdate()
-            {
-
-            }
-        }
-
-        public class MOVE : EntityStates.IState
-        {
-            private irene_ctrl Obj;
-            public MOVE(irene_ctrl obj)
-            {
-                Obj = obj;
-            }
-
-            public void OnEnter() { }
-
-            public void OnLeave() { }
-
-            public void OnUpdate()
-            {
-
-            }
-
-        }
-        */
-    }
-    //public EntityStates.IState EState;
-
     #region SpineAnimation
     [Header("Animation")]
     public SkeletonAnimation skeletonAnimation;
@@ -89,6 +46,14 @@ public class irene_ctrl : MonoBehaviour
     private float max_stun_tick = 0.35f;
     #endregion
 
+    [Header("Audio")]
+    [SerializeField]
+    private AudioSource a_Foot_step;
+    [SerializeField]
+    private AudioSource a_Landing;
+    [SerializeField]
+    private AudioSource a_Attack;
+
     [Header("Attack range")]
     public GameObject attack_range_mgr;
     [SerializeField]
@@ -115,7 +80,7 @@ public class irene_ctrl : MonoBehaviour
     private bool onGround = false;
     [SerializeField]
     private float jump_v = 10f;
-
+    private bool lf_onGround = false;
     #endregion
 
     void Start()
@@ -147,7 +112,10 @@ public class irene_ctrl : MonoBehaviour
                 StartCoroutine(BA(0f));
                 break;
             case "OnAttack_2":
-                StartCoroutine(BA(10.5f));
+                StartCoroutine(BA(13.5f));
+                break;
+            case "playWalkSound":
+                a_Foot_step.Play();
                 break;
         }
     }
@@ -167,6 +135,7 @@ public class irene_ctrl : MonoBehaviour
             mob_Instance MI = mob.GetComponent<mob_Instance>();
             if (MI != null)
             {
+                a_Attack.Play();
                 float db = MI.Damage(500);
                 MI.rigidbody.velocity += Vector2.right * (face_r ? 1 : -1) * KnockBack;
                 Debug.Log("Damage: " + db + "\n MOB_HEALTH: " + (int)MI.health + "/" + (int)MI.getMaxHealth());
@@ -195,6 +164,13 @@ public class irene_ctrl : MonoBehaviour
     {
         Vector2 speed = rb.velocity;
         float dt = Time.deltaTime;
+
+        if(!lf_onGround && onGround)
+        {
+            a_Landing.Play();
+        }
+
+
 
         #region Face on
         //visual handle
@@ -347,6 +323,7 @@ public class irene_ctrl : MonoBehaviour
 
         rb.velocity = speed;
         last_pos_x = gameObject.transform.position.x;
+        lf_onGround = onGround;
         #endregion
     }
 

@@ -23,6 +23,9 @@ public class camera_ctrl : MonoBehaviour
     static float a_y = 1.9f;
 
     [SerializeField]
+    private GameObject audio_lost;
+
+    [SerializeField]
     private float min_y = -20f;
 
     // Start is called before the first frame update
@@ -77,7 +80,8 @@ public class camera_ctrl : MonoBehaviour
         {
             col.a += Time.deltaTime * 1.5f;
             col.a = math.min(1.0f,col.a);
-
+            if (!audio_lost.active)
+                audio_lost.SetActive(true);
         }
         else
         {
@@ -88,4 +92,8 @@ public class camera_ctrl : MonoBehaviour
         danger_layer.GetComponent<SpriteRenderer>().color = col;
         lost_layer.GetComponent<SpriteRenderer>().color = col;
     }
+
+
+
+
 }

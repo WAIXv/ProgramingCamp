@@ -75,6 +75,8 @@ public class dslntc_AI : MonoBehaviour
                         PIns.Obj.GetComponent<irene_ctrl>().setMove_v((face_r ? -1 : 1) * 20f);
                     }
                 }
+                break;
+            case "playWalkSound":
 
                 break;
         }
