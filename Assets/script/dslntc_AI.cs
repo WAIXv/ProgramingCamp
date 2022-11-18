@@ -76,9 +76,6 @@ public class dslntc_AI : MonoBehaviour
                     }
                 }
                 break;
-            case "playWalkSound":
-
-                break;
         }
     }
 
