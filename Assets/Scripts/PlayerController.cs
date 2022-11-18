@@ -87,4 +87,13 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void OnCollisionEnter2D(Collision2D collision)//踩到敌人后起跳
+    {
+        if (anim.GetBool("Fall") && collision.gameObject.CompareTag("Enemy"))
+        {
+            anim.SetBool("Jump", true);//播放动画
+            Vector2 jumpVel = new Vector2(rb.velocity.x, jumpSpeed);//跳跃速度
+            rb.velocity = jumpVel;
+        }
+    }
 }
