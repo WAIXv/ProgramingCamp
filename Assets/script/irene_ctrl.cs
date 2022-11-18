@@ -144,12 +144,19 @@ public class irene_ctrl : MonoBehaviour
         switch (e.Data.Name)
         {
             case "OnAttack_1":
-                Basic_Attack(0);
+                StartCoroutine(BA(0f));
                 break;
             case "OnAttack_2":
-                Basic_Attack(8.5f);
+                StartCoroutine(BA(10.5f));
                 break;
         }
+    }
+
+    IEnumerator BA(float kb)
+    {
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
+        Basic_Attack(kb);
     }
 
     private void Basic_Attack(float KnockBack)
@@ -309,7 +316,6 @@ public class irene_ctrl : MonoBehaviour
                 }
                 break;
         }
-        speed.x = -move_v;
 
         #endregion
 
@@ -317,8 +323,9 @@ public class irene_ctrl : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             TrackEntry track = animationState.GetCurrent(1);
-            if (track==null || (track!= null && track.Animation.Name == "<empty>"))
-            {
+            if (track == null || (track != null && track.Animation.Name == "<empty>"))
+            { 
+                if (onGround) StartCoroutine(basic_attack_movement());
                 setAnim(1, "Attack", false, 1.7f);
                 animationState.AddEmptyAnimation(1, 0.2f, 0f);
             }
@@ -336,10 +343,22 @@ public class irene_ctrl : MonoBehaviour
         if (jump_buffer > 0f) jump_buffer -= dt;
         if (stun_tick > 0f) stun_tick -= dt;
 
+        speed.x = -move_v;
+
         rb.velocity = speed;
         last_pos_x = gameObject.transform.position.x;
         #endregion
     }
+
+    private IEnumerator basic_attack_movement()
+    {
+        walk_state = 3;
+        move_v = (face_r ? -1 : 1) * 3.8f;
+        stun_tick = 0.1f;
+        yield return new WaitForSeconds(0.95f);
+        walk_state = 0;
+    }
+
 
     public void setMove_v(float a)
     {

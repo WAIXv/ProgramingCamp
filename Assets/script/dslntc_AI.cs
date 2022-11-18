@@ -1,3 +1,4 @@
+using Assets;
 using Spine;
 using Spine.Unity;
 using System.Collections;
@@ -14,16 +15,32 @@ public class dslntc_AI : MonoBehaviour
     private SkeletonAnimation skeletonAnimation;
     private Spine.AnimationState animationState;
 
+    private GameObject target;
+
     [SerializeField]
     Rigidbody2D rb;
     [SerializeField]
     GameObject visual;
     [SerializeField]
+    private float move_v = 18f;
+    [SerializeField]
+    private float blood_lost_rate_ps = 5f;
+    [Header("Attack_ranges")]
+    [SerializeField]
     GameObject attack_range_root;
     [SerializeField]
     GameObject attack_range;
+    [SerializeField]
+    GameObject attack_lock;
+    [SerializeField]
+    GameObject skill_range;
 
     private GameObject attack_target;
+
+    #region Movement buffer
+    private int move_state;
+
+    #endregion
 
     private bool face_r = true;
     private int skill = 0;
@@ -33,8 +50,8 @@ public class dslntc_AI : MonoBehaviour
     {
         animationState = skeletonAnimation.AnimationState;
         mInstance.beforeDeath = () => {
-            animationState.SetAnimation(0, "Die", false);
             skill = -1;
+            animationState.SetAnimation(0, "Die", false);
         };
         mInstance.onDamage = () => {
             SkillStart();
@@ -66,6 +83,7 @@ public class dslntc_AI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (mInstance.health <= 0) return;
         if(skill != 2)
         {
             Vector3 v = gameObject.transform.localScale;
@@ -80,13 +98,35 @@ public class dslntc_AI : MonoBehaviour
             SkillStart();
         }
 
+        if (skill >= 1)
+        {
+            if(target == null)
+            {
+                GameObject[] tmp = MyUtils.BoxRange(skill_range.transform.position, skill_range.transform.localScale / 2, 0, Vector2.right * (face_r ? 1 : -1), 0f, "player_obj");
+                if (tmp.Length > 0)
+                    target = tmp[0];
+            }
+            mInstance.health -= mInstance.getMaxHealth() * (blood_lost_rate_ps / 100f) * Time.deltaTime;
+        }
+
         if (skill == 1)
         {
-            GameObject[] targets = Attack_Range();
+            GameObject[] targets = Attack_check();
             if (targets.Length > 0) Attack();
 
-            mInstance.health -= mInstance.getMaxHealth() * 0.05f * Time.deltaTime;
+            if(target!= null)
+            {
+                Vector2 speed = rb.velocity;
+                if (target.transform.position.x - gameObject.transform.position.x > 0.55f)
+                    speed.x = move_v;
+                else if (target.transform.position.x - gameObject.transform.position.x < -0.55f)
+                    speed.x = -move_v;
+                else
+                    speed.x = 0;
+                rb.velocity = speed;
+            }
         }
+
     }
 
     private void Basic_Attack(float KnockBack)
@@ -104,34 +144,32 @@ public class dslntc_AI : MonoBehaviour
         }
     }
 
-
-
-
-
     private void SkillStart()
     {
         if (skill == 0)
         {
-            skill = 1;
+            skill = 2;
             animationState.SetAnimation(0, "Skill_Begin", false);
             animationState.AddAnimation(0, "Skill_Idle", true, 0f);
+            StartCoroutine(delayChangeState());
         }
     }
+    
+    IEnumerator delayChangeState()
+    {
+        yield return new WaitForSpineAnimationEnd(animationState.GetCurrent(0));
+        skill = 1;
+    }
+
+    private GameObject[] Attack_check()
+    {
+        return MyUtils.BoxRange(attack_lock.transform.position, attack_lock.transform.localScale / 2, 0, Vector2.right * (face_r ? 1 : -1), 0f, "player_obj");
+    }
+
 
     private GameObject[] Attack_Range()
     {
-        Vector2 Button = attack_range.transform.position;
-        Vector2 Scale = attack_range.transform.localScale;
-        RaycastHit2D[] hits = Physics2D.BoxCastAll(Button, Scale / 2, 0, Vector2.right * (face_r ? 1 : -1), 0f);
-        List<GameObject> result = new List<GameObject>();
-        foreach (RaycastHit2D hit in hits)
-        {
-            if (!hit.collider.isTrigger && hit.collider.gameObject.tag == "player_obj" && result.IndexOf(hit.collider.gameObject) < 0)
-            {
-                result.Add(hit.collider.gameObject);
-            }
-        }
-        return result.ToArray();
+        return MyUtils.BoxRange(attack_range.transform.position, attack_range.transform.localScale / 2, 0, Vector2.right * (face_r ? 1 : -1), 0f, "player_obj");
     }
 
     private void Attack()
