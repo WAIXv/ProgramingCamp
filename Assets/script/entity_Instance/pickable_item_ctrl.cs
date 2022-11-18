@@ -12,6 +12,10 @@ public class pickable_item_ctrl : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (!collision.isTrigger && collision.gameObject.tag == "player_obj") GameObject.Destroy(gameObject);
+        if (!collision.isTrigger && collision.gameObject.tag == "player_obj")
+        {
+            collision.gameObject.GetComponent<entity_Instance>().Heal(300f);
+            GameObject.Destroy(gameObject);
+        }
     }
 }

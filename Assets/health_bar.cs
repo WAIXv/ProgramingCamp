@@ -2,13 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class health_bar : MonoBehaviour
 {
     [SerializeField]
     private GameObject Internal;
     [SerializeField]
-    private mob_Instance MI;
+    private entity_Instance EI;
 
     private SpriteRenderer sr1;
     private SpriteRenderer sr2;
@@ -23,7 +24,7 @@ public class health_bar : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float rate = math.min(math.max(MI.health / MI.getMaxHealth(), 0), 1.0f);
+        float rate = math.min(math.max(EI.health / EI.getMaxHealth(), 0), 1.0f);
         if(rate >= 1.0f)
         {
             sr1.enabled = false;

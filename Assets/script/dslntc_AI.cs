@@ -8,8 +8,8 @@ using UnityEngine;
 
 public class dslntc_AI : MonoBehaviour
 {
-    [SerializeField] 
-    mob_Instance mInstance;
+    [SerializeField]
+    entity_Instance EInstance;
     // Start is called before the first frame update
     [SerializeField]
     private SkeletonAnimation skeletonAnimation;
@@ -49,14 +49,14 @@ public class dslntc_AI : MonoBehaviour
     void Start()
     {
         animationState = skeletonAnimation.AnimationState;
-        mInstance.beforeDeath = () => {
+        EInstance.beforeDeath = () => {
             skill = -1;
             animationState.SetAnimation(0, "Die", false);
         };
-        mInstance.onDamage = () => {
+        EInstance.onDamage = () => {
             SkillStart();
         };
-        mInstance.wait_for_death = 1f;
+        EInstance.wait_for_death = 1f;
         animationState.Event += AnimEventHandler;
     }
 
@@ -68,10 +68,10 @@ public class dslntc_AI : MonoBehaviour
                 GameObject[] tmp2 = Attack_Range();
                 if(tmp2.Length > 0)
                 {
-                    player_Instance PIns = tmp2[0].GetComponent<player_Instance>();
+                    entity_Instance PIns = tmp2[0].GetComponent<entity_Instance>();
                     if(PIns != null)
                     {
-                        PIns.Damage(0f);
+                        PIns.Damage(500f);
                         PIns.Obj.GetComponent<irene_ctrl>().setMove_v((face_r ? -1 : 1) * 20f);
                     }
                 }
@@ -82,7 +82,7 @@ public class dslntc_AI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (mInstance.health <= 0) return;
+        if (EInstance.health <= 0) return;
         if(skill != 2)
         {
             Vector3 v = gameObject.transform.localScale;
@@ -105,7 +105,7 @@ public class dslntc_AI : MonoBehaviour
                 if (tmp.Length > 0)
                     target = tmp[0];
             }
-            mInstance.health -= mInstance.getMaxHealth() * (blood_lost_rate_ps / 100f) * Time.deltaTime;
+            EInstance.health -= EInstance.getMaxHealth() * (blood_lost_rate_ps / 100f) * Time.deltaTime;
         }
 
         if (skill == 1)
@@ -126,21 +126,6 @@ public class dslntc_AI : MonoBehaviour
             }
         }
 
-    }
-
-    private void Basic_Attack(float KnockBack)
-    {
-        GameObject[] tmp2 = Attack_Range();
-        foreach (GameObject mob in tmp2)
-        {
-            mob_Instance MI = mob.GetComponent<mob_Instance>();
-            if (MI != null)
-            {
-                float db = MI.Damage(500);
-                MI.rigidbody.velocity += Vector2.right * (face_r ? 1 : -1) * KnockBack;
-                Debug.Log("Damage: " + db + "\n MOB_HEALTH: " + (int)MI.health + "/" + (int)MI.getMaxHealth());
-            }
-        }
     }
 
     private void SkillStart()

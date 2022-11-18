@@ -41,7 +41,7 @@ public class irene_ctrl : MonoBehaviour
     [SerializeField]
     private float grav_mul = 1.0f;
     [SerializeField]
-    private player_Instance pInstance;
+    private entity_Instance EInstance;
     [SerializeField]
     private float max_stun_tick = 0.35f;
     #endregion
@@ -90,7 +90,7 @@ public class irene_ctrl : MonoBehaviour
         visual_scale = visual.transform.localScale;
         last_pos_x = gameObject.transform.position.x;
 
-        pInstance.onDamage = () => {
+        EInstance.onDamage = () => {
             walk_state = 3;
             stun_tick = max_stun_tick;
         };
@@ -132,13 +132,12 @@ public class irene_ctrl : MonoBehaviour
         GameObject[] tmp2 = Basic_Attack_Range();
         foreach (GameObject mob in tmp2)
         {
-            mob_Instance MI = mob.GetComponent<mob_Instance>();
+            entity_Instance MI = mob.GetComponent<entity_Instance>();
             if (MI != null)
             {
                 a_Attack.Play();
                 float db = MI.Damage(500);
                 MI.rigidbody.velocity += Vector2.right * (face_r ? 1 : -1) * KnockBack;
-                Debug.Log("Damage: " + db + "\n MOB_HEALTH: " + (int)MI.health + "/" + (int)MI.getMaxHealth());
             }
         }
     }
