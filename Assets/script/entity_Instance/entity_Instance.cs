@@ -2,7 +2,6 @@ using Assets;
 using Assets.script;
 using Spine;
 using System.Collections;
-using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 

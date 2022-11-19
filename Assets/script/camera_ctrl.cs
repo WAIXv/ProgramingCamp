@@ -1,9 +1,7 @@
 using Assets;
 using Unity.Mathematics;
-using UnityEditorInternal;
 using UnityEngine;
 
-using static Assets.EntityStates;
 
 public class camera_ctrl : MonoBehaviour
 {
