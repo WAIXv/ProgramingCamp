@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float runSpeed;
-    public float jumpSpeed;
 
     private Rigidbody2D rb;
     private Animator anim;
     private BoxCollider2D feet;
+    private float runSpeed = 7;
+    private float jumpSpeed = 15;
     private bool isGround;
 
     // Start is called before the first frame update
@@ -72,13 +72,12 @@ public class PlayerController : MonoBehaviour
     void SwitchAnim()//¶¯»­ÇÐ»»
     {
         anim.SetBool("Idle", false);
-        if (anim.GetBool("Jump"))//ÆðÌø
+     
+        if (rb.velocity.y < 0.0f && !isGround)
         {
-            if (rb.velocity.y < 0.0f)
-            {
-                anim.SetBool("Jump", false);
-                anim.SetBool("Fall", true);
-            }
+            anim.SetBool("Run", false);
+            anim.SetBool("Jump", false);
+            anim.SetBool("Fall", true);
         }
         else if (isGround)//ÂäµØ
         {
