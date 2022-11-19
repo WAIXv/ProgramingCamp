@@ -3,7 +3,9 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Collection
+  - Enemies
   layers:
   - Default
   - TransparentFX
@@ -41,9 +43,15 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: gd
+  - name: background
     uniqueID: 2663132117
     locked: 0
-  - name: fd
+  - name: environment
     uniqueID: 395181969
+    locked: 0
+  - name: collection
+    uniqueID: 2349280515
+    locked: 0
+  - name: forntground
+    uniqueID: 2350228797
     locked: 0
