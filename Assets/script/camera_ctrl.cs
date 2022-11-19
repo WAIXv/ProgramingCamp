@@ -64,7 +64,6 @@ public class camera_ctrl : MonoBehaviour
         else
             cam_pos.x = p_pos.x;
 
-
         //ay
         pos.y -= offest_y;
         tmp = pos.y * a_y;
@@ -73,7 +72,7 @@ public class camera_ctrl : MonoBehaviour
         if (math.abs(cam_pos.y - tmp) >= 0.0001f)
             cam_pos.y += tmp;
         else
-            cam_pos.y = p_pos.x;
+            cam_pos.y = p_pos.y;
 
         if (cam_pos.y <= min_y) cam_pos.y = min_y;
 
@@ -87,10 +86,8 @@ public class camera_ctrl : MonoBehaviour
         {
             col.a += Time.deltaTime * 1.5f;
             col.a = math.min(1.0f,col.a);
-#pragma warning disable CS0618 // 类型或成员已过时
             if (!audio_lost.active && !Win)
                 audio_lost.SetActive(true);
-#pragma warning restore CS0618 // 类型或成员已过时
         }
         else
         {
