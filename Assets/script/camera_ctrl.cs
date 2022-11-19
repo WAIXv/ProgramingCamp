@@ -7,13 +7,16 @@ using static Assets.EntityStates;
 
 public class camera_ctrl : MonoBehaviour
 {
+    [SerializeField]
     private Camera cam;
     public GameObject player;
     public bool Lost = false;
     public bool Win = false;
     //private GameObject bg;
 
+    [SerializeField]
     private GameObject danger_layer;
+    [SerializeField]
     private GameObject lost_layer;
 
     public float edge = 10f;
@@ -35,10 +38,6 @@ public class camera_ctrl : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        cam = gameObject.GetComponent<Camera>();
-        danger_layer = GameObject.Find("danger");
-        lost_layer = GameObject.Find("lost");
-
     }
 
     // Update is called once per frame
@@ -88,8 +87,10 @@ public class camera_ctrl : MonoBehaviour
         {
             col.a += Time.deltaTime * 1.5f;
             col.a = math.min(1.0f,col.a);
+#pragma warning disable CS0618 // 类型或成员已过时
             if (!audio_lost.active && !Win)
                 audio_lost.SetActive(true);
+#pragma warning restore CS0618 // 类型或成员已过时
         }
         else
         {
@@ -99,8 +100,10 @@ public class camera_ctrl : MonoBehaviour
 
         if(Win)
         {
+#pragma warning disable CS0618 // 类型或成员已过时
             if (!audio_win.active && !Lost)
                 audio_win.SetActive(true);
+#pragma warning restore CS0618 // 类型或成员已过时
         }
         else
         {

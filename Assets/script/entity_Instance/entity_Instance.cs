@@ -1,4 +1,5 @@
 using Assets;
+using Assets.script;
 using Spine;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,6 +13,8 @@ public class entity_Instance : MonoBehaviour
     protected float max_health = 1000f;
     public GameObject Obj;
 
+    public EffectMgr EfcMgr = new EffectMgr();
+
     public float defense = 10;
     public float attack = 530;
 
@@ -22,20 +25,18 @@ public class entity_Instance : MonoBehaviour
     public MyUtils.Executer beforeDeath;
     public MyUtils.Executer onDamage;
 
-    // Start is called before the first frame update
     void Start()
     {
         health = max_health;
     }
 
-    public float Heal(float h)
+    public virtual float Heal(float h)
     {
         health = math.min(health + h, max_health);
         return 0;
     }
-
-    //return damage
-    public float Damage(float d)
+    
+    public virtual float Damage(float d)//return damage real
     {
         if (onDamage != null) onDamage();
         float tmp = math.max(d - defense, 50f);
@@ -48,19 +49,25 @@ public class entity_Instance : MonoBehaviour
         return max_health;
     }
 
-    public void doDeath()
+    public virtual void doDeath()
     {
         GameObject.Destroy(gameObject);
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if (health <= 0 && !death)
+        if(death) return;
+        EfcMgr.Update(this);
+        if (health <= 0)
         {
             death = true;
             StartCoroutine(WaitForDeath());
         }
+    }
+
+    public virtual void KnockBack(Vector2 vec)
+    {
+        rigidbody.velocity += vec;
     }
 
     IEnumerator WaitForDeath()

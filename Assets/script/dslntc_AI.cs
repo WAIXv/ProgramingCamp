@@ -72,7 +72,8 @@ public class dslntc_AI : MonoBehaviour
                     if(PIns != null)
                     {
                         PIns.Damage(EInstance.attack);
-                        PIns.Obj.GetComponent<irene_ctrl>().setMove_v((face_r ? -1 : 1) * 20f);
+                        PIns.KnockBack(Vector2.right * (face_r ? -1 : 1) * 20f);
+                        //PIns.Obj.GetComponent<irene_ctrl>().setMove_v((face_r ? -1 : 1) * 20f);
                     }
                 }
                 break;

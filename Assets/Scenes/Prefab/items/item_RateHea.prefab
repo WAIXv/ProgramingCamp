@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 7960041624360476959}
   - component: {fileID: 7960041624360476956}
   - component: {fileID: 7960041624360476957}
-  - component: {fileID: 7960041624360476946}
+  - component: {fileID: 419181110700387322}
   m_Layer: 0
-  m_Name: item_heal
+  m_Name: item_RateHea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -100,7 +100,7 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.38
---- !u!114 &7960041624360476946
+--- !u!114 &419181110700387322
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -109,6 +109,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7960041624360476947}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df3b1d53bf9faaf4593ea44110e419a9, type: 3}
+  m_Script: {fileID: 11500000, guid: bb01342acb72ea3459dff3e732dd2349, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rate: 10

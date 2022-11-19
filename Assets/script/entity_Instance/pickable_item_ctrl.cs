@@ -10,12 +10,17 @@ public class pickable_item_ctrl : MonoBehaviour
         
     }
 
+    public virtual bool OnPick(entity_Instance EI) {
+        return true; // return shouldDestory
+    }
+
+
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (!collision.isTrigger && collision.gameObject.tag == "player_obj")
+        if (!collision.isTrigger && collision.gameObject.GetComponent<entity_Instance>())
         {
-            collision.gameObject.GetComponent<entity_Instance>().Heal(300f);
-            GameObject.Destroy(gameObject);
+            if(OnPick(collision.gameObject.GetComponent<entity_Instance>()))
+                GameObject.Destroy(gameObject);
         }
     }
 }

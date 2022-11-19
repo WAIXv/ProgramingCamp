@@ -35,7 +35,7 @@ public class UI_health_bar : MonoBehaviour
         col.r = 1f - tmp.x;
         col.g = tmp.x;
         IMG.color = col;
-        health_txt.text = (int)EI.health + "/" + (int)EI.getMaxHealth();
+        health_txt.text = (int)math.max(math.min(EI.health, EI.getMaxHealth()),0) + "/" + (int)EI.getMaxHealth();
         Internal.transform.localScale = tmp;
     }
 }

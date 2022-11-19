@@ -43,7 +43,7 @@ public class irene_ctrl : MonoBehaviour
     [SerializeField]
     private entity_Instance EInstance;
     [SerializeField]
-    private float max_stun_tick = 0.35f;
+    public float max_stun_tick { get; } = 0.35f;
     #endregion
 
     [Header("Audio")]
@@ -61,17 +61,17 @@ public class irene_ctrl : MonoBehaviour
     #region Walk buffer
     [Header("Buffer")]
     public bool face_r = true;
-    private float move_v = 0f;
+    public float move_v = 0f;
     Vector3 visual_scale;
 
     public int walk_state = 0;
     public float last_pos_x = 0f;
-    private float stun_tick = 0f;
+    public float stun_tick = 0f;
     #endregion
 
     #region Jump buffer
     private float jump_buffer = 0;
-    private int jump_state = 4;
+    public int jump_state = 4;
     private float jump_press_time = 0;
 
     private float[] grav = { 8.8f, 18.9f, 1.2f, 21.1f, 5.8f };
@@ -89,11 +89,6 @@ public class irene_ctrl : MonoBehaviour
         visual = gameObject.transform.Find("visual").gameObject;
         visual_scale = visual.transform.localScale;
         last_pos_x = gameObject.transform.position.x;
-
-        EInstance.onDamage = () => {
-            walk_state = 3;
-            stun_tick = max_stun_tick;
-        };
 
         #region Initializating SpineAnimation
         bone = skeletonAnimation.Skeleton.FindBone(boneName);
@@ -137,7 +132,7 @@ public class irene_ctrl : MonoBehaviour
             {
                 a_Attack.Play();
                 float db = MI.Damage(EInstance.attack);
-                MI.rigidbody.velocity += Vector2.right * (face_r ? 1 : -1) * KnockBack;
+                MI.KnockBack(Vector2.right * (face_r ? 1 : -1) * KnockBack);
             }
         }
     }
