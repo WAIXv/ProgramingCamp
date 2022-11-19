@@ -5,17 +5,17 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
-    public Rigidbody2D rd;
-    public Animator anim;
-    public Collider2D coll;
-
+    private Rigidbody2D rd;
+    private Animator anim;
+    private Collider2D coll;
+    public LayerMask ground;    //地面图层
+    public Text score;
+    public Collider2D disColl;
+    public Transform cellingCheck;
 
     public float speed;         //速度变量
     public float JumpForce;     //跳跃速度
     private int cherry = 0;          //吃掉的樱桃数量
-    public LayerMask Ground;    //地面图层
-    public Text score;
-
     private bool CanJump = true;        //用于判断能否跳跃
     private bool isHurt = false;        //判断是否受伤
     private bool isPast = false;        //时空穿越 判断是否处在过去
@@ -85,38 +85,43 @@ public class PlayerController : MonoBehaviour
         {
             JumpForce *= 0.8f;                                  //减少跳跃高度
         }
-        if (Input.GetKey(KeyCode.LeftControl))
+        if (!Physics2D.OverlapCircle(cellingCheck.position,0.2f,ground)) 
         {
-            anim.SetBool("crouch", true);                       //切换蹲下动画  存在bug：保持蹲下状态原地跳 落地后无法再次跳跃 除非让人物去触碰墙体才能再次跳跃
-            rd.velocity = new Vector2(0.5f * HorizontalSpeed, rd.velocity.y);
-        }
-        if (Input.GetKeyUp(KeyCode.LeftControl))
-        {
-            anim.SetBool("crouch", false);                      //切出蹲下动画
-            JumpForce *= 1.25f;
+            if (Input.GetKey(KeyCode.LeftControl))
+            {
+                anim.SetBool("crouch", true);                       //切换蹲下动画  存在bug：保持蹲下状态原地跳 落地后无法再次跳跃 除非让人物去触碰墙体才能再次跳跃
+                rd.velocity = new Vector2(0.5f * HorizontalSpeed, rd.velocity.y);
+                disColl.enabled = false;                            //关闭上半身碰撞体
+            }
+            if (Input.GetKeyUp(KeyCode.LeftControl))
+            {
+                anim.SetBool("crouch", false);                      //切出蹲下动画
+                JumpForce *= 1.25f;
+                disColl.enabled = true;                             //打开上半身碰撞体
+            }
         }
 
     }
         void SwitchAnimation()
-        {
-            if (anim.GetBool("jumping") && rd.velocity.y < 0)       //下落
+     {
+             if (anim.GetBool("jumping") && rd.velocity.y < 0)       //下落
             {
-                    anim.SetBool("falling", true);
-                    anim.SetBool("jumping", false);
-                    CanJump = false;              
+                anim.SetBool("falling", true);
+                anim.SetBool("jumping", false);
+                CanJump = false;
             }
-            else if (coll.IsTouchingLayers(Ground))         //落地
+            else if (anim.GetBool("falling") && coll.IsTouchingLayers(ground))         //落地
             {
                 anim.SetBool("falling", false);
                 anim.SetBool("idle", true);
-                    CanJump = true;           
+                CanJump = true;
             }
             if (isHurt && Mathf.Abs(rd.velocity.x) < 1)     //结束受伤动画
             {
                 isHurt = false;
                 anim.SetBool("hurt", false);
-            }
-        }
+            }      
+    }
     private void OnTriggerEnter2D(Collider2D collision)             
     {
         if (collision.gameObject.tag == "Collection")               //当角色触碰到物品

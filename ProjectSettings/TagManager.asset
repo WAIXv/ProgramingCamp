@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Collection
   - Enemy
+  - EnterDialog
   layers:
   - Default
   - TransparentFX

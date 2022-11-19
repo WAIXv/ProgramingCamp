@@ -10,4 +10,8 @@ public class UiManager : MonoBehaviour
     {
         SceneManager.LoadScene("Level1");
     }
+    public void exit()
+    {
+        Application.Quit();
+    }
 }
