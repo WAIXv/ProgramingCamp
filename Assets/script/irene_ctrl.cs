@@ -136,7 +136,7 @@ public class irene_ctrl : MonoBehaviour
             if (MI != null)
             {
                 a_Attack.Play();
-                float db = MI.Damage(500);
+                float db = MI.Damage(EInstance.attack);
                 MI.rigidbody.velocity += Vector2.right * (face_r ? 1 : -1) * KnockBack;
             }
         }

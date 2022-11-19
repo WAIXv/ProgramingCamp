@@ -25,7 +25,7 @@ public class UI_health_bar : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float dr = Time.deltaTime*0.4f;
+        float dr = Time.deltaTime*0.5f;
         float rate = math.min(math.max(EI.health / EI.getMaxHealth(), 0), 1.0f);
         Vector3 tmp = Internal.transform.localScale;
         tmp.x -= dr * (tmp.x > rate ? 1 : -1);
@@ -35,7 +35,7 @@ public class UI_health_bar : MonoBehaviour
         col.r = 1f - tmp.x;
         col.g = tmp.x;
         IMG.color = col;
-        health_txt.text = EI.health + "/" + EI.getMaxHealth();
+        health_txt.text = (int)EI.health + "/" + (int)EI.getMaxHealth();
         Internal.transform.localScale = tmp;
     }
 }

@@ -13,6 +13,7 @@ public class entity_Instance : MonoBehaviour
     public GameObject Obj;
 
     public float defense = 10;
+    public float attack = 530;
 
     public float wait_for_death = 0;
     protected bool death = false;
