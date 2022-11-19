@@ -1576,7 +1576,7 @@ MonoBehaviour:
   max_health: 10000
   Obj: {fileID: 330054441}
   defense: 10
-  attack: 530
+  attack: 700
   wait_for_death: 0
   rigidbody: {fileID: 330054444}
 --- !u!1 &371268844
@@ -5728,7 +5728,7 @@ MonoBehaviour:
   max_health: 25000
   Obj: {fileID: 1189923819}
   defense: 200
-  attack: 530
+  attack: 1000
   wait_for_death: 0
   rigidbody: {fileID: 1189923824}
 --- !u!114 &1189923821
