@@ -7,11 +7,16 @@ public class player_controler : MonoBehaviour
  
     [SerializeField] public static int player_blood;
     [SerializeField] public static int ammo_amount;
+
     [SerializeField] public static int stair_amount;
     
+    [SerializeField] private float jump_counter;
+    [SerializeField] private float jump_time;
+    [SerializeField] private bool able_to_attack;
+    [SerializeField] private bool able_to_move;
+    [SerializeField] private bool able_to_jump;
     [SerializeField] private float hurt_timecounter; 
     [SerializeField] private float hurt_foces;
-    [SerializeField] private bool able_to_move;
     [SerializeField] private bool hurted;
     [SerializeField] private float speedx;
     [SerializeField] private float jumpfoces;
@@ -47,6 +52,10 @@ public class player_controler : MonoBehaviour
         {
             player_move();
         }
+        if(!player_feet.IsTouchingLayers(ground))
+        {
+            jump_counter+=Time.fixedDeltaTime;
+        }
     }
     private void player_move()
     {
@@ -54,19 +63,18 @@ public class player_controler : MonoBehaviour
         
         float player_run_direction = Input.GetAxisRaw("Horizontal");
         float player_move = Input.GetAxis("Horizontal");
-        
+        //跑动
         if(player_move!=0)
         {
             player_body.velocity = new Vector2(player_move*speedx*Time.deltaTime,player_body.velocity.y);
             player_animator.SetFloat("running",Mathf.Abs(player_run_direction));
         }
-
+        //方向
         if(player_run_direction<0&&N_facing)
         {
             N_facing=!N_facing;
             transdirection();
         }
-
         if(player_run_direction>0&&!N_facing)
         {
             N_facing=!N_facing;
@@ -75,7 +83,7 @@ public class player_controler : MonoBehaviour
 
         float jump_direction=Input.GetAxisRaw("Vertical");
 
-        if(jump_direction>0&&player_feet.IsTouchingLayers(ground))
+        if(jump_direction>0&&able_to_jump)
         {
             jump();
         }
@@ -101,6 +109,7 @@ public class player_controler : MonoBehaviour
         }
         if(player_feet.IsTouchingLayers(ground))
         {
+            jump_counter = 0f;
             player_animator.SetBool("jumping",false);
             player_animator.SetBool("falling",false);
             player_animator.SetBool("hurt",false);
@@ -155,9 +164,23 @@ public class player_controler : MonoBehaviour
         {
             able_to_move = true;
         }
+        if(hurt_timecounter>=1f)
+        {
+            able_to_attack = true;
+        }
+        if(jump_counter<jump_time)
+        {
+            able_to_jump = true;
+        }
+        else
+        {
+            able_to_jump = false;
+        }
     }
     public void jump()
     {
+        able_to_jump =false;
+        jump_counter = jump_time;
         player_body.velocity = new Vector2(player_body.velocity.x,jumpfoces);
         player_animator.SetBool("jumping",true);
     }

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class enemy_controler : MonoBehaviour
 {
+    [SerializeField] private bool face_direction;
     [SerializeField] private int damage;
     [SerializeField] private float speed;
     [SerializeField] Transform leftpoint;
@@ -21,7 +22,7 @@ public class enemy_controler : MonoBehaviour
     {
         patrol();
     }
-    [SerializeField] private bool face_direction;
+    
 
     private void patrol()
     {
