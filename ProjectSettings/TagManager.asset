@@ -3,7 +3,10 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Collection1
+  - Enemy
+  - Collection2
   layers:
   - Default
   - TransparentFX
@@ -11,7 +14,7 @@ TagManager:
   - 
   - Water
   - UI
-  - 
+  - Ground
   - 
   - 
   - 
@@ -44,6 +47,15 @@ TagManager:
   - name: back
     uniqueID: 1612948657
     locked: 0
+  - name: environment
+    uniqueID: 1346782463
+    locked: 0
   - name: front
     uniqueID: 3205370611
+    locked: 0
+  - name: player
+    uniqueID: 3781886401
+    locked: 0
+  - name: ground
+    uniqueID: 2565546809
     locked: 0
