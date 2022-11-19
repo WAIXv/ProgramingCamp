@@ -14,10 +14,7 @@ public class bullet : MonoBehaviour
     }
     void OnTriggerEnter2D(Collider2D other)
     {
-        if(other.tag=="enemy")
-        {
-            Destroy(other.gameObject);
-        }
+        if(other.tag!="player")
         Destroy(gameObject);
     }
 }

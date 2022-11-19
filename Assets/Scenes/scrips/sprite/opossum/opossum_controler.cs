@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class opossum_controler : MonoBehaviour
 {
+    [SerializeField] private Animator opossum_animation;
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private bool find_target;
     [SerializeField] private bool face_direction;
@@ -94,8 +95,14 @@ public class opossum_controler : MonoBehaviour
             player.jump();
             Destroy(gameObject);
         }
+        else if(other.tag=="bullet")
+        {
+//debug用            player.jump();
+            opossum_animation.SetBool("death",true);
+        }
     }
-
-
-
+    private void death()
+    {
+        Destroy(gameObject);
+    }
 }

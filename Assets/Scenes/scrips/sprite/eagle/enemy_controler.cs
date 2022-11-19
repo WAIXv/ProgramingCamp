@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class enemy_controler : MonoBehaviour
 {
+    [SerializeField] private Animator eagle_animation;
     [SerializeField] private bool face_direction;
     [SerializeField] private int damage;
     [SerializeField] private float speed;
@@ -59,7 +60,16 @@ public class enemy_controler : MonoBehaviour
         else if(other.gameObject.CompareTag("player")&&other.GetType().ToString()=="UnityEngine.BoxCollider2D")
         {
             player.jump();
-            Destroy(gameObject);
+            eagle_animation.SetBool("death",true);
         }
+        else if(other.tag=="bullet")
+        {
+//debug用            player.jump();
+            eagle_animation.SetBool("death",true);
+        }
+    }
+    private void death()
+    {
+        Destroy(gameObject);
     }
 }

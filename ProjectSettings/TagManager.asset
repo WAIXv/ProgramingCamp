@@ -8,6 +8,7 @@ TagManager:
   - ammo
   - enemy
   - player
+  - bullet
   layers:
   - Default
   - TransparentFX
@@ -44,4 +45,10 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: player
+    uniqueID: 71226915
+    locked: 0
+  - name: background
+    uniqueID: 3479844387
     locked: 0

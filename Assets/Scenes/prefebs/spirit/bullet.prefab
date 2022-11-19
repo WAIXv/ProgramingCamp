@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 7590532679463104878}
   m_Layer: 0
   m_Name: bullet
-  m_TagString: Untagged
+  m_TagString: bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -98,9 +98,9 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.026813984}
+  m_Offset: {x: 0.015154362, y: -0.024163246}
   serializedVersion: 2
-  m_Radius: 0.1581192
+  m_Radius: 0.09129763
 --- !u!50 &7590532679463104879
 Rigidbody2D:
   serializedVersion: 4
@@ -135,4 +135,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 7590532679463104879}
-  speedx: 20
+  speedx: 40
