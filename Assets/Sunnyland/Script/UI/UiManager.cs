@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class UiManager : MonoBehaviour
 {
 
-    public void return_0()
+    public void GoToLevel1()
     {
         SceneManager.LoadScene("Level1");
     }

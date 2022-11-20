@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class FrogController : MonoBehaviour
 {
+    public Transform left, right;
+    public LayerMask ground;
+    public float jumpForce, speed;
+
     private Animator anim;
     private Rigidbody2D rb;
     private Collider2D coll;
-    public Transform left, right;
-    public LayerMask ground;
-
-    public float jumpForce,speed;
     private bool isFaceLeft = true;
     void Start()
     {

@@ -5,16 +5,17 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
-    private Rigidbody2D rd;
-    private Animator anim;
-    private Collider2D coll;
+
     public LayerMask ground;    //地面图层
     public Text score;
     public Collider2D disColl;
     public Transform cellingCheck;
-
     public float speed;         //速度变量
     public float JumpForce;     //跳跃速度
+
+    private Rigidbody2D rd;
+    private Animator anim;
+    private Collider2D coll;
     private int cherry = 0;          //吃掉的樱桃数量
     private bool CanJump = true;        //用于判断能否跳跃
     private bool isHurt = false;        //判断是否受伤

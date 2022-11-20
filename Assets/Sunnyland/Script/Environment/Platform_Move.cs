@@ -5,11 +5,12 @@ using UnityEngine.UIElements;
 
 public class Platform_Move : MonoBehaviour
 {
-    public float PlatformSpeed;
+
     public LayerMask empty;
     public Transform Left, Right;
     private Collider2D coll;
 
+    public float PlatformSpeed;
     private bool FacedRight = true;
 
     
