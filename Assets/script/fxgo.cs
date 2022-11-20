@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class fxgo : MonoBehaviour
 {
@@ -12,7 +14,9 @@ public class fxgo : MonoBehaviour
     public Collider2D coll;
     public LayerMask ground;
     public float jumpforce;
-    
+    [SerializeField] private int cherry=0;
+    public Text cherryNumber;
+    private bool isHurt;
     void Start()
     {
         //获取组件
@@ -23,11 +27,14 @@ public class fxgo : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Movement();
+        if (!isHurt)
+        {
+            Movement();
+        }
         SwitchAnim();
         //fire();
     }
-    void Movement()
+    private void Movement()
     {
         float horizontalMove = Input.GetAxis("Horizontal");
         float facedirection = Input.GetAxisRaw("Horizontal");
@@ -52,9 +59,14 @@ public class fxgo : MonoBehaviour
         }
     }
     //变换动画
-    void SwitchAnim()
+    private void SwitchAnim()
     {
         anim.SetBool("idle", false);
+        if (rb.velocity.y < 0.1f && !coll.IsTouchingLayers(ground))
+        {
+            anim.SetBool("falling", true);
+
+        }
         if (anim.GetBool("jumping"))
         {
             if (rb.velocity.y < 0)
@@ -63,11 +75,72 @@ public class fxgo : MonoBehaviour
                 anim.SetBool("falling", true);
             }
         }
+        else if (isHurt)
+        {
+            anim.SetBool("hurt", true);
+            anim.SetFloat("running", 0);
+            if (Mathf.Abs(rb.velocity.x) < 0.1f)
+            {
+                anim.SetBool("hurt", false);
+                anim.SetBool("idle", true);
+                isHurt = false;
+            }
+        }
         else if (coll.IsTouchingLayers(ground))
         {
             anim.SetBool("falling", false);
             anim.SetBool("idle", true);
         }
+    }
+    //触发器
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        //收集
+        if (collision.tag == "collection")
+        {
+            Destroy(collision.gameObject);
+            cherry++;
+            cherryNumber.text=cherry.ToString();
+        }
+        if (collision.tag == "deadLine")
+        {
+            //延迟
+            Invoke("reStart", 1.5f);
+            
+        }
+    }
+    //消灭敌人
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "enemy")
+        {
+            if (anim.GetBool("falling"))
+            {
+                Destroy(collision.gameObject);//销毁后小跳
+                rb.velocity = new Vector2(rb.velocity.x, jumpforce);
+                anim.SetBool("jumping", true);
+            }
+            else if (transform.position.x < collision.gameObject.transform.position.x)
+            {
+               
+                rb.velocity = new Vector2(-10,rb.velocity.y);
+                isHurt = true;
+            }
+            else if (transform.position.x > collision.gameObject.transform.position.x)
+            {
+                
+                rb.velocity=new Vector2(10,rb.velocity.y);
+                isHurt = true;
+            }
+            
+        }
+
+    }
+    //重启场景
+    private void reStart()
+    {
+        //重新加载某场景
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
     //射击
     /*void fire()

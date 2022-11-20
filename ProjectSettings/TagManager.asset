@@ -3,15 +3,21 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - player
+  - ground
+  - sword
+  - collection
+  - enemy
+  - deadLine
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - sword
   - Water
   - UI
-  - 
+  - ground
   - 
   - 
   - 
@@ -40,4 +46,13 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: ground
+    uniqueID: 1468840993
+    locked: 0
+  - name: enemy
+    uniqueID: 1429726319
+    locked: 0
+  - name: player
+    uniqueID: 3855576405
     locked: 0
