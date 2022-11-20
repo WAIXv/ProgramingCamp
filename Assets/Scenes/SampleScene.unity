@@ -842,8 +842,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.005740434, y: -0.3817361}
-  m_Size: {x: 0.8799793, y: 1.2186624}
+  m_Offset: {x: 0.009079933, y: -0.29017973}
+  m_Size: {x: 1.2740424, y: 1.2740424}
   m_Direction: 0
 --- !u!114 &1248880563
 MonoBehaviour:
@@ -857,8 +857,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 143348c5726310d47b5a6924a8c873d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  runSpeed: 7
-  jumpSpeed: 15
 --- !u!95 &1248880564
 Animator:
   serializedVersion: 3
@@ -890,7 +888,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16bb147b2b65c574aa3538c4f211a501, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 0
+  health: 10
 --- !u!1 &1517414063
 GameObject:
   m_ObjectHideFlags: 0
@@ -2642,6 +2640,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   leftPos: {fileID: 1660029072}
   rightPos: {fileID: 426775686}
+  damage: 3
 --- !u!1 &1960198759
 GameObject:
   m_ObjectHideFlags: 0

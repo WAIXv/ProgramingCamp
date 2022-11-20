@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     private float runSpeed = 7;
     private float jumpSpeed = 15;
     private bool isGround;
+    private bool isHurt;//默认false
 
     // Start is called before the first frame update
     void Start()
@@ -24,7 +25,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         Flip();
-        Run();
+        if (!isHurt) Run();
         CheckGrounded();
         Jump();
         SwitchAnim();
@@ -84,15 +85,39 @@ public class PlayerController : MonoBehaviour
             anim.SetBool("Fall", false);
             anim.SetBool("Idle", true);
         }
+        if (isHurt)
+        {
+            anim.SetBool("Run", false);
+            anim.SetBool("Jump", false);
+            anim.SetBool("Fall", false);
+            anim.SetBool("Hurt", true);
+
+            if (Mathf.Abs(rb.velocity.x) < 0.1f)
+            {
+                anim.SetBool("Hurt", false);
+                anim.SetBool("Idle", true);
+                isHurt = false;
+            }
+        }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)//踩到敌人后起跳
+    private void OnCollisionEnter2D(Collision2D collision)//与敌人碰撞
     {
         if (anim.GetBool("Fall") && collision.gameObject.CompareTag("Enemy"))
         {
+            Destroy(collision.gameObject);
             anim.SetBool("Jump", true);//播放动画
             Vector2 jumpVel = new Vector2(rb.velocity.x, jumpSpeed);//跳跃速度
             rb.velocity = jumpVel;
         }
+        else if (collision.gameObject.CompareTag("Enemy"))
+        {
+            isHurt = true;
+            if (transform.position.x < collision.gameObject.transform.position.x)
+                rb.velocity = new Vector2(-5, 10);
+            if (transform.position.x > collision.gameObject.transform.position.x)
+                rb.velocity = new Vector2(5, 10);
+        }
+
     }
 }
