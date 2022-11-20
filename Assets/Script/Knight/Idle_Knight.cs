@@ -4,37 +4,52 @@ using UnityEngine;
 
 public class Idle_Knight : State
 {
+    private Paramater_Knight paramater;
     private FSM_Knight fsm;
-    public Idle_Knight(FSM_Knight fSM)
+    private float moveDir;
+    public Idle_Knight(FSM_Knight fsm, Paramater_Knight paramater)
     {
-        this.fsm = fSM;
+        this.fsm = fsm;
+        this.paramater = paramater;
     }
 
     public override void OnEnter()
     {
-        fsm.anim.SetBool("isIdling", true);
-        //清空跳跃时按下的空格
-        fsm.spacePress = false;
+        paramater.anim.SetBool("isIdling", true);
     }
 
     public override void OnExit()
     {
-        fsm.anim.SetBool("isIdling", false);
+        paramater.anim.SetBool("isIdling", false);
+    }
+
+    public override void OnFixedUpdate()
+    {
+        moveDir = fsm.Move();
     }
 
     public override void OnUpdate()
     {
-        //如果角色正在水平移动，就切换到Run状态
-        if (fsm.Move() != 0) 
+        fsm.AttackCheck();
+        fsm.JumpCheck();
+
+        if (moveDir != 0)
         {
             fsm.ChangeState(StateType.Run);
         }
 
         //如果空格按下，就切换到Jump状态
-        if (fsm.spacePress)
+        if (paramater.spacePress)
         {
             fsm.ChangeState(StateType.Jump);
-            fsm.spacePress = false;
+            paramater.spacePress = false;
+        }
+
+        //如果攻击按下，就切换到Attack状态
+        if (paramater.attackPress)
+        {
+            fsm.ChangeState(StateType.Attack);
+            paramater.attackPress = false;
         }
     }
 }

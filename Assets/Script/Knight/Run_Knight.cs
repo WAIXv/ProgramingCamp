@@ -5,35 +5,51 @@ using UnityEngine;
 public class Run_Knight : State
 {
     private FSM_Knight fsm;
-    public Run_Knight(FSM_Knight fSM)
+    private Paramater_Knight paramater;
+    private float moveDir;
+    public Run_Knight(FSM_Knight fSM, Paramater_Knight paramater)
     {
         this.fsm = fSM;
+        this.paramater = paramater;
     }
     public override void OnEnter()
     {
-        fsm.anim.SetBool("isRunning", true);
+        paramater.anim.SetBool("isRunning", true);
     }
 
     public override void OnExit()
     {
-        fsm.anim.SetBool("isRunning", false);
+        paramater.anim.SetBool("isRunning", false);
+    }
+
+    public override void OnFixedUpdate()
+    {
+        moveDir = fsm.Move();
     }
 
     public override void OnUpdate()
     {
-        float move = fsm.Move();
-
+        fsm.JumpCheck();
+        fsm.AttackCheck();
+        
         //如果速度慢下来，就变成Idle状态
-        if (Mathf.Abs(move) < 0.05f)
+        if (Mathf.Abs(moveDir) < 0.05f)
         {
             fsm.ChangeState(StateType.Idle);
         }
 
         //如果空格按下，就切换到Jump状态
-        if (fsm.spacePress)
+        if (paramater.spacePress)
         {
             fsm.ChangeState(StateType.Jump);
-            fsm.spacePress = false;
+            paramater.spacePress = false;
+        }
+
+        //如果攻击按下，就切换到Attack状态
+        if (paramater.attackPress)
+        {
+            fsm.ChangeState(StateType.Attack);
+            paramater.attackPress = false;
         }
     }
 }
