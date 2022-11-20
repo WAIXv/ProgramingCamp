@@ -11,8 +11,8 @@ public class playercontroller : MonoBehaviour
     [SerializeField] private float speedx;
     [SerializeField] private float jumpforce;
     [SerializeField] private LayerMask ground;
-    [SerializeField] private int cherry = 0;
-    [SerializeField] private int gem = 0;
+    private int cherry = 0;
+    private int gem = 0;
     private int jumpchance;
     
     [SerializeField] private Text Cherrynum;
@@ -26,7 +26,7 @@ public class playercontroller : MonoBehaviour
     }
 
     
-    void FixedUpdate()
+    void Update()
     {
         movement();
         SwitchAnim();
@@ -41,7 +41,7 @@ public class playercontroller : MonoBehaviour
         //½ÇÉ«ÒÆ¶¯
         if  (horizontalmove != 0)
         {
-            player.velocity = new Vector2 (horizontalmove*speedx*Time.fixedDeltaTime, player.velocity.y);
+            player.velocity = new Vector2 (horizontalmove*speedx, player.velocity.y);
             anim.SetFloat("running", Mathf.Abs(facedirection));
         }
         
@@ -54,9 +54,9 @@ public class playercontroller : MonoBehaviour
         if (anim.GetBool("onground"))
             jumpchance = 1;
         //½ÇÉ«ÌøÔ¾
-        if (Input.GetButton("Jump")&& jumpchance > 0)
+        if (Input.GetButtonDown("Jump")&& jumpchance > 0)
         {
-            player.velocity = new Vector2 (player.velocity.x, jumpforce*Time.fixedDeltaTime);
+            player.velocity = new Vector2 (player.velocity.x, jumpforce);
             anim.SetBool("jumping", true);
             if(!anim.GetBool("onground"))
                 jumpchance -=1;
@@ -101,5 +101,16 @@ public class playercontroller : MonoBehaviour
         }
     }
 
-
+    //»÷°ÜµÐÈË
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(feet.IsTouching(collision.collider))
+        {
+            if (collision.gameObject.tag == "enemy")
+            {
+                Destroy (collision.gameObject);
+                jumpchance +=1;
+            }
+        }
+    }
 }
