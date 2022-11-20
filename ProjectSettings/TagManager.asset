@@ -41,3 +41,12 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: BackGrouond
+    uniqueID: 970695861
+    locked: 0
+  - name: Tile
+    uniqueID: 3314004425
+    locked: 0
+  - name: Player
+    uniqueID: 2159184143
+    locked: 0
