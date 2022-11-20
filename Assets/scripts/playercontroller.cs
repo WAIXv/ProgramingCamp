@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class playercontroller : MonoBehaviour
 {
@@ -13,8 +14,11 @@ public class playercontroller : MonoBehaviour
     [SerializeField] private int cherry = 0;
     [SerializeField] private int gem = 0;
     private int jumpchance;
-
     
+    [SerializeField] private Text Cherrynum;
+    [SerializeField] private Text Gemnum;
+
+
     void Start()
     {
         player = GetComponent<Rigidbody2D>();
@@ -48,13 +52,14 @@ public class playercontroller : MonoBehaviour
         }
 
         if (anim.GetBool("onground"))
-            jumpchance = 2;
+            jumpchance = 1;
         //½ÇÉ«ÌøÔ¾
         if (Input.GetButton("Jump")&& jumpchance > 0)
         {
             player.velocity = new Vector2 (player.velocity.x, jumpforce*Time.fixedDeltaTime);
             anim.SetBool("jumping", true);
-            jumpchance -= 1;
+            if(!anim.GetBool("onground"))
+                jumpchance -=1;
             anim.SetBool("onground",false);
         }
     }
@@ -82,10 +87,17 @@ public class playercontroller : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "collection")
+        if (collision.tag == "cherry")
         {
             Destroy(collision.gameObject);
             cherry += 1;
+            Cherrynum.text = cherry.ToString();
+        }
+        if (collision.tag == "gem")
+        {
+            Destroy(collision.gameObject);
+            gem += 1;
+            Gemnum.text = gem.ToString();
         }
     }
 
