@@ -42,5 +42,15 @@ public class Run_Goblin : State
         {
             fsm.ChangeState(StateType.Idle);
         }
+
+        if (paramater.isAttacked)
+        {
+            fsm.ChangeState(StateType.Hurt);
+        }
+
+        if (paramater.canAttack)
+        {
+            fsm.ChangeState(StateType.Attack);
+        }
     }
 }

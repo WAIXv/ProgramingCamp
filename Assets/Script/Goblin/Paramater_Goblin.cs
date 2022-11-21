@@ -11,9 +11,15 @@ public class Paramater_Goblin
     public BoxCollider2D chaseBound;
     public Rigidbody2D rb;
     public GameObject target;
+    public GameObject hand;
     public StateType currentState;
     public StateType lastState;
     public int hp;
+    public float attackStartTime;
+    public float attackHoldTime;
     public float speed;
+    public LayerMask playerLayer;
     public bool isPlayerIn;
+    public bool isAttacked;
+    public bool canAttack;
 }

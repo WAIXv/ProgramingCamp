@@ -2,16 +2,32 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Hurt_Goblin : MonoBehaviour
+public class Hurt_Goblin : State
 {
-    // Start is called before the first frame update
-    void Start()
+    private FSM_Goblin fsm;
+    private Paramater_Goblin paramater;
+    public Hurt_Goblin(FSM_Goblin fsm, Paramater_Goblin paramater)
+    {
+        this.fsm = fsm;
+        this.paramater = paramater;
+    }
+    public override void OnEnter()
+    {
+        paramater.anim.SetTrigger("isHurting");
+        paramater.isAttacked = false;
+    }
+
+    public override void OnExit()
+    {
+
+    }
+
+    public override void OnFixedUpdate()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void OnUpdate()
     {
         
     }

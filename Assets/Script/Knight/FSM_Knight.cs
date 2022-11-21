@@ -21,6 +21,7 @@ public class FSM_Knight : MonoBehaviour
         AddState(StateType.Jump, new Jump_Knight(this, paramater));
         AddState(StateType.Fall, new Fall_Knight(this, paramater));
         AddState(StateType.Attack, new Attack_Knight(this, paramater));
+        AddState(StateType.Death, new Death_Knight(this, paramater));
     }
     void Start()
     {
@@ -41,7 +42,6 @@ public class FSM_Knight : MonoBehaviour
     {
         PhysicsCheck();
         allSaveState[paramater.currentState]?.OnFixedUpdate();
-        Debug.Log(paramater.currentState);
     }
 
     //Ìí¼Ó×´Ì¬
@@ -121,14 +121,8 @@ public class FSM_Knight : MonoBehaviour
     {
         StartCoroutine(StartAttack(paramater.attackStartTime, paramater.attackHoldTime));
     }
-    //ÍË³ö¹¥»÷
-    public void ExitAttack()
-    {
-        if (paramater.lastState == StateType.Jump) ChangeState(StateType.Fall);
-        else ChangeState(paramater.lastState);
-    }
 
-    public IEnumerator StartAttack(float attackStartTime,float attackHoldTime)
+    public IEnumerator StartAttack(float attackStartTime, float attackHoldTime)
     {
         yield return new WaitForSeconds(attackStartTime);
         paramater.attackHitBox.enabled = true;
@@ -136,9 +130,26 @@ public class FSM_Knight : MonoBehaviour
         paramater.attackHitBox.enabled = false;
     }
 
+    //Ö¡¶¯»­ÊÂ¼þ£¬ÍË³ö¹¥»÷
+    public void ExitAttack()
+    {
+        if (paramater.lastState == StateType.Jump) ChangeState(StateType.Fall);
+        else ChangeState(paramater.lastState);
+    }
+
     //¿ÛÑª
     public void DecreaseHP(int n)
     {
         paramater.hp -= n;
+        if(paramater.hp <= 0)
+        {
+            ChangeState(StateType.Death);
+        }
+    }
+   
+    //Ö¡¶¯»­ÊÂ¼þ£¬½ÇÉ«ËÀÍö
+    public void Death()
+    {
+        Destroy(this.gameObject);
     }
 }
