@@ -1,4 +1,0 @@
-repository "My project@wechat_os_qy0wv5vgxsc76qy323zszw4jy@cloud.cn"
-  path "/"
-    br "/main"
-    co "/main"
