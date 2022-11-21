@@ -3,7 +3,9 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Collection
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -13,7 +15,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - Ground
   - 
   - 
   - 
@@ -40,4 +42,22 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: "\u80CC\u666F"
+    uniqueID: 219954917
+    locked: 0
+  - name: "\u73AF\u5883"
+    uniqueID: 1509874957
+    locked: 0
+  - name: "\u5EFA\u7B51"
+    uniqueID: 3673586273
+    locked: 0
+  - name: "\u654C\u4EBA"
+    uniqueID: 2779077913
+    locked: 0
+  - name: "\u73A9\u5BB6"
+    uniqueID: 3323212789
+    locked: 0
+  - name: "\u524D\u7AEF"
+    uniqueID: 1903201215
     locked: 0
