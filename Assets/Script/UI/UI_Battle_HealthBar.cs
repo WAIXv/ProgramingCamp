@@ -4,7 +4,7 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class health_bar : MonoBehaviour
+public class UI_Battle_HealthBar : MonoBehaviour
 {
     [SerializeField]
     private GameObject Internal;
