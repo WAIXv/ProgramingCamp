@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
@@ -82,10 +83,6 @@ public class PlayerController : MonoBehaviour
                 isPast = false;
             }
         }
-        if (Input.GetKeyDown(KeyCode.LeftControl))              //按下ctrl键
-        {
-            JumpForce *= 0.8f;                                  //减少跳跃高度
-        }
         if (!Physics2D.OverlapCircle(cellingCheck.position,0.2f,ground)) 
         {
             if (Input.GetKey(KeyCode.LeftControl))
@@ -94,10 +91,9 @@ public class PlayerController : MonoBehaviour
                 rd.velocity = new Vector2(0.5f * HorizontalSpeed, rd.velocity.y);
                 disColl.enabled = false;                            //关闭上半身碰撞体
             }
-            if (Input.GetKeyUp(KeyCode.LeftControl))
+            else
             {
                 anim.SetBool("crouch", false);                      //切出蹲下动画
-                JumpForce *= 1.25f;
                 disColl.enabled = true;                             //打开上半身碰撞体
             }
         }
@@ -125,11 +121,16 @@ public class PlayerController : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)             
     {
-        if (collision.gameObject.tag == "Collection")               //当角色触碰到物品
+        if (collision.tag == "Collection")               //当角色触碰到物品
         {
             Destroy(collision.gameObject);                          //吃掉物品
             cherry++;
             score.text = cherry.ToString();
+        }
+        if (collision.tag == "DeadTrigger")                         //角色死亡 重新开始
+        {
+            GetComponent<AudioSource>().enabled = false;
+            Invoke("Restart",0.4f);
         }
     }
     private void OnCollisionEnter2D(Collision2D collision)      
@@ -155,5 +156,9 @@ public class PlayerController : MonoBehaviour
                 rd.velocity = new Vector2(6, rd.velocity.y);
             }
         }
+    }
+    void Restart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
