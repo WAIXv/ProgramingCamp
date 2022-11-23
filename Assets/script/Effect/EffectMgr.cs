@@ -16,12 +16,15 @@ namespace Assets.script
         public EffectMgr() {
         }
 
-        public void Add(EffectBase effect)
+        public EffectBase Add(EffectBase effect)
         {
+            EffectBase tmp = getEffectInstance(effect.GetType());
+            if (tmp != null) effects.Remove(tmp);
             if (OnEffectAdd != null)
                 if (!OnEffectAdd(effect))
-                    return;
+                    return null;
             effects.Add(effect);
+            return effect;
         }
         public void Remove(EffectBase effect)
         {
@@ -34,11 +37,11 @@ namespace Assets.script
         {
             effects.Clear();
         }
-        public EffectBase getEffectInstance<T>()
+        public EffectBase getEffectInstance(Type type)
         {
             foreach (EffectBase efc in effects)
             {
-                if(efc is T) return efc;
+                if(efc.GetType() == type) return efc;
             }
             return null;
         }

@@ -11,14 +11,14 @@ public class UI_health_bar : MonoBehaviour
     [SerializeField]
     private Text health_txt;
     private Image IMG;
-    public GameObject player;
+    public camera_ctrl camera;
     private entity_Instance EI;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        EI = player.GetComponent<entity_Instance>();
+        EI = camera.player.GetComponent<entity_Instance>();
         IMG = Internal.GetComponent<Image>();
     }
 

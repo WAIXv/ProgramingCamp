@@ -4,9 +4,10 @@ using System.Collections;
 using Unity.Mathematics;
 using UnityEngine;
 using Spine;
-using static S;
+using static UnityEditor.Experimental.GraphView.GraphView;
+using UnityEngine.SocialPlatforms;
 
-public class irene_ctrl : MonoBehaviour
+public class texes_ctrl : MonoBehaviour
 {
     #region SpineAnimation
     [Header("Animation")]
@@ -24,6 +25,17 @@ public class irene_ctrl : MonoBehaviour
 
     private string rootLayerAnim;
     #endregion
+
+    #region Particle
+    [Header("Particle")]
+    [SerializeField]
+    private GameObject P_Root;
+    [SerializeField]
+    private ParticleSystem P_Left;
+    [SerializeField]
+    private ParticleSystem P_Right;
+    #endregion
+
 
     #region Editable var
     [Header("Ctrl")]
@@ -82,7 +94,7 @@ public class irene_ctrl : MonoBehaviour
     private float jump_press_time = 0;
 
     private float[] grav = { 8.8f, 18.9f, 1.2f, 21.1f, 5.8f };
-    
+
     float ground_tick = 0.2f;
     private bool onGround = false;
     [SerializeField]
@@ -112,10 +124,13 @@ public class irene_ctrl : MonoBehaviour
         switch (e.Data.Name)
         {
             case "OnAttack_1":
-                StartCoroutine(BA(0f));
+                StartCoroutine(BA(5f));
+                P_Right.Play();
+                //P_Left.Play();
                 break;
             case "OnAttack_2":
                 StartCoroutine(BA(13.5f));
+                P_Right.Play();
                 break;
             case "playWalkSound":
                 a_Foot_step.Play();
@@ -125,7 +140,7 @@ public class irene_ctrl : MonoBehaviour
 
     IEnumerator BA(float kb)
     {
-        bladeTrail_stun = 0.2f;
+        bladeTrail_stun = 0.15f;
         yield return new WaitForEndOfFrame();
         yield return new WaitForEndOfFrame();
         Basic_Attack(kb);
@@ -148,7 +163,7 @@ public class irene_ctrl : MonoBehaviour
 
     private GameObject[] Basic_Attack_Range()
     {
-        return MyUtils.BoxRange(basic_attack_range.transform.position, basic_attack_range.transform.localScale / 2, 0f, Vector2.right * (face_r ? 1 : -1), 0f, LayerMask.GetMask("Mob"),"mob_obj");
+        return MyUtils.BoxRange(basic_attack_range.transform.position, basic_attack_range.transform.localScale / 2, 0f, Vector2.right * (face_r ? 1 : -1), 0f, LayerMask.GetMask("Mob"), "mob_obj");
     }
 
 
@@ -166,7 +181,7 @@ public class irene_ctrl : MonoBehaviour
             if (!isJumping)
             {
                 if (rootLayerAnim == walk_Anim)
-                    setAnim(0, rootLayerAnim, true, math.abs(rb.velocity.x) * 0.5f);
+                    setAnim(0, rootLayerAnim, true, math.abs(rb.velocity.x) * 0.58f);
                 else
                     setAnim(0, rootLayerAnim, true);
                 ground_tick = 0.1f;
@@ -178,7 +193,6 @@ public class irene_ctrl : MonoBehaviour
                 if (dy < 0f) a_Landing.Play();
             }
         }
-
 
         #region Face on
         //visual handle
@@ -192,6 +206,16 @@ public class irene_ctrl : MonoBehaviour
         vec.x = math.abs(vec.x) * _0x00;
         attack_range_mgr.transform.localScale = vec;
         //Blade trail handle
+        if (bladeTrail_stun <= 0)
+        {
+            vec = P_Root.transform.localScale;
+            vec.y = math.abs(vec.y) * _0x00;
+            vec.x = math.abs(vec.x) * _0x00;
+            P_Root.transform.localScale = vec;
+            vec = P_Root.transform.rotation.eulerAngles;
+            vec.y = face_r ? 0 : 180f;
+            P_Root.transform.rotation = Quaternion.Euler(vec);
+        }
         #endregion
 
         #region Vertical movment handle
@@ -248,7 +272,6 @@ public class irene_ctrl : MonoBehaviour
         }
         #endregion
 
-
         #region Horizontal movment handle
         int axis_x = -(int)GetHorIn();
         if (axis_x != 0 && stun_tick <= 0)
@@ -293,7 +316,7 @@ public class irene_ctrl : MonoBehaviour
                 break;
             case 3:
                 rootLayerAnim = idle_Anim;
-                move_v += (move_v>0 ? -1 : 1) * stop_a * dt;
+                move_v += (move_v > 0 ? -1 : 1) * stop_a * dt;
                 if (math.abs(move_v) <= stop_a * dt || stun_tick <= 0)
                 {
                     walk_state = 0;
@@ -309,7 +332,7 @@ public class irene_ctrl : MonoBehaviour
         {
             TrackEntry track = animationState.GetCurrent(1);
             if (track == null || (track != null && track.Animation.Name == "<empty>"))
-            { 
+            {
                 setAnim(1, "Attack", false, 1.7f);
                 if (onGround) StartCoroutine(basic_attack_movement());
                 animationState.AddEmptyAnimation(1, 0.2f, 0f);
@@ -343,8 +366,8 @@ public class irene_ctrl : MonoBehaviour
         yield return new WaitForEndOfFrame();
         yield return new WaitForEndOfFrame();
         walk_state = 3;
-        move_v = (face_r ? -1 : 1) * 3.8f;
-        stun_tick = 0.35f;
+        move_v = (face_r ? -1 : 1) * 3.5f;
+        stun_tick = 0.28f;
         yield return new WaitForSeconds(0.12f);
         walk_state = 0;
     }
@@ -363,7 +386,7 @@ public class irene_ctrl : MonoBehaviour
         TrackEntry track = animationState.GetCurrent(layer);
         if (track != null)
         {
-            if(track.Animation.Name != anim) track = animationState.SetAnimation(layer, anim, loop);
+            if (track.Animation.Name != anim) track = animationState.SetAnimation(layer, anim, loop);
         }
         else
         {
