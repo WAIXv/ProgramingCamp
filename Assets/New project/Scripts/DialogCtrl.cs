@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class DialogCtrl : MonoBehaviour
 {
-    public GameObject mySelf;
+    public GameObject gameObj;
     public void DialogExit()
     {
-       mySelf.SetActive(false);
+       gameObj.SetActive(false);
     }
 }

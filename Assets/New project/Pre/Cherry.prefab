@@ -142,5 +142,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ece08b01f363014a8d9f90fd1172162, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PLCR: {fileID: 0}
-  ColCherry: {fileID: 5883725961251954005}
+  playerCtrler: {fileID: 0}
+  colCherry: {fileID: 0}
+  animCherry: {fileID: 0}

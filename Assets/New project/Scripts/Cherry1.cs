@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class Cherry1 : MonoBehaviour
 {
-    [SerializeField] private PlayerCtrler PLCR;
-    [SerializeField] private Collider2D ColCherry;
+    [SerializeField] private PlayerCtrler playerCtrler;
+    [SerializeField] private Collider2D colCherry;
+    [SerializeField] private Animator animCherry;
     // Start is called before the first frame update
     void Start()
     {
-        
+        animCherry=GetComponent<Animator>();
+        colCherry=GetComponent<Collider2D>();
     }
 
     // Update is called once per frame
@@ -19,10 +21,14 @@ public class Cherry1 : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.tag == "Player")
+        if (other.CompareTag("Player"))
         {
-            Destroy(this.gameObject);
-            PLCR.ScorePlus();
+            animCherry.Play("Feedback");
         }
+    }
+    private void Feedback()
+    {
+        Destroy(this.gameObject);
+        playerCtrler.ScorePlus();
     }
 }
