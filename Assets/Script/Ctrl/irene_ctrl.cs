@@ -38,7 +38,7 @@ public class irene_ctrl : MonoBehaviour
     [SerializeField]
     private float grav_mul = 1.0f;
     [SerializeField]
-    private entity_Instance EInstance;
+    private player_Instance PInstance;
     [SerializeField]
     public float max_stun_tick { get; } = 0.35f;
     #endregion
@@ -92,7 +92,7 @@ public class irene_ctrl : MonoBehaviour
     #endregion
     private Vector3 lf_pos;
 
-    void Start()
+    void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         visual = gameObject.transform.Find("visual").gameObject;
@@ -140,7 +140,7 @@ public class irene_ctrl : MonoBehaviour
             if (MI != null)
             {
                 a_Attack.Play();
-                float db = MI.Damage(EInstance.attack);
+                float db = MI.PhysicsDamage(PInstance.ATK);
                 MI.KnockBack(Vector2.right * (face_r ? 1 : -1) * KnockBack);
             }
         }

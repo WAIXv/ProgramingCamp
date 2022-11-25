@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
-public class irene_Instance : entity_Instance
+public class irene_Instance : player_Instance
 {
     public override void KnockBack(Vector2 vec)
     {

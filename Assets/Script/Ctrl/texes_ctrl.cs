@@ -4,8 +4,6 @@ using System.Collections;
 using Unity.Mathematics;
 using UnityEngine;
 using Spine;
-using static UnityEditor.Experimental.GraphView.GraphView;
-using UnityEngine.SocialPlatforms;
 
 public class texes_ctrl : MonoBehaviour
 {
@@ -13,15 +11,15 @@ public class texes_ctrl : MonoBehaviour
     [Header("Animation")]
     public SkeletonAnimation skeletonAnimation;
     private Spine.AnimationState animationState;
-    [SpineBone(dataField: "skeletonAnimation")]
-    public string boneName;
-    Bone bone;
 
     [SerializeField][SpineAnimation(dataField: "skeletonAnimation")] private string idle_Anim;
     [SerializeField][SpineAnimation(dataField: "skeletonAnimation")] private string walk_Anim;
     [SerializeField][SpineAnimation(dataField: "skeletonAnimation")] private string jump_up_Anim;
     [SerializeField][SpineAnimation(dataField: "skeletonAnimation")] private string jump_up_2_Anim;
     [SerializeField][SpineAnimation(dataField: "skeletonAnimation")] private string jump_fall_Anim;
+    [SerializeField][SpineAnimation(dataField: "skeletonAnimation")] private string basic_atk_Anim;
+    [SerializeField][SpineAnimation(dataField: "skeletonAnimation")] private string skill_atk_Anim;
+    [SerializeField][SpineAnimation(dataField: "skeletonAnimation")] private string skill_start_Anim;
 
     private string rootLayerAnim;
     #endregion
@@ -50,12 +48,12 @@ public class texes_ctrl : MonoBehaviour
     [SerializeField]
     private float grav_mul = 1.0f;
     [SerializeField]
-    private entity_Instance EInstance;
+    private player_Instance PInstance;
     [SerializeField]
     public float max_stun_tick { get; } = 0.35f;
     #endregion
 
-    #region Audio
+    #region Audio & Texture
     [Header("Audio")]
     [SerializeField]
     private AudioSource a_Foot_step;
@@ -102,20 +100,32 @@ public class texes_ctrl : MonoBehaviour
     private bool lf_onGround = false;
     private bool isJumping = false;
     #endregion
+
+    #region Skill buffer
+    [Header("Skill")]
+    [SerializeField]
+    private Texture2D t_SkillIcon;
+    [SerializeField]
+    private float Skill_time = 8f;
+    private float Skill_timer = 0f;
+    private bool skill_first = false;
+    #endregion
+
+
     private Vector3 lf_pos;
 
-    void Start()
+    void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         visual = gameObject.transform.Find("visual").gameObject;
         visual_scale = visual.transform.localScale;
         lf_pos = gameObject.transform.position;
         #region Initializating SpineAnimation
-        bone = skeletonAnimation.Skeleton.FindBone(boneName);
         animationState = skeletonAnimation.AnimationState;
         animationState.SetAnimation(0, idle_Anim, true);
         rootLayerAnim = idle_Anim;
         animationState.Event += AnimEventHandler;
+        PInstance.Skill = new TexasSkill("ÕóÓêÁ¬Ãà", t_SkillIcon, 10f);
         #endregion
     }
 
@@ -124,12 +134,30 @@ public class texes_ctrl : MonoBehaviour
         switch (e.Data.Name)
         {
             case "OnAttack_1":
-                StartCoroutine(BA(5f));
-                P_Right.Play();
-                //P_Left.Play();
+                if (isOnSkill())
+                {
+                    if (skill_first)
+                    {
+                        StartCoroutine(BA(PInstance.ATK * 4f, 6f));
+                        P_Left.Play();
+                        P_Right.Play();
+                        skill_first = false;
+                    }
+                    else
+                    {
+                        StartCoroutine(BA(PInstance.ATK * 1.8f, 5f));
+                        P_Left.Play();
+                    }
+                }
+                else
+                {
+                    StartCoroutine(BA(PInstance.ATK, 5f));
+                }
+                    
+                    
                 break;
             case "OnAttack_2":
-                StartCoroutine(BA(13.5f));
+                StartCoroutine(BA(PInstance.ATK * 1.8f, 5f));
                 P_Right.Play();
                 break;
             case "playWalkSound":
@@ -138,15 +166,22 @@ public class texes_ctrl : MonoBehaviour
         }
     }
 
-    IEnumerator BA(float kb)
+    private bool isOnSkill()
+    {
+        return Skill_timer > 0f;
+    }
+
+
+
+    IEnumerator BA(float d,float kb)
     {
         bladeTrail_stun = 0.15f;
         yield return new WaitForEndOfFrame();
         yield return new WaitForEndOfFrame();
-        Basic_Attack(kb);
+        Basic_Attack(d,kb);
     }
 
-    private void Basic_Attack(float KnockBack)
+    private void Basic_Attack(float d,float KnockBack)
     {
         GameObject[] tmp2 = Basic_Attack_Range();
         foreach (GameObject mob in tmp2)
@@ -155,8 +190,10 @@ public class texes_ctrl : MonoBehaviour
             if (MI != null)
             {
                 a_Attack.Play();
-                float db = MI.Damage(EInstance.attack);
+                if(isOnSkill()) MI.MagicDamage(d);
+                else MI.PhysicsDamage(d);
                 MI.KnockBack(Vector2.right * (face_r ? 1 : -1) * KnockBack);
+                if (MI.isDeath()) PInstance.Skill.AddSkillPoint(1f);
             }
         }
     }
@@ -202,12 +239,12 @@ public class texes_ctrl : MonoBehaviour
         if (math.abs(vec.x) > visual_scale.x) vec.x = visual_scale.x * _0x00;
         visual.transform.localScale = vec;
         //attack range handle
-        vec = attack_range_mgr.transform.localScale;
-        vec.x = math.abs(vec.x) * _0x00;
-        attack_range_mgr.transform.localScale = vec;
         //Blade trail handle
         if (bladeTrail_stun <= 0)
         {
+            vec = attack_range_mgr.transform.localScale;
+            vec.x = math.abs(vec.x) * _0x00;
+            attack_range_mgr.transform.localScale = vec;
             vec = P_Root.transform.localScale;
             vec.y = math.abs(vec.y) * _0x00;
             vec.x = math.abs(vec.x) * _0x00;
@@ -333,11 +370,28 @@ public class texes_ctrl : MonoBehaviour
             TrackEntry track = animationState.GetCurrent(1);
             if (track == null || (track != null && track.Animation.Name == "<empty>"))
             {
-                setAnim(1, "Attack", false, 1.7f);
+                if(isOnSkill()) setAnim(1, skill_atk_Anim, false, 1.7f);
+                else setAnim(1, basic_atk_Anim, false, 1.7f);
                 if (onGround) StartCoroutine(basic_attack_movement());
                 animationState.AddEmptyAnimation(1, 0.2f, 0f);
             }
         }
+        #endregion
+
+        #region Skill handle
+        if (Input.GetKeyDown(KeyCode.R) && !isOnSkill() && PInstance.Skill.isAvailable())
+        {
+            skill_first = true;
+            if (onGround) setAnim(1, skill_start_Anim, false, 1.7f);
+            else setAnim(1, skill_atk_Anim, false, 1.7f);
+            
+            if (onGround) StartCoroutine(basic_attack_movement());
+            animationState.AddEmptyAnimation(1, 0.2f, 0f);
+
+            Skill_timer = Skill_time;
+            PInstance.Skill.ClearSkillPoint();
+        }
+
         #endregion
 
         #region EndUpdate
@@ -351,6 +405,9 @@ public class texes_ctrl : MonoBehaviour
         if (jump_buffer > 0f) jump_buffer -= dt;
         if (stun_tick > 0f) stun_tick -= dt;
         if (bladeTrail_stun >= 0f) bladeTrail_stun -= dt;
+        if (Skill_timer >= 0f) Skill_timer -= dt;
+
+        PInstance.Skill.SkillTimeRate = Skill_timer / Skill_time;
 
         speed.x = -move_v;
 

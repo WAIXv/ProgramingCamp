@@ -71,7 +71,7 @@ public class dslntc_AI : MonoBehaviour
                     entity_Instance PIns = tmp2[0].GetComponent<entity_Instance>();
                     if(PIns != null)
                     {
-                        PIns.Damage(EInstance.attack);
+                        PIns.PhysicsDamage(EInstance.ATK);
                         PIns.KnockBack(Vector2.right * (face_r ? -1 : 1) * 20f);
                         //PIns.Obj.GetComponent<irene_ctrl>().setMove_v((face_r ? -1 : 1) * 20f);
                     }

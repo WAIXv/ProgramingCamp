@@ -442,10 +442,11 @@ MonoBehaviour:
   health: 0
   max_health: 10000
   Obj: {fileID: 506859904644129770}
-  defense: 10
-  attack: 700
+  AD: 10
+  AP: 0
+  ATK: 530
   wait_for_death: 0
-  rigidbody: {fileID: 506859904644129775}
+  rb: {fileID: 506859904644129775}
 --- !u!1 &506859904877794890
 GameObject:
   m_ObjectHideFlags: 0

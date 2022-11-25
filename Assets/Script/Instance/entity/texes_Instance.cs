@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class texes_Instance : entity_Instance
+public class texes_Instance : player_Instance
 {
     public override void KnockBack(Vector2 vec)
     {
