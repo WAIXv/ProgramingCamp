@@ -60,10 +60,12 @@ public class enemy_controler : MonoBehaviour
         else if(other.gameObject.CompareTag("player")&&other.GetType().ToString()=="UnityEngine.BoxCollider2D")
         {
             player.jump();
+            audio_manager.Enemy_dead();
             eagle_animation.SetBool("death",true);
         }
         else if(other.tag=="bullet")
         {
+            audio_manager.Enemy_dead();
 //debug用            player.jump();
             eagle_animation.SetBool("death",true);
         }

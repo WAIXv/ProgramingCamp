@@ -7,14 +7,20 @@ public class player_controler : MonoBehaviour
  
     [SerializeField] public static int player_blood;
     [SerializeField] public static int ammo_amount;
-
     [SerializeField] public static int stair_amount;
     
+
+
     [SerializeField] private float jump_counter;
     [SerializeField] private float jump_time;
+    
+    
     [SerializeField] private bool able_to_attack;
     [SerializeField] private bool able_to_move;
     [SerializeField] private bool able_to_jump;
+    
+    
+    
     [SerializeField] private float hurt_timecounter; 
     [SerializeField] private float hurt_foces;
     [SerializeField] private bool hurted;
@@ -138,6 +144,7 @@ public class player_controler : MonoBehaviour
     {
         able_to_move = false;
         hurted = true;
+        audio_manager.hurted();
         print("opps");
         if(!direction)
         {
@@ -168,7 +175,7 @@ public class player_controler : MonoBehaviour
         {
             able_to_attack = true;
         }
-        if(jump_counter<jump_time)
+        if(jump_counter<jump_time&&Input.GetAxis("Vertical")<1f)
         {
             able_to_jump = true;
         }

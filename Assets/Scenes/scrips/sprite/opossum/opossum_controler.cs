@@ -93,11 +93,13 @@ public class opossum_controler : MonoBehaviour
         else if(other.gameObject.CompareTag("player")&&other.GetType().ToString()=="UnityEngine.BoxCollider2D")
         {
             player.jump();
+            audio_manager.Enemy_dead();
             Destroy(gameObject);
         }
         else if(other.tag=="bullet")
         {
 //debug用            player.jump();
+            audio_manager.Enemy_dead();
             opossum_animation.SetBool("death",true);
         }
     }
