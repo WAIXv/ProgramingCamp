@@ -9,8 +9,9 @@ public class PlayerController : MonoBehaviour
 
     public LayerMask ground;    //地面图层
     public Text score;
+    public Text HP;
     public Collider2D disColl;
-    public Transform cellingCheck;
+    public Transform cellingCheck,groundCheck;
     public float speed;         //速度变量
     public float JumpForce;     //跳跃速度
 
@@ -18,9 +19,12 @@ public class PlayerController : MonoBehaviour
     private Animator anim;
     private Collider2D coll;
     private int cherry = 0;          //吃掉的樱桃数量
+    private int life = 3;               //HP
     private bool CanJump = true;        //用于判断能否跳跃
     private bool isHurt = false;        //判断是否受伤
-    private bool isPast = false;        //时空穿越 判断是否处在过去
+    private bool isPast = false;        //时空穿越 判断是否处在过去 
+    private bool isGround;
+    private int extraJump;               //可跳跃次数
     
     // Start is called before the first frame update
     void Start()
@@ -38,6 +42,8 @@ public class PlayerController : MonoBehaviour
             Movement();
         }
         SwitchAnimation();
+        isGround = Physics2D.OverlapCircle(groundCheck.position, 0.2f, ground);
+        Jump();
     }
 
     void Movement()
@@ -61,12 +67,12 @@ public class PlayerController : MonoBehaviour
         {
             rd.velocity = new Vector2(0, rd.velocity.y);
         }
-        if (Input.GetButtonDown("Jump") && CanJump)                 //跳跃
+        /*if (Input.GetButtonDown("Jump") && CanJump)                 //旧版跳跃
         {
             rd.velocity = new Vector2(rd.velocity.x, JumpForce);
             anim.SetBool("jumping", true);
             CanJump = false;
-        }
+        }*/
         if (!isPast)
         {
             if (Input.GetKeyDown("q"))
@@ -97,6 +103,7 @@ public class PlayerController : MonoBehaviour
                 disColl.enabled = true;                             //打开上半身碰撞体
             }
         }
+
 
     }
         void SwitchAnimation()
@@ -147,18 +154,44 @@ public class PlayerController : MonoBehaviour
             {
                 isHurt = true;
                 anim.SetBool("hurt", true);
-                rd.velocity = new Vector2(-6, rd.velocity.y);
+                rd.velocity = new Vector2(-6, rd.velocity.y);               //触碰到敌人后反弹
+                life--;                             //HP减一
+                HP.text = life.ToString();
+                if (life == 0)                      //角色死亡重新开始
+                {
+                    Invoke("Restart", 0.2f);
+                }
             }
             else if(transform.position.x > collision.gameObject.transform.position.x)
             {
                 isHurt = true;
                 anim.SetBool("hurt", true);
-                rd.velocity = new Vector2(6, rd.velocity.y);
+                rd.velocity = new Vector2(6, rd.velocity.y);                //触碰到敌人后反弹
+                life--;                             //HP减一
+                HP.text = life.ToString();
+                if(life == 0)                       //角色死亡重新开始
+                {
+                    Invoke("Restart", 0.2f);
+                }
             }
         }
     }
     void Restart()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+    void Jump()
+    {
+        if(isGround)
+        {
+            extraJump = 1;
+        }
+        if(Input.GetButtonDown("Jump") && extraJump > 0)
+        {
+            rd.velocity = Vector2.up * JumpForce;
+            extraJump--;
+            anim.SetBool("jumping",true);
+        }
+        
     }
 }
