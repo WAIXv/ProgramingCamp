@@ -13,7 +13,7 @@ TagManager:
   - Water
   - UI
   - Ground
-  - 
+  - Player
   - 
   - 
   - 
@@ -47,6 +47,9 @@ TagManager:
     locked: 0
   - name: Tile
     uniqueID: 3314004425
+    locked: 0
+  - name: Sign
+    uniqueID: 1452156625
     locked: 0
   - name: Player
     uniqueID: 2159184143

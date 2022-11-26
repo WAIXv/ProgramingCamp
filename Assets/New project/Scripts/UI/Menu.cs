@@ -25,4 +25,9 @@ public class Menu : MonoBehaviour
         pauseMenu.SetActive(false);
         Time.timeScale = 1f;
     }
+    public void RestartGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        Time.timeScale = 1f;
+    }
 }

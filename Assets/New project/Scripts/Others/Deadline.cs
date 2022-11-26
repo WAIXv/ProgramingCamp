@@ -18,7 +18,7 @@ public class Deadline : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Invoke("Restart", 2f);
+            Invoke("Restart", 1f);
         }
     }
     private void Restart()

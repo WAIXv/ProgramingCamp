@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1801889655671071854}
   - component: {fileID: 1801889655671071852}
   - component: {fileID: 1801889655671071853}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: coll
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -41,7 +41,7 @@ CapsuleCollider2D:
   m_GameObject: {fileID: 1801889655671071855}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 6200000, guid: 5724ae00f32ee0246a812ab75a1fb517, type: 2}
+  m_Material: {fileID: 6200000, guid: cecefea8ef6b179419cec180ff6e054a, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -76,7 +76,7 @@ GameObject:
   - component: {fileID: 1801889655785716692}
   - component: {fileID: 1801889655785716691}
   - component: {fileID: 1801889655785716696}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -164,7 +164,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 2.5
+  m_GravityScale: 3
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -182,19 +182,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 648f368e1c8308e479b436c2e6cb595d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  xSpeed: 10
-  rbPlayer: {fileID: 0}
-  ySpeed1Temp: 1100
-  ySpeed2Temp: 1000
+  ycJumpTemp: 0.15
+  ySpeed1Temp: 900
+  ySpeed2Temp: 800
   nTimesJumpTemp: 1
-  playerColl1: {fileID: 0}
-  ChildrensCol: {fileID: 0}
+  xSpeed: 10
   ground:
     serializedVersion: 2
     m_Bits: 64
-  ycJumpTemp: 10
+  playerColl1: {fileID: 0}
+  ChildrensCol: {fileID: 0}
+  rbPlayer: {fileID: 0}
   Anima: {fileID: 0}
   isHurting: 0
+  knockBack_left: {x: -8, y: 7}
+  knockBack_right: {x: 8, y: 7}
+  scoreText: {fileID: 0}
+  scoreNum: 0
+  upLeft: {x: -0.3, y: 0.4, z: 0}
+  upRight: {x: 0.3, y: 0.4, z: 0}
+  midUp: {x: 0, y: 0.4, z: 0}
+  down: {x: 0, y: -1, z: 0}
+  moveLeft: {x: -0.1, y: 0, z: 0}
+  onLayers: 0
 --- !u!95 &1801889655785716691
 Animator:
   serializedVersion: 3

@@ -23,6 +23,7 @@ public class Cherry1 : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            AudioManager.instance.PlayFeedbackSound();
             animCherry.Play("Feedback");
         }
     }
