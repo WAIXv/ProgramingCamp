@@ -12,6 +12,7 @@ public class playerattack : MonoBehaviour
     private PolygonCollider2D coll2D;
     void Start()
     {
+        
         anim = GameObject.FindGameObjectWithTag("Player").GetComponent<Animator>();
         coll2D = GetComponent<PolygonCollider2D>();
     }
@@ -23,10 +24,16 @@ public class playerattack : MonoBehaviour
     }
     void Attack()
     {
-        if (Input.GetButtonDown("attack"))
+        AnimatorStateInfo info = anim.GetCurrentAnimatorStateInfo(0);
+        if(info.normalizedTime >= 0.817f)
+        {
+            anim.SetBool("isattacking", false);
+        }
+        if (Input.GetButtonDown("attack")&&anim.GetBool("isattacking")==false)
         {
             anim.SetTrigger("attack");
             StartCoroutine(StartAttack());
+            anim.SetBool("isattacking", true);
         }
     }
     IEnumerator StartAttack()
@@ -42,7 +49,7 @@ public class playerattack : MonoBehaviour
     }
      void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag("enemies"))
+        if (other.gameObject.CompareTag("enemies")|| other.gameObject.CompareTag("boss"))
         {
             other.GetComponent<Enemy1>().TakeDamage(damage);
         }

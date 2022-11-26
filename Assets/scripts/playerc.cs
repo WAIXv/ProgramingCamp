@@ -15,9 +15,11 @@ public class playerc : MonoBehaviour
     public Collider2D collbox;
     public LayerMask ground;
     public int collectionsget = 0;//收集数
-    int cut = 0;//暂时用这个防止收集的时候人物两个刚体碰到，让收集数直接加2
+    int cut1 = 0;//暂时用这个防止收集的时候人物两个刚体碰到，让收集数直接加2;//暂时用这个防止受击的时候人物两个刚体碰到，让HP-2
     public bool candoublejump;
     public Text score;//计分ui
+    private bool isHurt;//判断是否受伤，默认是false
+    private float facedirection;
     void Start()
     {
         rb= GetComponent<Rigidbody2D>();
@@ -27,15 +29,19 @@ public class playerc : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Movement();
+        score.text = collectionsget.ToString();
+        if (!isHurt&&this.GetComponent<playerhealth>().isdied==false)
+        {
+            Movement();
+        }
         falljudge();
       //  Attack();
-        cut++;
+        cut1++;
     }//主函数
     void Movement()
     {
         float horizontalmove = Input.GetAxis("Horizontal");
-        float facedirection = Input.GetAxisRaw("Horizontal");
+        facedirection = Input.GetAxisRaw("Horizontal");
         if (facedirection != 0&& facedirection*this.transform.localScale.x<0)//朝向
         {
             transform.localScale = new Vector3(facedirection*Mathf.Abs( this.transform.localScale.x), this.transform.localScale.y, 1);
@@ -76,19 +82,60 @@ public class playerc : MonoBehaviour
         {
             anim.SetBool("jumping", false);
             anim.SetBool("falling", true);
-        }else if(coll.IsTouchingLayers(ground)){
+        }else if (coll.IsTouchingLayers(ground) || collbox.IsTouchingLayers(ground))
+        {
             anim.SetBool("falling", false);
             anim.SetBool("idel", true);
         }
+        if (isHurt)
+        {
+            anim.SetBool("hurt", true);
+            anim.SetFloat("running",0);
+            AnimatorStateInfo info = anim.GetCurrentAnimatorStateInfo(0);
+            if (info.normalizedTime >= 0.58f&& rb.velocity.y<2f) {//这玩意搞了好久，原来想不明白为什么跳的时候没受击动画。原来是瞬间给关了，后来多加了给y的条件，好了
+                anim.SetBool("hurt", false);
+                isHurt = false;
+            }
+        }
+        
     }//下落判定及动画切换
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "collection"&&cut>100)
+        if (collision.tag == "collection"&&cut1>100)
         { 
             Destroy(collision.gameObject);
             collectionsget++;
-            cut=0;
+            cut1=0;
+            this.GetComponentInParent<playerhealth>().Recovey(2);
             score.text = collectionsget.ToString();
+            FindObjectOfType<playerskill>().RecoveyMP(4);
         }
     }//收集物品
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "enemies" || collision.gameObject.tag == "boss" && cut1>=400)
+        {
+            if (collision.gameObject.tag == "enemies")
+            {
+                this.GetComponent<playerhealth>().DamagePlayer(1);
+                cut1 = 0;
+                isHurt = true;
+            }
+            else
+            {
+                this.GetComponent<playerhealth>().DamagePlayer(3);
+                cut1 = 0;
+                isHurt = true;
+
+            }
+            if (anim.GetBool("falling"))
+            {
+                rb.velocity = new Vector2(rb.velocity.x, 0.8f * jumpforce);
+            }
+            else if (transform.position.x != collision.gameObject.transform.position.x)
+            {
+                rb.velocity = new Vector2( -facedirection*1.2f ,  rb.velocity.y);
+            }
+        }
+    }
 }

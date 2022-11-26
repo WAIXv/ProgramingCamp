@@ -6,6 +6,9 @@ TagManager:
   tags:
   - collection
   - enemies
+  - "\u6B66\u5668"
+  - UI
+  - boss
   layers:
   - Default
   - TransparentFX
@@ -15,7 +18,7 @@ TagManager:
   - UI
   - ground
   - groundd
-  - 
+  - image
   - 
   - 
   - 
