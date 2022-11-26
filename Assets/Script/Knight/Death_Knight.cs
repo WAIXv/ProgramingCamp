@@ -13,6 +13,7 @@ public class Death_Knight : State
     }
     public override void OnEnter()
     {
+        AudioManager.instance.PlayDeathMusic();
         paramater.anim.SetTrigger("isDeath");
     }
 

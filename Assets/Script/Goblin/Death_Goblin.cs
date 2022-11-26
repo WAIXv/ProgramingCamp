@@ -13,6 +13,7 @@ public class Death_Goblin : State
     }
     public override void OnEnter()
     {
+        AudioManager.instance.PlayKillMusic();
         paramater.anim.SetBool("isDeath", true);
     }
 

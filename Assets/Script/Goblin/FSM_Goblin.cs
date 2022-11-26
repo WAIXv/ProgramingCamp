@@ -34,7 +34,7 @@ public class FSM_Goblin : MonoBehaviour
 
     private void FixedUpdate()
     {
-        IfAttackCheck();
+        if (paramater.currentState != StateType.Hurt) IfAttackCheck();
         allSaveState[paramater.currentState]?.OnFixedUpdate();
     }
 

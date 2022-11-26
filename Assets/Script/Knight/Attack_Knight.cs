@@ -16,6 +16,7 @@ public class Attack_Knight : State
     {
         paramater.anim.SetTrigger("isAttacking");
         fsm.EnterAttack();
+        AudioManager.instance.PlayAttackMusic();
     }
 
     public override void OnExit()

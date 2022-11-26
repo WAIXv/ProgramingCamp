@@ -9,7 +9,7 @@ public class AttackHitBox_Goblin : MonoBehaviour
         if (collision.gameObject.CompareTag("Player") && collision.isTrigger == false)
         {
             FSM_Knight target = collision.gameObject.GetComponent<FSM_Knight>();
-            target.SendMessage("DecreaseHP", 30);
+            target.SendMessage("DecreaseHP", 10);
         }
     }
 }
