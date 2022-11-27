@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class mainMenuMusic: MonoBehaviour
 {
-
+    private GameOption _Option;
     public static AudioSource mainMenu_audio_Soc;
     public static AudioClip clickSound;
     public static AudioClip pointOnSound;
@@ -15,12 +15,14 @@ public class mainMenuMusic: MonoBehaviour
         mainMenu_audio_Soc =  GetComponent<AudioSource>();
         clickSound = Resources.Load<AudioClip>("SoundFolder/Hit");
         pointOnSound = Resources.Load<AudioClip>("SoundFolder/Step_grass");
+        _Option = GameObject.Find("GameOption").GetComponent<GameOption>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        mainMenu_audio_Soc.volume = _Option.Vol;
+
     }
 
     public void play_clickSound()
