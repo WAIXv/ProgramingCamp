@@ -5,22 +5,25 @@ using UnityEngine;
 public abstract class Collection : MonoBehaviour
 {
     // Start is called before the first frame update
-    public void Start()
+    protected AudioSource collectAudio;
+    protected virtual void Start()
     {
-        
+        collectAudio = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
-    public void Update()
+    protected void Update()
     {
         
     }
 
-    public void OnTriggerEnter2D(Collider2D other)
+    public void Collect()
     {
-        if (other.gameObject.CompareTag("Player") && other.GetType().ToString() == "UnityEngine.CapsuleCollider2D")
-        {
-            Destroy(gameObject);
-        }
+        collectAudio.Play();
+    }
+
+    public void Destroy()
+    {
+        Destroy(gameObject);
     }
 }

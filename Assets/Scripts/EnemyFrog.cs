@@ -2,14 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyFrog : MonoBehaviour
+public class EnemyFrog : Enemy
 {
     public Transform leftPos;
     public Transform rightPos;
-    public int damage;
+    //public int damage;
 
     private Rigidbody2D rb;
-    private Animator anim;
     private PlayerHealth playerHealth;
     private float moveSpeed = 3;
     private float jumpSpeed = 10;
@@ -20,10 +19,10 @@ public class EnemyFrog : MonoBehaviour
 
     // Start is called before the first frame update
 
-    void Start()
+    protected override void Start()
     {
+        base.Start();
         rb = GetComponent<Rigidbody2D>();
-        anim = GetComponent<Animator>();
         playerHealth = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerHealth>();
         transform.DetachChildren();
         leftX = leftPos.position.x;
@@ -92,11 +91,11 @@ public class EnemyFrog : MonoBehaviour
         }
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
+   /* void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {
             playerHealth.DamagePlayer(damage);
         }
-    }
+    }*/
 }

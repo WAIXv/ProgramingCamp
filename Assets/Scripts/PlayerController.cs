@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public AudioSource jumpAudio;
+    public AudioSource hurtAudio;
 
     private Rigidbody2D rb;
     private Animator anim;
@@ -65,6 +67,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetButtonDown("Jump") && isGround)
         {
             anim.SetBool("Jump", true);//播放动画
+            jumpAudio.Play();
             Vector2 jumpVel = new Vector2(rb.velocity.x, jumpSpeed);//跳跃速度
             rb.velocity = jumpVel;
         }
@@ -105,7 +108,8 @@ public class PlayerController : MonoBehaviour
     {
         if (anim.GetBool("Fall") && collision.gameObject.CompareTag("Enemy"))
         {
-            Destroy(collision.gameObject);
+            Enemy enemy = collision.gameObject.GetComponent<Enemy>();
+            enemy.DeathAnim();
             anim.SetBool("Jump", true);//播放动画
             Vector2 jumpVel = new Vector2(rb.velocity.x, jumpSpeed);//跳跃速度
             rb.velocity = jumpVel;
@@ -114,10 +118,27 @@ public class PlayerController : MonoBehaviour
         {
             isHurt = true;
             if (transform.position.x < collision.gameObject.transform.position.x)
+            {
                 rb.velocity = new Vector2(-5, 10);
+                hurtAudio.Play();
+
+            }
             if (transform.position.x > collision.gameObject.transform.position.x)
+            {
                 rb.velocity = new Vector2(5, 10);
+                hurtAudio.Play();
+            }
         }
 
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)//收集物品
+    {
+        if (collision.gameObject.CompareTag("Collection"))
+        {
+            Collection collection = collision.gameObject.GetComponent<Collection>();
+            collection.Collect();
+            Destroy(collision.gameObject);
+        }
     }
 }
