@@ -3,20 +3,21 @@ using System.Collections.Generic;
 using System.IO.MemoryMappedFiles;
 using UnityEngine;
 
-public class frogmove : MonoBehaviour
+public class frogmove : enemy
 {
     // Start is called before the first frame update
     private Rigidbody2D rb;
     private Collider2D coll;
-    private Animator Anim;
+    //private Animator Anim;
     public float jumpForce=2;
     public LayerMask ground;
     [SerializeField] public Transform leftpoint, rightpoint;
     [SerializeField] public float speed;
     [SerializeField] private bool faccLeft = true;
     private float leftx, rightx;
-    void Start()
+    protected override void Start()
     {
+        base.Start();
         rb= GetComponent<Rigidbody2D>();
         Anim = GetComponent<Animator>();
         coll = GetComponent<Collider2D>();
@@ -84,4 +85,7 @@ public class frogmove : MonoBehaviour
         }
        
     }
+
+    //À¿Õˆ
+    
 }

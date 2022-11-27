@@ -12,6 +12,8 @@ public class fxgo : MonoBehaviour
     private Animator anim;//在开头加上[SerializeField]变为可见不可改
     private Rigidbody2D rb;
     public Collider2D coll;
+    public Collider2D disColl;
+    public Transform top;
     public LayerMask ground;
     public float jumpforce;
     [SerializeField] private int cherry=0;
@@ -38,6 +40,7 @@ public class fxgo : MonoBehaviour
     {
         float horizontalMove = Input.GetAxis("Horizontal");
         float facedirection = Input.GetAxisRaw("Horizontal");
+        Crouch();
         //移动
         if (horizontalMove != 0)
         {
@@ -114,9 +117,10 @@ public class fxgo : MonoBehaviour
     {
         if (collision.gameObject.tag == "enemy")
         {
+            enemy frog=collision.gameObject.GetComponent<enemy>();
             if (anim.GetBool("falling"))
             {
-                Destroy(collision.gameObject);//销毁后小跳
+                frog.jumpOn();//销毁后小跳
                 rb.velocity = new Vector2(rb.velocity.x, jumpforce);
                 anim.SetBool("jumping", true);
             }
@@ -135,6 +139,24 @@ public class fxgo : MonoBehaviour
             
         }
 
+    }
+    //下蹲
+    private void Crouch()
+    {
+        if (!Physics2D.OverlapCircle(top.position,0.2f,ground))
+        {
+            if (Input.GetButton("Crouch"))
+            {
+                anim.SetBool("crouch", true);
+                disColl.enabled = false;
+            }
+            else
+            {
+                anim.SetBool("crouch", false);
+                disColl.enabled = true;
+            }
+        }
+        
     }
     //重启场景
     private void reStart()
