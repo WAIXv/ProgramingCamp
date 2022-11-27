@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,6 +15,7 @@ public class playerController : MonoBehaviour
     public LayerMask ground;
     public int Cherry;
     public Text CherryNum;
+    private bool isHurt;
 
     void Start()
     {
@@ -23,7 +25,10 @@ public class playerController : MonoBehaviour
     }
     void FixedUpdate()
     {
-        Movement();
+        if (!isHurt)
+        {
+            Movement();
+        }
         SwitchAnim();
     }
 
@@ -56,12 +61,27 @@ public class playerController : MonoBehaviour
     void SwitchAnim()
     {
         anim.SetBool("idle", false);
+        if(rb.velocity.y < 0.1f && !coll.IsTouchingLayers(ground))
+        {
+            anim.SetBool("falling",true);
+        }
+
+
         if(anim.GetBool("jumping"))
         {
             if(rb.velocity.y<0)
             {
                 anim.SetBool("jumping",false);
                 anim.SetBool("falling", true);
+            }
+        }else if (isHurt)
+        {
+            anim.SetBool("hurt", true);
+            if (Mathf.Abs(rb.velocity.x) < 0.1f)
+            {
+                anim.SetBool("hurt", false);
+                anim.SetBool("idle", true);
+                isHurt = false;
             }
         }
         else if(coll.IsTouchingLayers(ground))
@@ -86,9 +106,25 @@ public class playerController : MonoBehaviour
     //ÏûÃð¹ÖÎï
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision.gameObject.tag == "Enemy")
+        if (collision.gameObject.tag == "Enemy")
         {
-            Destroy(collision.gameObject);
+            Enemy_Forg frog = collision.gameObject.GetComponent<Enemy_Forg>();
+            if (anim.GetBool("falling"))
+            {
+                frog.JumpOn();
+                rb.velocity = new Vector2(rb.velocity.x, jumpforce * Time.deltaTime);
+                anim.SetBool("jumping", true);
+            }
+            else if (transform.position.x < collision.gameObject.transform.position.x)
+            {
+                rb.velocity = new Vector2(-10,rb.velocity.y);
+                isHurt = true;
+            }
+            else if (transform.position.x > collision.gameObject.transform.position.x)
+            {
+                rb.velocity = new Vector2(10, rb.velocity.y);
+                isHurt = true;
+            }
         }
     }
 }
