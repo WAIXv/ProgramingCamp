@@ -120,14 +120,20 @@ public class texes_ctrl : MonoBehaviour
         visual = gameObject.transform.Find("visual").gameObject;
         visual_scale = visual.transform.localScale;
         lf_pos = gameObject.transform.position;
+        PInstance.Skill = new TexasSkill("’Û”Í¡¨√‡", t_SkillIcon, 10f);
+    }
+
+    void Start()
+    {
         #region Initializating SpineAnimation
         animationState = skeletonAnimation.AnimationState;
         animationState.SetAnimation(0, idle_Anim, true);
         rootLayerAnim = idle_Anim;
         animationState.Event += AnimEventHandler;
-        PInstance.Skill = new TexasSkill("’Û”Í¡¨√‡", t_SkillIcon, 10f);
         #endregion
     }
+
+
 
     private void AnimEventHandler(TrackEntry trackEntry, Spine.Event e)
     {
