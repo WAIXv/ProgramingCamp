@@ -553,7 +553,9 @@ MonoBehaviour:
   GroundMask:
     serializedVersion: 2
     m_Bits: 8
-  UIText: {fileID: 7454032284721518849, guid: a36a79a39a01a424793d3f1023a908b0, type: 3}
+  PlatformMask:
+    serializedVersion: 2
+    m_Bits: 512
   parameter:
     MaxMoveSpeed: 8
     RunTime: 1

@@ -48,9 +48,12 @@ public class PlayerFSM : MonoBehaviour
     [SerializeField] private Transform PlayerTransform;
     [SerializeField] private Rigidbody2D PlayerRigidbody;
     [SerializeField] private LayerMask GroundMask;
-    
+    [SerializeField] private LayerMask PlatformMask;
+    [SerializeField] private float RestoreLayerTime;
+
     public Parameter parameter;
     private bool RollInFall;
+    private bool IsOneWayPlatform;
     public enum PlayerStateType
     {
         Idle,Run,SlowDown,Roll,Jump,Fall,Attack1,Attack2,Attack3
@@ -76,6 +79,7 @@ public class PlayerFSM : MonoBehaviour
         parameter.IsJump = Input.GetButton("Jump");
         parameter.IsRoll = Input.GetKey(KeyCode.LeftControl)|| RollInFall;
         parameter.IsOnGround = CheckGournd();
+
         if(Input.GetKey(KeyCode.LeftControl) && currentState == states[PlayerStateType.Fall])
         {
             StartCoroutine(RollIEnumerator());
@@ -86,6 +90,8 @@ public class PlayerFSM : MonoBehaviour
             currentState = states[PlayerStateType.Idle];
         }
         currentState.OnUpdate();
+        CheckOneWayPlatform();
+        OneWayPlatformDownCheck();
     }
     private void FixedUpdate()
     {
@@ -127,7 +133,11 @@ public class PlayerFSM : MonoBehaviour
     }
     private bool CheckGournd()
     {
-        return GroundCollider.IsTouchingLayers(GroundMask);
+        return GroundCollider.IsTouchingLayers(GroundMask)|| GroundCollider.IsTouchingLayers(PlatformMask);
+    }
+    private void CheckOneWayPlatform()
+    {
+        IsOneWayPlatform = GroundCollider.IsTouchingLayers(LayerMask.GetMask("Platform"));
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -135,6 +145,24 @@ public class PlayerFSM : MonoBehaviour
         {
             parameter.Score++;
             Destroy(collision.gameObject);
+        }
+    }
+    void OneWayPlatformDownCheck()
+    {
+        float MoveY = Input.GetAxis("Vertical");
+
+        if (IsOneWayPlatform && Input.GetKeyDown(KeyCode.S))
+        {
+            gameObject.layer = LayerMask.NameToLayer("Platform");
+            Invoke("RestorePlayerlayer", RestoreLayerTime);
+        }
+
+    }
+    void RestorePlayerlayer()
+    {
+        if(gameObject.layer != LayerMask.GetMask("Player"))
+        {
+            gameObject.layer = LayerMask.NameToLayer("Player");
         }
     }
     IEnumerator RollIEnumerator()
