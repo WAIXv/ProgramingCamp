@@ -7,6 +7,7 @@ public class audio_manager : MonoBehaviour
     public static AudioSource audioSrc;
     public static AudioClip shoot_bullet;
     public static AudioClip shoot_stair;
+    public static AudioClip collectSound;
     public static AudioClip Enemy_death;
     public static AudioClip hit;
     // Start is called before the first frame update
@@ -16,6 +17,7 @@ public class audio_manager : MonoBehaviour
         shoot_bullet = Resources.Load<AudioClip>("SoundFolder/DM-CGS-48");
         shoot_stair = Resources.Load<AudioClip>("SoundFolder/DM-CGS-47");
         Enemy_death = Resources.Load<AudioClip>("SoundFolder/Enemy_Death");
+        collectSound = Resources.Load<AudioClip>("");
         hit= Resources.Load<AudioClip>("SoundFolder/Hit");
     }
 
