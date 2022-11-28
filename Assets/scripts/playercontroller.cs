@@ -2,96 +2,100 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class playercontroller : MonoBehaviour
 {
-    [SerializeField] private Rigidbody2D rb;
-    [SerializeField] private Animator anim;
-    [SerializeField] private float speed;
-    [SerializeField] private float jumpforce;
-    [SerializeField] private LayerMask ground;
-    [SerializeField] private Collider2D coll;
-    [SerializeField] private int cherry = 0;
-    [SerializeField] private Text Cherrynum;
-    [SerializeField] private bool ishurt;
+    [SerializeField] private Rigidbody2D Rb;
+    [SerializeField] private Animator Anim;
+    [SerializeField] private float Speed;
+    [SerializeField] private float jumpForce;
+    [SerializeField] private LayerMask Ground;
+    [SerializeField] private Collider2D Coll;
+    [SerializeField] private int Cherry = 0;
+    [SerializeField] private Text cherryNum;
+    [SerializeField] private bool isHurt;
+    [SerializeField] private AudioSource jumpAudio,hurtAudio,cherryAudio;
+
 
     // Start is called before the first frame update
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
-        anim = GetComponent<Animator>();
+        Rb = GetComponent<Rigidbody2D>();
+        Anim = GetComponent<Animator>();
 
     }
 
     // Update is called once per frame
     private void Update()
     {
-        if (!ishurt)
+        if (!isHurt)
         { movement(); }
     }
     void FixedUpdate()
     {
-        if (!ishurt)
+        if (!isHurt)
         { movement(); }
         SwitchAnim();
     }
     void movement()
     {
-        float horizontalmove = Input.GetAxis("Horizontal");
-        float facedirection = Input.GetAxisRaw("Horizontal");
+        float horizontalMove = Input.GetAxis("Horizontal");
+        float faceDirection = Input.GetAxisRaw("Horizontal");
         //ÒÆ¶¯
-        if (horizontalmove != 0)
+        if (horizontalMove != 0)
         {
-            rb.velocity = new Vector2(horizontalmove * speed * Time.deltaTime, rb.velocity.y);
-            anim.SetFloat("running", Mathf.Abs(facedirection));
+            Rb.velocity = new Vector2(horizontalMove * Speed * Time.deltaTime, Rb.velocity.y);
+            Anim.SetFloat("running", Mathf.Abs(faceDirection));
         }
 
 
-        if (facedirection != 0)
+        if (faceDirection != 0)
         {
-            transform.localScale = new Vector3(facedirection, 1, 1);
+            transform.localScale = new Vector3(faceDirection, 1, 1);
         }
         //ÌøÔ¾
-        if (Input.GetButtonDown("Jump")&&anim.GetBool("idle"))
-        { 
-             rb.velocity = new Vector2(rb.velocity.x, jumpforce * Time.fixedDeltaTime);
-                anim.SetBool("jumping", true); 
+        if (Input.GetButtonDown("Jump")&&Anim.GetBool("idle"))
+        {
+            jumpAudio.Play(); 
+            Rb.velocity = new Vector2(Rb.velocity.x, jumpForce * Time.fixedDeltaTime);
+                Anim.SetBool("jumping", true); 
         }
 
     }
 
     void SwitchAnim()
     {
-        anim.SetBool("idle", false);
-        if (anim.GetBool("jumping"))
+        Anim.SetBool("idle", false);
+        if (Anim.GetBool("jumping"))
         {
-            if (rb.velocity.y < 0)
+            if (Rb.velocity.y < 0)
             {
-                anim.SetBool("jumping", false);
-                anim.SetBool("falling", true);
+                Anim.SetBool("jumping", false);
+                Anim.SetBool("falling", true);
             }
         }
-        else if (ishurt)
+        else if (isHurt)
         {
-            anim.SetBool("hurt", true);
-            anim.SetFloat("running", 0);
-            anim.SetBool("jumping", false);
-            anim.SetBool("falling", false);        
-            if (Mathf.Abs(rb.velocity.x) < 0.1f)
+            Anim.SetBool("hurt", true);
+            Anim.SetFloat("running", 0);
+            Anim.SetBool("jumping", false);
+            Anim.SetBool("falling", false);        
+            if (Mathf.Abs(Rb.velocity.x) < 0.1f)
             {
-                ishurt = false;
-                anim.SetBool("hurt", false);
-                anim.SetBool("idle", true);
+                isHurt = false;
+                Anim.SetBool("hurt", false);
+                Anim.SetBool("idle", true);
             }
         }
-        else if (coll.IsTouchingLayers(ground))
+        else if (Coll.IsTouchingLayers(Ground))
         {
-            anim.SetBool("falling", false);
-            anim.SetBool("idle", true);
+            Anim.SetBool("falling", false);
+            Anim.SetBool("idle", true);
         }
-        else if (!coll.IsTouchingLayers(ground))
+        else if (!Coll.IsTouchingLayers(Ground))
         {
-            anim.SetBool("falling", true);
+            Anim.SetBool("falling", true);
         }
     }
 
@@ -99,9 +103,15 @@ public class playercontroller : MonoBehaviour
     {
         if(collision.tag=="collection")
         {
+            cherryAudio.Play();
             Destroy(collision.gameObject);
-            cherry += 1;
-            Cherrynum.text = cherry.ToString();
+            Cherry += 1;
+            cherryNum.text = Cherry.ToString();
+        }
+        if(collision.tag=="deadLine")
+        {
+            GetComponent<AudioSource>().enabled = false;
+            Invoke("reStart", 2f);
         }
     }
 
@@ -109,24 +119,33 @@ public class playercontroller : MonoBehaviour
     {
         if (collision.gameObject.tag == "enemy")
         {
-            if (anim.GetBool("falling"))
+            //enemy_frog frog = collision.gameObject.GetComponent<enemy_frog>();
+            enemy Enemy = collision.gameObject.GetComponent<enemy>();
+            if (Anim.GetBool("falling"))
             {
-                Destroy(collision.gameObject);
-                rb.velocity = new Vector2(rb.velocity.x, jumpforce * Time.fixedDeltaTime);
-                anim.SetBool("jumping", true);
+                //frog.Jumpon();
+                Enemy.Jumpon();
+                Rb.velocity = new Vector2(Rb.velocity.x, jumpForce * Time.fixedDeltaTime);
+                Anim.SetBool("jumping", true);
             }
             else if (transform.position.x < collision.gameObject.transform.position.x)
             {
-                rb.velocity = new Vector2(-5, rb.velocity.y);
-                ishurt = true;
+                hurtAudio.Play();
+                Rb.velocity = new Vector2(-10, Rb.velocity.y);
+                isHurt = true;
             }
             else if (transform.position.x > collision.gameObject.transform.position.x)
             {
-                rb.velocity = new Vector2(5, rb.velocity.y);
-                ishurt = true;
+                hurtAudio.Play();
+                Rb.velocity = new Vector2(10, Rb.velocity.y);
+                isHurt = true;
             }
         }
     }
 
 
+    public void reStart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
 }

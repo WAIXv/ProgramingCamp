@@ -6,6 +6,7 @@ TagManager:
   tags:
   - collection
   - enemy
+  - deadLine
   layers:
   - Default
   - TransparentFX
@@ -14,9 +15,9 @@ TagManager:
   - Water
   - UI
   - 
-  - 
+  - environment
   - background
-  - 
+  - ground
   - 
   - 
   - 

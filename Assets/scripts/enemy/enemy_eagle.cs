@@ -2,26 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class enemy_eagle : MonoBehaviour
+public class enemy_eagle : enemy
+
 {
     [SerializeField] private Rigidbody2D rb;
-
+    //[SerializeField] private Animator Anim;
     [SerializeField] private float Speed, leftx, rightx;
     [SerializeField] private Transform leftpoint, rightpoint;
 
     [SerializeField] private bool Faceleft = true;
 
-    void Start()
+     protected override void Start()
     {
+        base.Start();
         rb = GetComponent<Rigidbody2D>();
+        Anim = GetComponent<Animator>();
         transform.DetachChildren();
         rightx = rightpoint.position.x;
         leftx = leftpoint.position.x;
         Destroy(leftpoint.gameObject);
         Destroy(rightpoint.gameObject);
     }
-
-    // Update is called once per frame
+   
     void Update()
     {
         Movement();
@@ -49,4 +51,6 @@ public class enemy_eagle : MonoBehaviour
 
 
     }
+    
+
 }
