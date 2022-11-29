@@ -10,16 +10,13 @@ namespace Assets.Script
     public class SkillBase
     {
         public string name;
-        public float coolTime = 0f;
-        public float coolTimer { private set; get; } = 0f;
         public float skillPoint = 0f;
-        public float SkillTimeRate = 1f;
+        public float SkillTimeRate = 0f;
         public float skillPointBuffer { private set; get; } = 0f;
         public Texture2D Icon;
-        public SkillBase(string name, Texture2D icon, float coolTime, float skillPoint) {
+        public SkillBase(string name, Texture2D icon, float skillPoint) {
             this.skillPoint = skillPoint;
             this.Icon = icon;
-            this.coolTime = coolTime;
             this.name=name;
         }
         public virtual void Update() {

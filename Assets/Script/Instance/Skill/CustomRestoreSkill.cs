@@ -6,9 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class TexasSkill : SkillBase
+public class CustomRestoreSkill : SkillBase
 {
-    public TexasSkill(string name, Texture2D icon, float coolTime) : base(name, icon, coolTime, 1f)
+    public CustomRestoreSkill(string name, Texture2D icon, float skillPoint) : base(name, icon, skillPoint)
     {
     }
 

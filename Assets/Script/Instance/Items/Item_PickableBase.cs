@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class pickable_item_ctrl : MonoBehaviour
+public class Item_PickableBase : MonoBehaviour
 {
     // Update is called once per frame
     void Update()

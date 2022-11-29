@@ -5,6 +5,7 @@ using Unity.Mathematics;
 using UnityEngine;
 using Spine;
 using static S;
+using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 
 public class irene_ctrl : MonoBehaviour
 {
@@ -21,6 +22,8 @@ public class irene_ctrl : MonoBehaviour
     [SerializeField][SpineAnimation(dataField: "skeletonAnimation")] private string jump_up_Anim;
     [SerializeField][SpineAnimation(dataField: "skeletonAnimation")] private string jump_up_2_Anim;
     [SerializeField][SpineAnimation(dataField: "skeletonAnimation")] private string jump_fall_Anim;
+    [SerializeField][SpineAnimation(dataField: "skeletonAnimation")] private string skill_atk_Anim;
+    [SerializeField][SpineAnimation(dataField: "skeletonAnimation")] private string skill_start_Anim;
 
     private string rootLayerAnim;
     #endregion
@@ -89,8 +92,16 @@ public class irene_ctrl : MonoBehaviour
     private float jump_v = 10f;
     private bool lf_onGround = false;
     private bool isJumping = false;
-    #endregion
+    private float jumping_timer = 0f;
     private Vector3 lf_pos;
+    #endregion
+
+    #region Skill buffer
+    [Header("Skill")]
+    [SerializeField]
+    private Texture2D t_SkillIcon;
+    private bool onSkill = false;
+    #endregion
 
     void Awake()
     {
@@ -98,6 +109,7 @@ public class irene_ctrl : MonoBehaviour
         visual = gameObject.transform.Find("visual").gameObject;
         visual_scale = visual.transform.localScale;
         lf_pos = gameObject.transform.position;
+        PInstance.Skill = new CustomRestoreSkill("еп╬Ж" ,t_SkillIcon, 30);
         #region Initializating SpineAnimation
         bone = skeletonAnimation.Skeleton.FindBone(boneName);
         animationState = skeletonAnimation.AnimationState;
@@ -120,6 +132,9 @@ public class irene_ctrl : MonoBehaviour
             case "playWalkSound":
                 a_Foot_step.Play();
                 break;
+            case "SkillAtk_1":
+                a_Attack.Play();
+                break;
         }
     }
 
@@ -140,6 +155,7 @@ public class irene_ctrl : MonoBehaviour
             if (MI != null)
             {
                 a_Attack.Play();
+                PInstance.Skill.AddSkillPoint(1f);
                 float db = MI.PhysicsDamage(PInstance.ATK);
                 MI.KnockBack(Vector2.right * (face_r ? 1 : -1) * KnockBack);
             }
@@ -176,6 +192,22 @@ public class irene_ctrl : MonoBehaviour
             {
                 isJumping = false;
                 if (dy < 0f) a_Landing.Play();
+            }
+            else
+            {
+                if (isJumping)
+                {
+                    jumping_timer += dt;
+                    if (jumping_timer >= 0.2f)
+                    {
+                        jumping_timer = 0f;
+                        isJumping = false;
+                    }
+                }
+                else
+                {
+                    jumping_timer = 0f;
+                }
             }
         }
 
@@ -305,7 +337,7 @@ public class irene_ctrl : MonoBehaviour
         #endregion
 
         #region Attack handle
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && !onSkill)
         {
             TrackEntry track = animationState.GetCurrent(1);
             if (track == null || (track != null && track.Animation.Name == "<empty>"))
@@ -316,6 +348,16 @@ public class irene_ctrl : MonoBehaviour
             }
         }
         #endregion
+
+        #region Skill handle
+        if (Input.GetKeyDown(KeyCode.R) && PInstance.Skill.isAvailable() && !onSkill)
+        {
+            StartCoroutine(StartSkill());
+        }
+
+        #endregion
+
+
 
         #region EndUpdate
         //handle animation
@@ -338,6 +380,19 @@ public class irene_ctrl : MonoBehaviour
 
     }
     #region Utils
+    private IEnumerator StartSkill()
+    {
+        onSkill = true;
+        setAnim(1, skill_start_Anim, false, 1.7f);
+        animationState.AddAnimation(1, skill_atk_Anim, false, 0f);
+        animationState.AddEmptyAnimation(1, 0.2f, 0f);
+        PInstance.Skill.ClearSkillPoint();
+        yield return new WaitForSpineAnimationEnd(animationState.GetCurrent(1));
+        yield return new WaitForSpineAnimationEnd(animationState.GetCurrent(1));
+        onSkill = false;
+    }
+
+
     private IEnumerator basic_attack_movement()
     {
         yield return new WaitForEndOfFrame();

@@ -28,9 +28,12 @@ MonoBehaviour:
   skeletonDataModifiers: []
   fromAnimation:
   - Idle
+  - Skill_3_Start
   toAnimation:
   - Walk
+  - Skill_3_Attack
   duration:
   - 0.1
+  - 0
   defaultMix: 0.2
   controller: {fileID: 0}

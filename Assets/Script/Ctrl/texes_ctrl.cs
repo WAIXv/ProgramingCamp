@@ -4,6 +4,7 @@ using System.Collections;
 using Unity.Mathematics;
 using UnityEngine;
 using Spine;
+using UnityEngine.Rendering;
 
 public class texes_ctrl : MonoBehaviour
 {
@@ -24,16 +25,21 @@ public class texes_ctrl : MonoBehaviour
     private string rootLayerAnim;
     #endregion
 
-    #region Particle
-    [Header("Particle")]
+    #region Renderer
+    [Header("Renderer")]
     [SerializeField]
     private GameObject P_Root;
     [SerializeField]
     private ParticleSystem P_Left;
     [SerializeField]
     private ParticleSystem P_Right;
-    #endregion
 
+    [SerializeField]
+    private texas_skill_shoot_ctrl white_shoot;
+    private float white_shoot_timer = 0f;
+    [SerializeField]
+    private AnimationCurve white_shoot_time_curve;
+    #endregion
 
     #region Editable var
     [Header("Ctrl")]
@@ -51,6 +57,7 @@ public class texes_ctrl : MonoBehaviour
     private player_Instance PInstance;
     [SerializeField]
     public float max_stun_tick { get; } = 0.35f;
+
     #endregion
 
     #region Audio & Texture
@@ -99,6 +106,7 @@ public class texes_ctrl : MonoBehaviour
     private float jump_v = 10f;
     private bool lf_onGround = false;
     private bool isJumping = false;
+    private float jumping_timer = 0f;
     #endregion
 
     #region Skill buffer
@@ -120,11 +128,7 @@ public class texes_ctrl : MonoBehaviour
         visual = gameObject.transform.Find("visual").gameObject;
         visual_scale = visual.transform.localScale;
         lf_pos = gameObject.transform.position;
-        PInstance.Skill = new TexasSkill("ÕóÓêÁ¬Ãà", t_SkillIcon, 10f);
-    }
-
-    void Start()
-    {
+        PInstance.Skill = new CustomRestoreSkill("ÕóÓêÁ¬Ãà", t_SkillIcon, 1);
         #region Initializating SpineAnimation
         animationState = skeletonAnimation.AnimationState;
         animationState.SetAnimation(0, idle_Anim, true);
@@ -132,6 +136,7 @@ public class texes_ctrl : MonoBehaviour
         animationState.Event += AnimEventHandler;
         #endregion
     }
+
 
 
 
@@ -147,6 +152,7 @@ public class texes_ctrl : MonoBehaviour
                         StartCoroutine(BA(PInstance.ATK * 4f, 6f));
                         P_Left.Play();
                         P_Right.Play();
+                        StartCoroutine(VVV(0.3f));
                         skill_first = false;
                     }
                     else
@@ -159,8 +165,6 @@ public class texes_ctrl : MonoBehaviour
                 {
                     StartCoroutine(BA(PInstance.ATK, 5f));
                 }
-                    
-                    
                 break;
             case "OnAttack_2":
                 StartCoroutine(BA(PInstance.ATK * 1.8f, 5f));
@@ -182,10 +186,27 @@ public class texes_ctrl : MonoBehaviour
     IEnumerator BA(float d,float kb)
     {
         bladeTrail_stun = 0.15f;
-        yield return new WaitForEndOfFrame();
-        yield return new WaitForEndOfFrame();
+        yield return null;
         Basic_Attack(d,kb);
     }
+
+    IEnumerator VVV(float t)
+    {
+        if (white_shoot_timer > 0f) yield break;
+        white_shoot_timer = t;
+        white_shoot.setImgActive(true);
+        white_shoot.setAlpha(0f);
+        while (white_shoot_timer > 0)
+        {
+            white_shoot_timer -= Time.deltaTime;
+            white_shoot.setAlpha(white_shoot_time_curve.Evaluate(1-white_shoot_timer / t));
+
+            yield return null;
+        }
+        white_shoot.setImgActive(false);
+        white_shoot_timer = 0f;
+    }
+
 
     private void Basic_Attack(float d,float KnockBack)
     {
@@ -209,7 +230,6 @@ public class texes_ctrl : MonoBehaviour
         return MyUtils.BoxRange(basic_attack_range.transform.position, basic_attack_range.transform.localScale / 2, 0f, Vector2.right * (face_r ? 1 : -1), 0f, LayerMask.GetMask("Mob"), "mob_obj");
     }
 
-
     // Update is called once per frame
     void Update()
     {
@@ -230,10 +250,27 @@ public class texes_ctrl : MonoBehaviour
                 ground_tick = 0.1f;
                 jump_state = 4;
             }
+
             if (!lf_onGround)
             {
                 isJumping = false;
                 if (dy < 0f) a_Landing.Play();
+            }
+            else
+            {
+                if (isJumping)
+                {
+                    jumping_timer += dt;
+                    if(jumping_timer >= 0.2f)
+                    {
+                        jumping_timer= 0f;
+                        isJumping = false;
+                    }
+                }
+                else
+                {
+                    jumping_timer = 0f;
+                }
             }
         }
 

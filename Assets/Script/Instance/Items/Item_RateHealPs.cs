@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Assets.script
 {
-    public class Item_RateHealPs : pickable_item_ctrl
+    public class Item_RateHealPs : Item_PickableBase
     {
         [SerializeField]
         private float time = 3f;
@@ -15,7 +15,7 @@ namespace Assets.script
         private float rate = 12f;
         public override bool OnPick(entity_Instance EI)
         {
-            if(EI.Obj.tag == "player_obj")
+            if(EI is player_Instance)
             {
                 EI.EfcMgr.Add(new Effect.RateHealEffect(time, rate));
                 return true;
