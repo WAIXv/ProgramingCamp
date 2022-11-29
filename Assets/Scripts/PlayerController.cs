@@ -138,7 +138,6 @@ public class PlayerController : MonoBehaviour
         {
             Collection collection = collision.gameObject.GetComponent<Collection>();
             collection.Collect();
-            Destroy(collision.gameObject);
         }
     }
 }

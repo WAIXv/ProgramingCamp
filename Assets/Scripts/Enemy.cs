@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    // Start is called before the first frame update
     protected Animator anim;
     protected AudioSource deathAudio;
 
+    // Start is called before the first frame update
     protected virtual void Start()
     {
         anim = GetComponent<Animator>();

@@ -4,10 +4,12 @@ using UnityEngine;
 
 public abstract class Collection : MonoBehaviour
 {
-    // Start is called before the first frame update
+    protected Animator anim;
     protected AudioSource collectAudio;
+    // Start is called before the first frame update
     protected virtual void Start()
     {
+        anim = GetComponent<Animator>();
         collectAudio = GetComponent<AudioSource>();
     }
 
@@ -20,6 +22,7 @@ public abstract class Collection : MonoBehaviour
     public void Collect()
     {
         collectAudio.Play();
+        anim.SetTrigger("Collected");
     }
 
     public void Destroy()
