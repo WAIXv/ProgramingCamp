@@ -10,21 +10,28 @@ public class audio_manager : MonoBehaviour
     public static AudioClip collectSound;
     public static AudioClip Enemy_death;
     public static AudioClip hit;
+    private GameOption _Option;
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
+        _Option = GameObject.Find("GameOption").GetComponent<GameOption>();
         audioSrc =  GetComponent<AudioSource>();
         shoot_bullet = Resources.Load<AudioClip>("SoundFolder/DM-CGS-48");
         shoot_stair = Resources.Load<AudioClip>("SoundFolder/DM-CGS-47");
         Enemy_death = Resources.Load<AudioClip>("SoundFolder/Enemy_Death");
         collectSound = Resources.Load<AudioClip>("");
         hit= Resources.Load<AudioClip>("SoundFolder/Hit");
+        audioSrc.volume = _Option.Vol;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        audioSrc.volume = _Option.Vol;
+        if(_Option.ifMute)
+        {
+            audioSrc.volume=0;
+        }
     }
 
     public static void PlayShootBullet()
@@ -47,5 +54,4 @@ public class audio_manager : MonoBehaviour
         audioSrc.PlayOneShot(hit);
     }
 
-    
 }

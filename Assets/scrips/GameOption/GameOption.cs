@@ -24,6 +24,7 @@ public class GameOption : MonoBehaviour
     /// </summary>
     private void Awake()
     {
+        Vol=1;
         if(_instance == null)
         {
             _instance = this;
