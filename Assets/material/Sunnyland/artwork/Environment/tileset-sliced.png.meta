@@ -1750,15 +1750,19 @@ TextureImporter:
       name: tileset-sliced_60
       rect:
         serializedVersion: 2
-        x: 116
+        x: 112
         y: 192
-        width: 8
+        width: 16
         height: 16
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-      physicsShape: []
+      physicsShape:
+      - - {x: -4.3257675, y: -8}
+        - {x: -4.058342, y: 8}
+        - {x: 4.058342, y: 8}
+        - {x: 4.0583344, y: -8}
       tessellationDetail: 0
       bones: []
       spriteID: 89305410000000000800000000000000

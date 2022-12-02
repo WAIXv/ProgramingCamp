@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public class player_controler : MonoBehaviour
 {
  
@@ -19,27 +19,29 @@ public class player_controler : MonoBehaviour
     [SerializeField] private bool able_to_move;
     [SerializeField] private bool able_to_jump;
     
-    
-    
+    [SerializeField] private bool isLadder;
+    [SerializeField] private bool isJump;
     [SerializeField] private float hurt_timecounter; 
     [SerializeField] private float hurt_foces;
     [SerializeField] private bool hurted;
     [SerializeField] private float speedx;
     [SerializeField] private float jumpfoces;
+    [SerializeField] private float climbSpeed;
     [SerializeField] private Rigidbody2D player_body;
     [SerializeField] private Collider2D player_head;
     [SerializeField] private Collider2D player_feet;
     [SerializeField] private LayerMask ground;
     [SerializeField] private Animator player_animator;
     
-    
+    [SerializeField] private Collider2D Limit;
     [SerializeField] private bool N_facing;
     // Start is called before the first frame update
     void Start()
     {
+        Limit = GameObject.Find("BackGround").GetComponent<PolygonCollider2D>();
         Time.timeScale =1;
         able_to_move=true;
-        player_blood=10000;
+        player_blood=1;
         hurted=false;
         ammo_amount=5;
         stair_amount=0;
@@ -67,7 +69,6 @@ public class player_controler : MonoBehaviour
     private void player_move()
     {
         player_animator.SetBool("croching",false);
-        
         float player_run_direction = Input.GetAxisRaw("Horizontal");
         float player_move = Input.GetAxis("Horizontal");
         //跑动
@@ -94,9 +95,30 @@ public class player_controler : MonoBehaviour
         {
             jump();
         }
-        else if(jump_direction<0&&player_feet.IsTouchingLayers(ground))
+        else if(jump_direction<0&&player_feet.IsTouchingLayers(ground)&&!isLadder)
         {
             player_animator.SetBool("croching",true);
+        }
+
+        if(isLadder)
+        {
+            float moveY = Input.GetAxis("Vertical");
+            if(moveY>0.5f || moveY <-0.5f)
+            {
+                player_animator.SetBool("ladder",true);
+                player_body.gravityScale = 0.0f;
+                player_body.velocity = new Vector2(player_body.velocity.x,moveY * climbSpeed);
+            }
+            else
+            {
+                player_animator.SetBool("ladder",true);
+                player_body.velocity = new Vector2(player_body.velocity.x,0.0f);
+            }
+        }
+        else
+        {
+            player_animator.SetBool("ladder",false);
+            player_body.gravityScale = 6.3f;
         }
     }
     private void transdirection()
@@ -117,10 +139,12 @@ public class player_controler : MonoBehaviour
         if(player_feet.IsTouchingLayers(ground))
         {
             jump_counter = 0f;
+            isJump = false;
             player_animator.SetBool("jumping",false);
             player_animator.SetBool("falling",false);
             player_animator.SetBool("hurt",false);
         }
+        isLadder = player_feet.IsTouchingLayers(LayerMask.GetMask("ladder"));
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -137,9 +161,15 @@ public class player_controler : MonoBehaviour
         }
     }
 
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if(other==Limit)
+        Dead();
+    }
+
     private void Dead()
     {
-
+        SceneManager.LoadScene("DeadMenu");
     }    
     public void gethurt(int damage,bool direction)
     {
@@ -187,6 +217,7 @@ public class player_controler : MonoBehaviour
     }
     public void jump()
     {
+        isJump = true;
         able_to_jump =false;
         jump_counter = jump_time;
         player_body.velocity = new Vector2(player_body.velocity.x,jumpfoces);

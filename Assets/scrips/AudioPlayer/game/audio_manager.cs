@@ -22,6 +22,7 @@ public class audio_manager : MonoBehaviour
         collectSound = Resources.Load<AudioClip>("");
         hit= Resources.Load<AudioClip>("SoundFolder/Hit");
         audioSrc.volume = _Option.Vol;
+        audioSrc.Play();
     }
 
     // Update is called once per frame
@@ -52,6 +53,16 @@ public class audio_manager : MonoBehaviour
     public static void hurted()
     {
         audioSrc.PlayOneShot(hit);
+    }
+
+    public void Pause()
+    {
+        audioSrc.Pause();
+    }
+
+    public void Play()
+    {
+        audioSrc.Play();
     }
 
 }

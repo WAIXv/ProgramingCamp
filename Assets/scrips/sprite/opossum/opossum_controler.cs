@@ -11,6 +11,7 @@ public class opossum_controler : MonoBehaviour
     [SerializeField] private float jumpfoces;
     [SerializeField] private int damage;
     [SerializeField] private float speed;
+    [SerializeField] private float limit;
     [SerializeField] Transform leftpoint;
     [SerializeField] Transform rightpoint;
     [SerializeField] Transform attack_right;
@@ -20,7 +21,7 @@ public class opossum_controler : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        face_direction = true;        
+        face_direction=true;        
         find_target =false;
     }
 
@@ -28,7 +29,7 @@ public class opossum_controler : MonoBehaviour
     
     void Update()
     {
-        if(player.transform.position.x>=attack_left.position.x&&player.transform.position.x<=attack_right.position.x)
+        if(player.transform.position.x>=attack_left.position.x&&player.transform.position.x<=attack_right.position.x&&Mathf.Abs(player.transform.position.y-attack_left.position.y)<limit)
         {
             if(!find_target)
             {

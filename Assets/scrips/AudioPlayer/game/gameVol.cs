@@ -10,7 +10,6 @@ public class gameVol : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        
         _gameOption = GameObject.Find("GameOption").GetComponent<GameOption>();
         muteSet  = GameObject.Find("MuteButton").GetComponent<Button>();
         volControl = GameObject.Find("Vol_change").GetComponent<Slider>();
