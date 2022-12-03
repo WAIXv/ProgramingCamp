@@ -223,4 +223,6 @@ public class player_controler : MonoBehaviour
         player_body.velocity = new Vector2(player_body.velocity.x,jumpfoces);
         player_animator.SetBool("jumping",true);
     }
+
+    
 }

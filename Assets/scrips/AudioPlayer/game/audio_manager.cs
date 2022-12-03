@@ -10,6 +10,7 @@ public class audio_manager : MonoBehaviour
     public static AudioClip collectSound;
     public static AudioClip Enemy_death;
     public static AudioClip hit;
+    public static AudioClip Crank;
     private GameOption _Option;
     // Start is called before the first frame update
     void Awake()
@@ -20,6 +21,7 @@ public class audio_manager : MonoBehaviour
         shoot_stair = Resources.Load<AudioClip>("SoundFolder/DM-CGS-47");
         Enemy_death = Resources.Load<AudioClip>("SoundFolder/Enemy_Death");
         collectSound = Resources.Load<AudioClip>("");
+        Crank = Resources.Load<AudioClip>("SoundFolder/51_Flee_02");
         hit= Resources.Load<AudioClip>("SoundFolder/Hit");
         audioSrc.volume = _Option.Vol;
         audioSrc.Play();
@@ -34,7 +36,10 @@ public class audio_manager : MonoBehaviour
             audioSrc.volume=0;
         }
     }
-
+    public static void playCrank()
+    {
+        audioSrc.PlayOneShot(Crank);
+    }
     public static void PlayShootBullet()
     {
         audioSrc.PlayOneShot(shoot_bullet);
