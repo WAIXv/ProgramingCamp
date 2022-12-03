@@ -1,18 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class playercontroller : MonoBehaviour
 {
-    [SerializeField] private int acornNum;
+    [SerializeField] private AudioSource touchAudio;//碰撞时果实时的音效
+    [SerializeField] private AudioSource jumpAudio;//跳跃时的音效
+    [SerializeField] private int acornNum;//果实数量
     [SerializeField] private float speed;//走路速度
     [SerializeField] private float jumpSpeed;//跳跃速度
+    [SerializeField] private Text acorn;
     private Rigidbody2D myRigidbody;//获取玩家刚体
     private Animator myAnime;//获取动画机
     private BoxCollider2D myFeet;//获取碰撞机
     private bool isGround;//判断是否接触地面的信息
     private bool canDoubleJump;//判断能否二段跳
-    private bool isHurt;
+    private bool isHurt;//判断是否受伤
     void Start()
     {
         myRigidbody = GetComponent<Rigidbody2D>();
@@ -80,6 +84,7 @@ public class playercontroller : MonoBehaviour
             {
                 myAnime.SetBool("jump", true);
                 canDoubleJump = true;
+                jumpAudio.Play();
                 Vector2 jumpVel = new Vector2(0.0f, jumpSpeed);
                 myRigidbody.velocity = Vector2.up * jumpVel;
             }
@@ -87,6 +92,7 @@ public class playercontroller : MonoBehaviour
             {
                 Vector2 jumpVel = new Vector2(0.0f, jumpSpeed);
                 myRigidbody.velocity = Vector2.up * jumpVel;
+                jumpAudio.Play();
                 canDoubleJump = false;
             }
 
@@ -114,14 +120,23 @@ public class playercontroller : MonoBehaviour
             }
         }
     }
+    /// <summary>
+    /// 判断是否与果实相撞
+    /// </summary>
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "healthPack")
         {
+            touchAudio.Play();
             Destroy(collision.gameObject);
             acornNum += 1;
-        }//判断是否与血包碰撞
+            acorn.text = acornNum.ToString();
+
+        }
     }
+    /// <summary>
+    /// 判断是否与敌人相撞
+    /// </summary>
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.tag == "ant")
@@ -138,7 +153,7 @@ public class playercontroller : MonoBehaviour
                 isHurt = true;
                 myAnime.SetBool("hurt", true);
             }
-        }//判断是否与敌人碰撞
+        }
     }
 }
 
