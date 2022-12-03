@@ -10,7 +10,6 @@ public class Menu : MonoBehaviour
     public GameObject PauseMenu;
     private void Start()
     {
-        PauseMenu.SetActive(false);
         isShow = false;
     }
     private void Update()

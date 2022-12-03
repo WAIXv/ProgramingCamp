@@ -13,9 +13,11 @@ public class playermove : MonoBehaviour
     [SerializeField] private float JumpForce;
     [SerializeField] private LayerMask ground;
     [SerializeField] private Collider2D coll;
+    [SerializeField] private Transform CellingCheck;
     [SerializeField] private int cherry;
     [SerializeField] private bool isHurt;
     [SerializeField] private AudioSource JumpAudio;
+    [SerializeField] private AudioSource CollectAudio;
     [SerializeField] private Text CherryNumber;
     // Start is called before the first frame update
     void Start()
@@ -51,6 +53,7 @@ public class playermove : MonoBehaviour
             animi.SetBool("jumping", true);
             JumpAudio.Play();
         }
+        Crouch();
 
     }//ÒÆ¶¯
     void switchanimation()
@@ -99,6 +102,7 @@ public class playermove : MonoBehaviour
         {
             Destroy(collision.gameObject);
             cherry++;
+            CollectAudio.Play();
             CherryNumber.text = cherry.ToString();
         }
         if (collision.tag == "DeadLine")
@@ -141,6 +145,23 @@ public class playermove : MonoBehaviour
     void Restart()
     {
         SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().name);
+    }
+
+    void Crouch()
+    {
+        if(!Physics2D.OverlapCircle(CellingCheck.position,0.2f,ground))
+        {
+            if (Input.GetButtonDown("crouch"))
+            {
+                animi.SetBool("crouching", true);
+                coll.enabled = false;
+            }
+            else if (Input.GetButtonUp("crouch"))
+            {
+                animi.SetBool("crouching", false);
+                coll.enabled = true;
+            }
+        }
     }
    
 }
