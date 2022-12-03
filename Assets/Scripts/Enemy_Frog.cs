@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy_Frog : MonoBehaviour
+public class Enemy_Frog : Enemy
 {
 
     private Rigidbody2D rb;
-    private Animator Anim;
+    //private Animator Anim;
     private Collider2D Coll;
 
     public LayerMask Ground;
@@ -16,10 +16,11 @@ public class Enemy_Frog : MonoBehaviour
 
     private bool Faceleft = true;
 
-    void Start()
+    protected override void Start()
     {
+        base.Start();
         rb = GetComponent<Rigidbody2D>();
-        Anim = GetComponent<Animator>();
+        //Anim = GetComponent<Animator>();
         Coll = GetComponent<Collider2D>();
 
         transform.DetachChildren();
@@ -82,13 +83,5 @@ public class Enemy_Frog : MonoBehaviour
         }
     }
 
-    void Death()
-    {
-        Destroy(gameObject);
-    }
-
-    public void JumpOn()
-    {
-        Anim.SetTrigger("death");
-    }
+   
 }
