@@ -4,9 +4,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public AudioSource jumpAudio;
-    public AudioSource hurtAudio;
-
+ 
     private Rigidbody2D rb;
     private Animator anim;
     private BoxCollider2D feet;
@@ -67,7 +65,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetButtonDown("Jump") && isGround)
         {
             anim.SetBool("Jump", true);//播放动画
-            jumpAudio.Play();
+            SoundMananger.instance.JumpAudio();
             Vector2 jumpVel = new Vector2(rb.velocity.x, jumpSpeed);//跳跃速度
             rb.velocity = jumpVel;
         }
@@ -120,13 +118,12 @@ public class PlayerController : MonoBehaviour
             if (transform.position.x < collision.gameObject.transform.position.x)
             {
                 rb.velocity = new Vector2(-5, 10);
-                hurtAudio.Play();
-
+                SoundMananger.instance.HurtAudio();
             }
             if (transform.position.x > collision.gameObject.transform.position.x)
             {
                 rb.velocity = new Vector2(5, 10);
-                hurtAudio.Play();
+                SoundMananger.instance.HurtAudio();
             }
         }
 
