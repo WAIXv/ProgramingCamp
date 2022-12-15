@@ -17,7 +17,9 @@ public class Platform : MonoBehaviour
     }
     private void PlatformDown()//按下键跳下平台
     {
-        if (Input.GetButtonDown("Crouch")) effector.rotationalOffset = 180;
+        if (Input.GetButton("Crouch")) { 
+            if(Input.GetButtonDown("Jump"))effector.rotationalOffset = 180; 
+        }
         if (Input.GetButtonUp("Crouch"))effector.rotationalOffset = 0; 
     }
 }

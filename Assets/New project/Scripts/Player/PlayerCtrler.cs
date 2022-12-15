@@ -11,10 +11,11 @@ public class PlayerCtrler : MonoBehaviour
     private float ycJump;
 
     [Header("移动与多段跳")]
+    [SerializeField] private float Face;
     [SerializeField] private float ySpeed1Temp;                     //第一段跳移动参考值
     [SerializeField] private float ySpeed2Temp;                     //多段跳速度参考值
     [SerializeField] public int nTimesJumpTemp;                     //多段跳次数参考值     
-    [SerializeField] private float xSpeed;                          //水平速度
+    [SerializeField] private float xSpeed,xSpeedTemp;                          //水平速度
     [SerializeField] private LayerMask ground;                      //用来检测地面
     private float ySpeed1, ySpeed2;                                 //多段跳实时速度
     private int nTimesJump;                                         //多段跳次数
@@ -43,7 +44,15 @@ public class PlayerCtrler : MonoBehaviour
     /// <summary>
     /// 标记是否在墙体之上
     /// </summary>
-    [SerializeField] private bool onLayers=false;                   
+    [SerializeField] private bool onLayers=false;
+
+    [Header("Dash")]
+    [SerializeField] private float dashTime;
+    [SerializeField] private float dashTimeLeft;
+    [SerializeField] private float dashSpeed;
+    [SerializeField] private bool dashChance;
+    [SerializeField] private bool isDashing;
+    [SerializeField] private float dashDir;
     #endregion
     void Start()
     {
@@ -56,17 +65,20 @@ public class PlayerCtrler : MonoBehaviour
     {
         if(!isHurting)Movement();
         SwitchAnimP(ChildrensCol);
-        Crouch();
+        if(!isHurting&&!isDashing)Crouch();
         LayerCheck2();
+
     }
     private void FixedUpdate()
     {
+        if(isDashing)ShadowPool.instance.GetFromPool();
     }
     private void Movement()
     {
         float Hrztmove = Input.GetAxis("Horizontal");
-        float Face = Input.GetAxisRaw("Horizontal");
-        if (Hrztmove != 0)
+        Face = Input.GetAxisRaw("Horizontal");
+        if (Face != 0) dashDir = Face;
+        if (Hrztmove != 0&&!isDashing)
         {
             rbPlayer.velocity = new Vector2(Hrztmove * xSpeed, rbPlayer.velocity.y);
             Anima.SetFloat("Running",Mathf.Abs(Hrztmove));
@@ -97,6 +109,7 @@ public class PlayerCtrler : MonoBehaviour
                 ySpeed2 = ySpeed2Temp;
             }
         }
+        if (Input.GetKeyDown(KeyCode.R)) Dash();
     }
     /// <summary>
     /// LayerCheck方法用来进行地面检测，以重置多段跳次数以及土狼时间的实现
@@ -177,11 +190,13 @@ public class PlayerCtrler : MonoBehaviour
             {
                 Anima.SetBool("Crouch", true);
                 playerColl1.isTrigger = true;
+                xSpeed = xSpeedTemp / 2; 
             }
             else
             {
                 Anima.SetBool("Crouch", false);
                 playerColl1.isTrigger = false;
+                xSpeed = xSpeedTemp;
             }
         }
         else if (playerColl1.IsTouchingLayers(ground) && playerColl1.isTrigger)
@@ -190,6 +205,8 @@ public class PlayerCtrler : MonoBehaviour
             {
                 Anima.SetBool("Crouch", false);
                 playerColl1.isTrigger = false;
+                xSpeed = xSpeedTemp;
+                
             }
         }
         
@@ -209,5 +226,24 @@ public class PlayerCtrler : MonoBehaviour
         }
         if (Physics2D.OverlapCircle(transform.position + down, 0.3f, ground)) onLayers = true;
         else onLayers = false;
+    }
+    private void Dash()
+    {
+        if (dashChance)
+        {
+            isDashing = true;
+            rbPlayer.velocity=new Vector2(dashSpeed*dashDir,rbPlayer.velocity.y);
+            dashChance = false;
+            Invoke("DashDelay", 0.3f);
+
+        }
+    }
+    private void DashDelay()
+    {
+        isDashing = false;
+    }
+    public void GiveDashChance()
+    {
+        dashChance = true;
     }
 }

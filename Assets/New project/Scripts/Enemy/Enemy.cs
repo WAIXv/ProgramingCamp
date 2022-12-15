@@ -8,6 +8,7 @@ public class Enemy : MonoBehaviour
     protected Collider2D enemyColl;
     protected Rigidbody2D enemyRb;
     protected bool isDeathing=false;
+    protected PlayerCtrler playerCtrler;
     // Start is called before the first frame update
     protected virtual void Start()
     {
@@ -26,6 +27,8 @@ public class Enemy : MonoBehaviour
         {
             if (other.transform.position.y > transform.position.y +1&&other.rigidbody.velocity.y<=0)
             {
+                playerCtrler = other.gameObject.GetComponent<PlayerCtrler>();
+                playerCtrler.GiveDashChance();
                 other.rigidbody.velocity = new Vector2(other.rigidbody.velocity.x, 12);
                 AudioManager.instance.PlayDeathSound();
                 isDeathing = true;
