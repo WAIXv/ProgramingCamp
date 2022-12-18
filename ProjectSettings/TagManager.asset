@@ -9,6 +9,7 @@ TagManager:
   - "\u6B66\u5668"
   - UI
   - boss
+  - deadline
   layers:
   - Default
   - TransparentFX

@@ -8,12 +8,18 @@ public class EneryBoss : MonoBehaviour
 {
     public float speed;
     public float radius;
+    public float startTime;
     // Start is called before the first frame update
     private Transform playertransform;
-    private float transformY;
+
+    public Animator anim;
+    public bool Begin=false;
+    public int lenth;//ª÷∏¥ ±º‰
+    private int cut=0;
     void Start()
     {
-        transformY = this.transform.position.y;
+       // anim = GameObject.FindGameObjectWithTag("boss").GetComponent<Animator>();
+
         playertransform = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
     }
 
@@ -25,8 +31,33 @@ public class EneryBoss : MonoBehaviour
             float distance = (transform.position - playertransform.position).sqrMagnitude;
             if (distance < radius)
             {
-               transform.position = UnityEngine.Vector2.MoveTowards(transform.position, playertransform.position, speed * Time.deltaTime);
+                cut = 0;
+                if (anim.GetBool("wake") == false)
+                {
+                    StartCoroutine(StartWake());
+                }
+                if(Begin)
+                {
+                    transform.position = UnityEngine.Vector2.MoveTowards(transform.position, playertransform.position, speed * Time.deltaTime);
+                }
+            }
+            else
+            {
+                cut++;
+                if (cut >= lenth){
+                    anim.SetBool("wake", false);
+                    anim.SetBool("move", false);
+                    Begin = false;
+                }
             }
         }
+    }
+
+    IEnumerator StartWake()
+    {
+        anim.SetBool("wake", true);
+        yield return new WaitForSeconds(startTime);//—” ±
+        Begin = true;
+        anim.SetBool("move", true);
     }
 }

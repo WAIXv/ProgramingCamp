@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using System.Security;
 
 public class playerc : MonoBehaviour
 {
@@ -14,6 +16,7 @@ public class playerc : MonoBehaviour
     public Collider2D coll;
     public Collider2D collbox;
     public LayerMask ground;
+    public AudioSource JumpMusic;
     public int collectionsget = 0;//收集数
     int cut1 = 0;//暂时用这个防止收集的时候人物两个刚体碰到，让收集数直接加2;//暂时用这个防止受击的时候人物两个刚体碰到，让HP-2
     public bool candoublejump;
@@ -61,12 +64,14 @@ public class playerc : MonoBehaviour
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpforce );
             anim.SetBool("jumping", true);
+            JumpMusic.Play();
             candoublejump = true;
         }else if (candoublejump == true && Input.GetButtonDown("Jump"))
         {
             Vector2 doublejumpvel = new Vector2(rb.velocity.x, doublejumpforce);
             rb.velocity = Vector2.up * doublejumpvel;
             candoublejump = false;
+            JumpMusic.Play();
         }
         }//动作
   /*  void Attack()
@@ -110,7 +115,12 @@ public class playerc : MonoBehaviour
             score.text = collectionsget.ToString();
             FindObjectOfType<playerskill>().RecoveyMP(4);
         }
-    }//收集物品
+        if (collision.tag == "deadline")
+        {
+            GetComponent<AudioSource>().enabled = false;
+            Invoke("Restart", 1.2f);
+        }
+    }//碰撞触发器
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.tag == "enemies" || collision.gameObject.tag == "boss" && cut1>=400)
@@ -123,7 +133,7 @@ public class playerc : MonoBehaviour
             }
             else
             {
-                this.GetComponent<playerhealth>().DamagePlayer(3);
+                this.GetComponent<playerhealth>().DamagePlayer(7);
                 cut1 = 0;
                 isHurt = true;
 
@@ -137,5 +147,9 @@ public class playerc : MonoBehaviour
                 rb.velocity = new Vector2( -facedirection*1.2f ,  rb.velocity.y);
             }
         }
+    }
+    void Restart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

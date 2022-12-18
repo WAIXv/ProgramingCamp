@@ -8,8 +8,10 @@ public class playerskill : MonoBehaviour
     public float time;
     public float startTime;
     public int MP;
+    public float MusicWaitTime;
     private Animator anim;
     private PolygonCollider2D coll2D;
+    public AudioSource skillMusic;
     int cut = 0;
     void Start()
     {
@@ -37,6 +39,7 @@ public class playerskill : MonoBehaviour
             MP -= 3;
             MPBar.MPCurrent = MP;
             anim.SetTrigger("skill");
+            StartCoroutine(Musicplay());
             StartCoroutine(StartSkilling());
             anim.SetBool("isskilling", true);
         }
@@ -66,11 +69,16 @@ public class playerskill : MonoBehaviour
         yield return new WaitForSeconds(time);//ÑÓÊ±
         coll2D.enabled = false;
     }
+    IEnumerator Musicplay()
+    {
+        yield return new WaitForSeconds(MusicWaitTime);//ÑÓÊ±
+        skillMusic.Play();
+    }
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.CompareTag("enemies"))
         {
-            if (cut >= 400)
+            if (cut >= 50)
             {
                 other.GetComponent<Enemy1>().TakeDamage(damage);
                 cut = 0;
@@ -78,7 +86,7 @@ public class playerskill : MonoBehaviour
         }
         if(other.gameObject.CompareTag("boss"))
         {
-            if (cut >= 400)
+            if (cut >= 50)
             {
                 other.GetComponent<Enemy1>().TakeDamage(damage);
                 cut = 0;
