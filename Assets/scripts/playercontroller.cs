@@ -12,11 +12,11 @@ public class playercontroller : MonoBehaviour
     [SerializeField] private float jumpForce;
     [SerializeField] private LayerMask Ground;
     [SerializeField] private Collider2D Coll;
-    [SerializeField] private int Cherry = 0;
-    [SerializeField] private Text cherryNum;
+    [SerializeField] private int Cherry = 0,Gem=0,extraJump;
+    [SerializeField] private Text cherryNum,gemNum;
     [SerializeField] private bool isHurt;
-    [SerializeField] private AudioSource jumpAudio,hurtAudio,cherryAudio;
-
+    [SerializeField] private AudioSource jumpAudio,hurtAudio,cherryAudio,gemAudio;
+    //[SerializeField] private Transform groundCheck;
 
     // Start is called before the first frame update
     void Start()
@@ -29,7 +29,7 @@ public class playercontroller : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        if (!isHurt)
+        //if (!isHurt)
         { movement(); }
     }
     void FixedUpdate()
@@ -55,13 +55,34 @@ public class playercontroller : MonoBehaviour
             transform.localScale = new Vector3(faceDirection, 1, 1);
         }
         //ÌøÔ¾
-        if (Input.GetButtonDown("Jump")&&Anim.GetBool("idle"))
+        /*if (Input.GetButtonDown("Jump")&&Anim.GetBool("idle"))
         {
             jumpAudio.Play(); 
             Rb.velocity = new Vector2(Rb.velocity.x, jumpForce * Time.fixedDeltaTime);
                 Anim.SetBool("jumping", true); 
+        }*/
+        if (Coll.IsTouchingLayers(Ground))
+        {
+            extraJump = 1;
+        }
+       
+        if(Input.GetButtonDown("Jump") && Coll.IsTouchingLayers(Ground))
+        {
+            jumpAudio.Play();
+            Rb.velocity = new Vector2(Rb.velocity.x, jumpForce * Time.fixedDeltaTime);
+            Anim.SetBool("jumping", true);          
         }
 
+        if(Input.GetButtonDown("Jump") && extraJump>0)
+        {
+            jumpAudio.Play();
+            Rb.velocity = new Vector2(Rb.velocity.x, jumpForce * Time.fixedDeltaTime);
+            Anim.SetBool("jumping", true);
+            extraJump--;
+        }
+
+
+        
     }
 
     void SwitchAnim()
@@ -110,8 +131,16 @@ public class playercontroller : MonoBehaviour
         }
         if(collision.tag=="deadLine")
         {
+            
             GetComponent<AudioSource>().enabled = false;
-            Invoke("reStart", 2f);
+            Invoke("reStart", 1f);
+        }
+        if (collision.tag == "gem")
+        {
+            gemAudio.Play();
+            Destroy(collision.gameObject);
+            Gem += 1;
+            gemNum.text = Gem.ToString();
         }
     }
 
@@ -147,5 +176,10 @@ public class playercontroller : MonoBehaviour
     public void reStart()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void Stop()
+    {
+        Rb.velocity = Vector2.zero;
     }
 }
