@@ -5,7 +5,6 @@ using Unity.Mathematics;
 using UnityEngine;
 using Spine;
 using static S;
-using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 
 public class irene_ctrl : MonoBehaviour
 {

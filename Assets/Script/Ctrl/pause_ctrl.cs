@@ -10,6 +10,10 @@ public class pause_ctrl : MonoBehaviour
     private Image bgMask;
     [SerializeField]
     private Text txt;
+    [SerializeField]
+    private Text txt_ext;
+    [SerializeField]
+    private run_once_on_start_0 roos;
 
     private bool pause = false;
 
@@ -21,18 +25,29 @@ public class pause_ctrl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (roos.WinOrLost())
+        {
+            txt_ext.enabled = true;
+        }
         float dt = Time.unscaledDeltaTime;
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (pause)
+            if (roos.WinOrLost())
             {
-                pause = false;
-                Time.timeScale = 1f;
+                roos.RestartGame();
             }
             else
             {
-                pause = true;
-                Time.timeScale = 0f;
+                if (pause)
+                {
+                    pause = false;
+                    Time.timeScale = 1f;
+                }
+                else
+                {
+                    pause = true;
+                    Time.timeScale = 0f;
+                }
             }
         }
 
