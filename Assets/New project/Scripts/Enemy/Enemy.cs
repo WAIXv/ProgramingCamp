@@ -7,7 +7,7 @@ public class Enemy : MonoBehaviour
     protected Animator enemyAnim;
     protected Collider2D enemyColl;
     protected Rigidbody2D enemyRb;
-    protected bool isDeathing=false;
+    protected bool isDeathing = false;
     protected PlayerCtrler playerCtrler;
     // Start is called before the first frame update
     protected virtual void Start()
@@ -19,13 +19,13 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
     private void OnCollisionEnter2D(Collision2D other)
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            if (other.transform.position.y > transform.position.y +1&&other.rigidbody.velocity.y<=0)
+            if (other.transform.position.y > transform.position.y + 1 && other.rigidbody.velocity.y <= 0)
             {
                 playerCtrler = other.gameObject.GetComponent<PlayerCtrler>();
                 playerCtrler.GiveDashChance();

@@ -15,7 +15,7 @@ public class PlayerCtrler : MonoBehaviour
     [SerializeField] private float ySpeed1Temp;                     //第一段跳移动参考值
     [SerializeField] private float ySpeed2Temp;                     //多段跳速度参考值
     [SerializeField] public int nTimesJumpTemp;                     //多段跳次数参考值     
-    [SerializeField] private float xSpeed,xSpeedTemp;                          //水平速度
+    [SerializeField] private float xSpeed,xSpeedTemp;               //水平速度
     [SerializeField] private LayerMask ground;                      //用来检测地面
     private float ySpeed1, ySpeed2;                                 //多段跳实时速度
     private int nTimesJump;                                         //多段跳次数

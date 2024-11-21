@@ -12,7 +12,7 @@ public class Egale : Enemy
     {
         base.Start();
         up = transform.position.y + 3;
-        down=transform.position.y-3;
+        down = transform.position.y - 3;
     }
 
     // Update is called once per frame
@@ -29,11 +29,11 @@ public class Egale : Enemy
         if (transform.position.y <= down) reachTop = false;
         if (!reachTop)
         {
-            transform.position += new Vector3(0, moveSpeed*Time.deltaTime);
+            transform.position += new Vector3(0, moveSpeed * Time.deltaTime);
         }
         if (reachTop)
         {
-            transform.position+=new Vector3(0, -moveSpeed*Time.deltaTime);
+            transform.position += new Vector3(0, -moveSpeed * Time.deltaTime);
         }
     }
     private void Death()
